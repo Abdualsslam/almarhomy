@@ -280,13 +280,47 @@ export class WatermarkProcessor {
     // الحصول على buffer المنتج مع الحفاظ على الألوان والشفافية
     const productBuf = await prod.png().ensureAlpha().toBuffer();
 
-    // استخدام 'over' blend mode مع ضمان الحفاظ على الألوان
-    await sharp(logoPath)
-      .resize(meta.width, meta.height, {
-        fit: 'cover',
-        position: 'center',
+    // جعل الصورة المائية أصغر (40% من حجم الصورة الأصلي)
+    const logoMeta = await sharp(logoPath).metadata();
+    const watermarkSize = Math.round(maxDim * 0.4); // 40% من أصغر بعد
+    const watermarkW =
+      (logoMeta.width || 0) >= (logoMeta.height || 0)
+        ? watermarkSize
+        : Math.round(watermarkSize * ((logoMeta.width || 0) / (logoMeta.height || 0)));
+    const watermarkH =
+      (logoMeta.width || 0) >= (logoMeta.height || 0)
+        ? Math.round(watermarkSize * ((logoMeta.height || 0) / (logoMeta.width || 0)))
+        : watermarkSize;
+    
+    const watermarkBuf = await sharp(logoPath)
+      .resize(watermarkW, watermarkH, {
+        fit: 'contain',
+        background: { r: 0, g: 0, b: 0, alpha: 0 },
       })
+      .png()
+      .ensureAlpha()
+      .toBuffer();
+
+    // وضع الصورة المائية في المنتصف
+    const watermarkTop = Math.floor(((meta.height || 0) - watermarkH) / 2);
+    const watermarkLeft = Math.floor(((meta.width || 0) - watermarkW) / 2);
+
+    // استخدام 'over' blend mode مع ضمان الحفاظ على الألوان
+    await sharp({
+      create: {
+        width: meta.width || 0,
+        height: meta.height || 0,
+        channels: 4,
+        background: { r: 0, g: 0, b: 0, alpha: 0 },
+      },
+    })
       .composite([
+        {
+          input: watermarkBuf,
+          top: watermarkTop,
+          left: watermarkLeft,
+          blend: 'over',
+        },
         {
           input: productBuf,
           blend: 'over', // هذا يحافظ على الألوان الأصلية
