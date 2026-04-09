@@ -1,6 +1,8 @@
 services:
   api:
     container_name: ${PROJECT_SLUG}-api
+    labels:
+      - traefik.docker.network=g898bxh8j23tmtzjnf417j90
     build:
       context: ./backend
       dockerfile: Dockerfile
@@ -43,6 +45,8 @@ services:
 
   frontend:
     container_name: ${PROJECT_SLUG}-frontend
+    labels:
+      - traefik.docker.network=g898bxh8j23tmtzjnf417j90
     build:
       context: ./frontend
       dockerfile: Dockerfile
