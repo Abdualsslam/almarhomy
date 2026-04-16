@@ -9,9 +9,17 @@ import {
     HttpCode,
     HttpStatus,
 } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiParam } from '@nestjs/swagger';
+import {
+    ApiTags,
+    ApiOperation,
+    ApiParam,
+    ApiOkResponse,
+    ApiCreatedResponse,
+    ApiNoContentResponse,
+} from '@nestjs/swagger';
 import { FoldersService } from './folders.service';
 import { CreateFolderDto, RenameFolderDto } from './dto/folder.dto';
+import { FolderContentsResponseDto } from './dto/folder-response.dto';
 
 @ApiTags('Folders')
 @Controller('folders')
@@ -20,7 +28,7 @@ export class FoldersController {
 
     @Post()
     @ApiOperation({ summary: 'إنشاء مجلد جديد' })
-    @ApiResponse({ status: 201, description: 'تم إنشاء المجلد بنجاح' })
+    @ApiCreatedResponse({ description: 'تم إنشاء المجلد بنجاح', schema: { type: 'object' } })
     async create(@Body() dto: CreateFolderDto) {
         return this.foldersService.create(dto);
     }
@@ -28,7 +36,7 @@ export class FoldersController {
     @Get(':id/contents')
     @ApiOperation({ summary: 'جلب محتويات المجلد (المجلدات الفرعية والصور)' })
     @ApiParam({ name: 'id', description: 'معرف المجلد أو "root" للجذر' })
-    @ApiResponse({ status: 200, description: 'محتويات المجلد' })
+    @ApiOkResponse({ description: 'محتويات المجلد', type: FolderContentsResponseDto })
     async getContents(@Param('id') id: string) {
         const parentId = id === 'root' ? null : id;
         const contents = await this.foldersService.getContents(parentId);
@@ -38,7 +46,7 @@ export class FoldersController {
 
     @Patch(':id')
     @ApiOperation({ summary: 'إعادة تسمية مجلد' })
-    @ApiResponse({ status: 200, description: 'تم التحديث بنجاح' })
+    @ApiOkResponse({ description: 'تم التحديث بنجاح', schema: { type: 'object' } })
     async rename(@Param('id') id: string, @Body() dto: RenameFolderDto) {
         return this.foldersService.rename(id, dto);
     }
@@ -46,7 +54,7 @@ export class FoldersController {
     @Delete(':id')
     @HttpCode(HttpStatus.NO_CONTENT)
     @ApiOperation({ summary: 'حذف مجلد (يتم نقل المحتويات للجذر)' })
-    @ApiResponse({ status: 204, description: 'تم الحذف بنجاح' })
+    @ApiNoContentResponse({ description: 'تم الحذف بنجاح' })
     async delete(@Param('id') id: string) {
         await this.foldersService.delete(id);
     }

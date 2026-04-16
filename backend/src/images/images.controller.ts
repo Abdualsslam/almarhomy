@@ -19,6 +19,12 @@ import {
   ApiBearerAuth,
   ApiConsumes,
   ApiBody,
+  ApiForbiddenResponse,
+  ApiUnauthorizedResponse,
+  ApiBadRequestResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiCreatedResponse,
 } from '@nestjs/swagger';
 import { diskStorage } from 'multer';
 import * as path from 'path';
@@ -29,11 +35,21 @@ import { FolderQueryDto } from './dto/folder-query.dto';
 import { JwtAuthGuard } from '../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../common/guards/roles.guard';
 import { Roles } from '../common/decorators/roles.decorator';
+import {
+  DownloadUrlResponseDto,
+  ImageListResponseDto,
+  QueueStatusResponseDto,
+  RelatedImagesResponseDto,
+  ToggleWatermarkResponseDto,
+  UploadImageResponseDto,
+} from './dto/image-response.dto';
 
 @ApiTags('Images')
 @Controller('images')
 @UseGuards(JwtAuthGuard)
-@ApiBearerAuth()
+@ApiBearerAuth('JWT-auth')
+@ApiUnauthorizedResponse({ description: 'Missing or invalid JWT token' })
+@ApiForbiddenResponse({ description: 'Admin role required for selected endpoints' })
 export class ImagesController {
   constructor(private readonly imagesService: ImagesService) { }
 
@@ -69,10 +85,8 @@ export class ImagesController {
       required: ['file'],
     },
   })
-  @ApiResponse({
-    status: 201,
-    description: 'تم رفع الصورة بنجاح',
-  })
+  @ApiCreatedResponse({ description: 'تم رفع الصورة بنجاح', type: UploadImageResponseDto })
+  @ApiBadRequestResponse({ description: 'الملف غير صالح أو لم يتم رفع ملف' })
   async upload(@UploadedFile() file: Express.Multer.File, @Body() uploadDto: UploadImageDto) {
     if (!file) {
       throw new BadRequestException('لم يتم رفع ملف');
@@ -95,10 +109,7 @@ export class ImagesController {
 
   @Get()
   @ApiOperation({ summary: 'جلب قائمة الصور' })
-  @ApiResponse({
-    status: 200,
-    description: 'قائمة الصور',
-  })
+  @ApiOkResponse({ description: 'قائمة الصور', type: ImageListResponseDto })
   async findAll(@Query() queryDto: ImageQueryDto) {
     return this.imagesService.findAll(queryDto);
   }
@@ -107,30 +118,23 @@ export class ImagesController {
   @UseGuards(RolesGuard)
   @Roles('admin')
   @ApiOperation({ summary: 'الحصول على حالة طابور المعالجة' })
-  @ApiResponse({
-    status: 200,
-    description: 'حالة الطابور',
-  })
+  @ApiOkResponse({ description: 'حالة الطابور', type: QueueStatusResponseDto })
   async getQueueStatus() {
     return this.imagesService.getQueueStatus();
   }
 
   @Get('folders')
   @ApiOperation({ summary: 'تصفح الصور بنظام المجلدات' })
-  @ApiResponse({
-    status: 200,
-    description: 'هيكل المجلدات او الملفات',
-  })
+  @ApiOkResponse({ description: 'هيكل المجلدات او الملفات', schema: { type: 'object' } })
   async getFolders(@Query() query: FolderQueryDto) {
     return this.imagesService.getFolderStructure(query);
   }
 
   @Get(':id/download-url')
   @ApiOperation({ summary: 'الحصول على رابط التحميل المؤقت' })
-  @ApiResponse({
-    status: 200,
-    description: 'رابط التحميل المؤقت',
-  })
+  @ApiOkResponse({ description: 'رابط التحميل المؤقت', type: DownloadUrlResponseDto })
+  @ApiNotFoundResponse({ description: 'الصورة غير موجودة' })
+  @ApiBadRequestResponse({ description: 'لا يمكن العثور على الملف' })
   async getDownloadUrl(@Param('id') id: string) {
     return this.imagesService.getDownloadUrl(id);
   }
@@ -139,10 +143,8 @@ export class ImagesController {
   @UseGuards(RolesGuard)
   @Roles('admin')
   @ApiOperation({ summary: 'تبديل حالة العلامة المائية' })
-  @ApiResponse({
-    status: 200,
-    description: 'تم تبديل الحالة',
-  })
+  @ApiOkResponse({ description: 'تم تبديل الحالة', type: ToggleWatermarkResponseDto })
+  @ApiNotFoundResponse({ description: 'الصورة غير موجودة' })
   async toggleWatermark(@Param('id') id: string) {
     return this.imagesService.toggleWatermark(id);
   }

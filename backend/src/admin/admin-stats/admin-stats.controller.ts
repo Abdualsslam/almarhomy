@@ -1,5 +1,12 @@
 import { Controller, Get, UseGuards } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse, ApiBearerAuth } from '@nestjs/swagger';
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiBearerAuth,
+  ApiForbiddenResponse,
+  ApiUnauthorizedResponse,
+} from '@nestjs/swagger';
 import { AdminStatsService } from './admin-stats.service';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
@@ -9,7 +16,9 @@ import { Roles } from '../../common/decorators/roles.decorator';
 @Controller('admin/stats')
 @UseGuards(JwtAuthGuard, RolesGuard)
 @Roles('admin')
-@ApiBearerAuth()
+@ApiBearerAuth('JWT-auth')
+@ApiUnauthorizedResponse({ description: 'Missing or invalid JWT token' })
+@ApiForbiddenResponse({ description: 'Admin role required' })
 export class AdminStatsController {
   constructor(private readonly adminStatsService: AdminStatsService) {}
 

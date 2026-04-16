@@ -8,6 +8,8 @@ import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const port = parseInt(process.env.PORT || process.env.APP_PORT || '5000', 10);
+  const apiDomain = process.env.API_DOMAIN;
 
   // Enable CORS with better configuration
   app.enableCors({
@@ -68,8 +70,14 @@ async function bootstrap() {
   // Swagger configuration
   const config = new DocumentBuilder()
     .setTitle('Product Catalog API')
-    .setDescription('API documentation for Product Catalog Management System')
+    .setDescription(
+      'Official OpenAPI specification for Alrhomi Catalog. This documentation is generated from NestJS decorators and stays in sync with the codebase.',
+    )
     .setVersion('1.0.0')
+    .setContact('Alrhomi Engineering', '', 'engineering@alrhomi.local')
+    .setLicense('Proprietary', '')
+    .addServer(`http://localhost:${port}`, 'Local development')
+    .addServer('https://<API_DOMAIN>', 'Production (template)')
     .addBearerAuth(
       {
         type: 'http',
@@ -89,16 +97,32 @@ async function bootstrap() {
     .addTag('Admin - Images', 'Image management endpoints (Admin only)')
     .addTag('Admin - Statistics', 'Statistics endpoints (Admin only)')
     .addTag('Job Status', 'Job status endpoints')
+    .addTag('Folders', 'Folder tree and image organization endpoints')
+    .addTag('Health', 'Service liveness and readiness probes')
     .build();
 
-  const document = SwaggerModule.createDocument(app, config);
+  const document = SwaggerModule.createDocument(app, config, {
+    deepScanRoutes: true,
+    operationIdFactory: (controllerKey: string, methodKey: string) => `${controllerKey}_${methodKey}`,
+  });
+
+  if (apiDomain) {
+    document.servers = [
+      { url: `http://localhost:${port}`, description: 'Local development' },
+      { url: `https://${apiDomain}`, description: 'Production' },
+    ];
+  }
+
   SwaggerModule.setup('api-docs', app, document, {
     swaggerOptions: {
       persistAuthorization: true,
+      displayRequestDuration: true,
+      tagsSorter: 'alpha',
+      operationsSorter: 'alpha',
     },
+    customSiteTitle: 'Alrhomi Catalog API Docs',
   });
 
-  const port = parseInt(process.env.PORT || '5000', 10);
   await app.listen(port, '0.0.0.0');
   console.log(`🚀 Server running on port ${port}`);
   console.log(`📚 Swagger documentation available at http://localhost:${port}/api-docs`);

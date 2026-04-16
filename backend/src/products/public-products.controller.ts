@@ -1,7 +1,8 @@
 import { Controller, Get, Param, Query, NotFoundException } from '@nestjs/common';
-import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
+import { ApiTags, ApiOperation, ApiResponse, ApiNotFoundResponse } from '@nestjs/swagger';
 import { ProductsService } from './products.service';
 import { ProductQueryDto } from './dto/product-query.dto';
+import { ProductDetailDto, ProductListResponseDto } from './dto/product-response.dto';
 
 @ApiTags('Products - Public')
 @Controller('public/products')
@@ -13,6 +14,7 @@ export class PublicProductsController {
   @ApiResponse({
     status: 200,
     description: 'قائمة المنتجات مع الصور الأولى',
+    type: ProductListResponseDto,
   })
   async findAll(@Query() queryDto: ProductQueryDto) {
     return this.productsService.findAllPublic(queryDto);
@@ -23,11 +25,9 @@ export class PublicProductsController {
   @ApiResponse({
     status: 200,
     description: 'تفاصيل المنتج',
+    type: ProductDetailDto,
   })
-  @ApiResponse({
-    status: 404,
-    description: 'المنتج غير موجود',
-  })
+  @ApiNotFoundResponse({ description: 'المنتج غير موجود' })
   async findOne(@Param('id') id: string) {
     const product = await this.productsService.findOnePublic(id);
     if (!product) {

@@ -1,6 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { CategoriesService } from './categories.service';
+import { CategoryListResponseDto } from './dto/category-response.dto';
 
 @ApiTags('Categories - Public')
 @Controller('categories')
@@ -12,6 +13,7 @@ export class PublicCategoriesController {
   @ApiResponse({
     status: 200,
     description: 'قائمة الفئات',
+    type: CategoryListResponseDto,
   })
   async findAll() {
     // استدعاء نفس الـ service method
