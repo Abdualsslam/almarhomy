@@ -2,6 +2,9 @@ import { NestFactory } from '@nestjs/core';
 import { ValidationPipe } from '@nestjs/common';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import { Request, Response, NextFunction } from 'express';
+import helmet from 'helmet';
+import * as cookieParser from 'cookie-parser';
+import * as compression from 'compression';
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import { LoggingInterceptor } from './common/interceptors/logging.interceptor';
@@ -11,9 +14,35 @@ async function bootstrap() {
   const port = parseInt(process.env.PORT || process.env.APP_PORT || '5000', 10);
   const apiDomain = process.env.API_DOMAIN;
 
+  // Use Helmet for security headers
+  app.use(helmet({
+    crossOriginResourcePolicy: false,
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: ["'self'"],
+        scriptSrc: ["'self'", "'unsafe-inline'", "'unsafe-eval'"],
+        styleSrc: ["'self'", "'unsafe-inline'"],
+        imgSrc: ["'self'", "data:", "validator.swagger.io"],
+        connectSrc: ["'self'"],
+      },
+    },
+  }));
+
+  app.use(cookieParser());
+  app.use(compression());
+
+  const allowedOrigins = process.env.NODE_ENV === 'production'
+    ? (process.env.ALLOWED_ORIGINS 
+        ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim())
+        : [process.env.FRONTEND_URL].filter((url): url is string => Boolean(url))
+      )
+    : [true];
+
   // Enable CORS with better configuration
   app.enableCors({
-    origin: true, // السماح لجميع المصادر
+    origin: allowedOrigins.length === 1 && allowedOrigins[0] === true
+      ? true
+      : allowedOrigins as string[],
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: [
@@ -68,7 +97,7 @@ async function bootstrap() {
   app.useGlobalInterceptors(new LoggingInterceptor());
 
   // Swagger configuration
-  const config = new DocumentBuilder()
+  const documentBuilder = new DocumentBuilder()
     .setTitle('Product Catalog API')
     .setDescription(
       'Official OpenAPI specification for Alrhomi Catalog. This documentation is generated from NestJS decorators and stays in sync with the codebase.',
@@ -76,8 +105,13 @@ async function bootstrap() {
     .setVersion('1.0.0')
     .setContact('Alrhomi Engineering', '', 'engineering@alrhomi.local')
     .setLicense('Proprietary', '')
-    .addServer(`http://localhost:${port}`, 'Local development')
-    .addServer('https://<API_DOMAIN>', 'Production (template)')
+    .addServer(`http://localhost:${port}`, 'Local development');
+
+  if (apiDomain) {
+    documentBuilder.addServer(`https://${apiDomain}`, 'Production');
+  }
+
+  const config = documentBuilder
     .addBearerAuth(
       {
         type: 'http',

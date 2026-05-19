@@ -11,6 +11,7 @@ import {
 import { NavLink, useNavigate } from "react-router-dom";
 import { WhatsApp, PhoneInTalk } from "@mui/icons-material";
 import { FC, ReactElement } from "react";
+import { getWhatsAppUrl } from "../../utils/whatsapp";
 
 interface NavLinkItem {
   label: string;
@@ -173,7 +174,7 @@ const SiteHeader: FC = (): ReactElement => {
             <IconButton
               color="success"
               aria-label="تواصل عبر واتساب"
-              onClick={() => window.open("https://wa.me/967775017485", "_blank")}
+              onClick={() => window.open(getWhatsAppUrl(), "_blank")}
               sx={{
                 bgcolor: "success.main",
                 color: "white",

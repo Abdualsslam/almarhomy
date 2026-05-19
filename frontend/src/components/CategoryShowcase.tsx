@@ -60,6 +60,28 @@ const CategoryShowcase: FC<CategoryShowcaseProps> = ({
     }
   };
 
+  if (!loading && categories.length === 0) {
+    return (
+      <Box
+        sx={{
+          textAlign: "center",
+          py: 10,
+          borderRadius: 4,
+          border: `1px dashed ${theme.palette.divider}`,
+          bgcolor: alpha(theme.palette.background.paper, 0.5),
+        }}
+      >
+        <CategoryOutlined sx={{ fontSize: 60, color: "text.disabled", mb: 2 }} />
+        <Typography variant="h6" color="text.secondary" gutterBottom>
+          لا توجد فئات متاحة حالياً
+        </Typography>
+        <Typography variant="body2" color="text.secondary">
+          سيتم إضافة الفئات قريباً. يرجى المحاولة مرة أخرى لاحقاً.
+        </Typography>
+      </Box>
+    );
+  }
+
   return (
     <Box>
       <Grid container spacing={3}>
@@ -136,6 +158,7 @@ const CategoryShowcase: FC<CategoryShowcaseProps> = ({
                         component="img"
                         image={category.image}
                         alt={category.name}
+                        loading="lazy"
                         className="category-image"
                         sx={{
                           width: "100%",

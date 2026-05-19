@@ -84,12 +84,45 @@ export class AuthService {
     const token = this.jwtService.sign(payload, {
       expiresIn: jwtConfig.expiresIn,
     });
+    
+    const refreshToken = this.jwtService.sign(payload, {
+      expiresIn: jwtConfig.refreshExpiresIn,
+    });
 
     console.log(`[AuthService] Login successful for user: ${username}, role: ${user.role}`);
 
     return {
       token,
+      refreshToken,
       role: user.role as 'rep' | 'admin',
-    };
+    } as any;
+  }
+
+  async refreshToken(oldRefreshToken: string): Promise<any> {
+    try {
+      const payload = this.jwtService.verify(oldRefreshToken);
+      
+      const newPayload: UserPayload = {
+        sub: payload.sub,
+        role: payload.role,
+      };
+
+      const jwtConfig = this.configService.get('jwt');
+      const token = this.jwtService.sign(newPayload, {
+        expiresIn: jwtConfig.expiresIn,
+      });
+      
+      const refreshToken = this.jwtService.sign(newPayload, {
+        expiresIn: jwtConfig.refreshExpiresIn,
+      });
+
+      return {
+        token,
+        refreshToken,
+        role: payload.role,
+      };
+    } catch (e) {
+      throw new UnauthorizedException('Refresh token is invalid or expired');
+    }
   }
 }

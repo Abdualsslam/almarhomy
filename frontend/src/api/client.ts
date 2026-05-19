@@ -12,11 +12,14 @@ const API_BASE_URL =
 
 class ApiClient {
   private client: AxiosInstance;
+  private isRefreshing = false;
+  private refreshSubscribers: ((token: string) => void)[] = [];
 
   constructor(baseURL: string) {
     this.client = axios.create({
       baseURL,
       timeout: 15000,
+      withCredentials: true, // مهم لإرسال واستقبال ملفات تعريف الارتباط
     });
 
     this.setupInterceptors();
@@ -38,19 +41,61 @@ class ApiClient {
     // Response interceptor
     this.client.interceptors.response.use(
       (response) => response,
-      (error: AxiosError<ApiError>) => {
+      async (error: AxiosError<ApiError>) => {
+        const originalRequest = error.config as InternalAxiosRequestConfig & { _retry?: boolean };
         const status = error.response?.status;
-        if (status === 401 || status === 403) {
+        
+        // محاولة تجديد التوكن إذا كان 401 والطلب لم يكن موجهًا للمصادقة
+        if (status === 401 && originalRequest && !originalRequest._retry && !originalRequest.url?.includes('/auth/')) {
+          if (this.isRefreshing) {
+            return new Promise((resolve) => {
+              this.refreshSubscribers.push((token: string) => {
+                if (originalRequest.headers) {
+                  originalRequest.headers.Authorization = `Bearer ${token}`;
+                }
+                resolve(this.client(originalRequest));
+              });
+            });
+          }
+
+          originalRequest._retry = true;
+          this.isRefreshing = true;
+
+          try {
+            const response = await axios.post<{ token: string, role: string }>(`${API_BASE_URL}/auth/refresh`, {}, { withCredentials: true });
+            const newToken = response.data.token;
+            
+            localStorage.setItem("accessToken", newToken);
+            
+            if (originalRequest.headers) {
+              originalRequest.headers.Authorization = `Bearer ${newToken}`;
+            }
+
+            this.refreshSubscribers.forEach((callback) => callback(newToken));
+            this.refreshSubscribers = [];
+            
+            return this.client(originalRequest);
+          } catch (refreshError) {
+            this.refreshSubscribers = [];
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("role");
+            localStorage.removeItem("username");
+            if (typeof window !== "undefined" && window.location.pathname !== "/") {
+              window.location.assign("/");
+            }
+            return Promise.reject(refreshError);
+          } finally {
+            this.isRefreshing = false;
+          }
+        } else if (status === 401 || status === 403) {
           localStorage.removeItem("accessToken");
           localStorage.removeItem("role");
           localStorage.removeItem("username");
-          if (
-            typeof window !== "undefined" &&
-            window.location.pathname !== "/"
-          ) {
+          if (typeof window !== "undefined" && window.location.pathname !== "/") {
             window.location.assign("/");
           }
         }
+        
         return Promise.reject(error);
       }
     );

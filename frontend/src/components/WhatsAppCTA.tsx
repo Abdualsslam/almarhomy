@@ -11,6 +11,7 @@ import {
 } from "@mui/material";
 import { WhatsApp, ContentCopy } from "@mui/icons-material";
 import { useMemo, useState, FC, ReactElement } from "react";
+import { getWhatsAppUrl } from "../utils/whatsapp";
 
 interface Product {
   _id: string;
@@ -38,8 +39,6 @@ const WhatsAppCTA: FC<WhatsAppCTAProps> = ({
 }): ReactElement => {
   const theme = useTheme();
   const [copied, setCopied] = useState<boolean>(false);
-  const whatsappNumber =
-    process.env.REACT_APP_WHATSAPP_NUMBER || "967775017485";
 
   const message = useMemo(() => {
     if (!product) {
@@ -49,9 +48,7 @@ const WhatsAppCTA: FC<WhatsAppCTAProps> = ({
       } (الرمز: ${product._id}).`;
   }, [product, context]);
 
-  const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(
-    message
-  )}`;
+  const whatsappUrl = getWhatsAppUrl(message);
 
   const handleCopy = async (): Promise<void> => {
     try {

@@ -14,6 +14,8 @@ export function searchProducts(
       productCode: params.productCode,
       page: params.page,
       limit: params.limit,
+      sortBy: params.sortBy,
+      sortOrder: params.sortOrder,
     },
   });
 }

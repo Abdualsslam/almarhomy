@@ -11,6 +11,7 @@ import {
 import { NavLink } from "react-router-dom";
 import { WhatsApp, Facebook, Instagram } from "@mui/icons-material";
 import { FC, ReactElement } from "react";
+import { getWhatsAppUrl } from "../../utils/whatsapp";
 
 interface QuickLink {
   label: string;
@@ -36,8 +37,6 @@ const socialLinks: SocialLink[] = [
 ];
 
 const SiteFooter: FC = (): ReactElement => {
-  const whatsappNumber = process.env.REACT_APP_WHATSAPP_NUMBER || "967775017485";
-
   return (
     <Box component="footer" sx={{ bgcolor: "grey.100", mt: 6, pt: 6 }}>
       <Container>
@@ -97,7 +96,7 @@ const SiteFooter: FC = (): ReactElement => {
                 البريد: almarhomi@almrhomi1955.com
               </Typography>
               <MuiLink
-                href={`https://wa.me/${whatsappNumber}`}
+                href={getWhatsAppUrl()}
                 target="_blank"
                 rel="noopener noreferrer"
                 color="primary"

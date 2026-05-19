@@ -109,7 +109,16 @@ export class ProductsService {
   }
 
   async findAll(queryDto: ProductQueryDto) {
-    const { page = 1, limit = 24, q, category, model, productCode } = queryDto;
+    const {
+      page = 1,
+      limit = 24,
+      q,
+      category,
+      model,
+      productCode,
+      sortBy = 'createdAt',
+      sortOrder = 'desc',
+    } = queryDto;
 
     const rawHasImages = queryDto.hasImages;
     const normalizedHasImages =
@@ -174,7 +183,7 @@ export class ProductsService {
       .find(finalFilter)
       .populate('category', 'name')
       .populate('subcategory', 'name')
-      .sort({ createdAt: -1 })
+      .sort({ [sortBy]: sortOrder === 'asc' ? 1 : -1 })
       .skip((page - 1) * limit)
       .limit(limit)
       .exec();
@@ -274,7 +283,16 @@ export class ProductsService {
   }
 
   async findAllPublic(queryDto: ProductQueryDto) {
-    const { page = 1, limit = 24, q, category, model, productCode } = queryDto;
+    const {
+      page = 1,
+      limit = 24,
+      q,
+      category,
+      model,
+      productCode,
+      sortBy = 'createdAt',
+      sortOrder = 'desc',
+    } = queryDto;
 
     const filter: Record<string, unknown> = {};
     if (category && Types.ObjectId.isValid(category)) {
@@ -301,7 +319,7 @@ export class ProductsService {
       .find(filter)
       .populate('category', 'name')
       .populate('subcategory', 'name')
-      .sort({ createdAt: -1 })
+      .sort({ [sortBy]: sortOrder === 'asc' ? 1 : -1 })
       .skip((page - 1) * limit)
       .limit(limit)
       .exec();

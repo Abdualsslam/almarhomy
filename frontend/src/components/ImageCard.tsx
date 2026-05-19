@@ -113,6 +113,7 @@ export default function ImageCard({
               src={image.watermarkedUrl || image.originalUrl}
               alt={title}
               loading="lazy"
+              decoding="async"
               onLoad={() => setImgLoaded(true)}
               sx={{
                 position: "absolute",

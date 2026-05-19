@@ -12,6 +12,10 @@ import {
   Paper,
   Button,
   Alert,
+  FormControl,
+  Select,
+  MenuItem,
+  InputLabel,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import { useNavigate, useSearchParams } from "react-router-dom";
@@ -29,6 +33,8 @@ import type { Product, Category } from "../types/models.types";
 type CatalogFilters = {
   q: string;
   category: string;
+  sortBy: string;
+  sortOrder: "asc" | "desc";
 };
 
 const parsePageParam = (value: string | null): number => {
@@ -46,6 +52,8 @@ export default function CatalogPage() {
   const filters: CatalogFilters = {
     q: searchParams.get("q") || "",
     category: searchParams.get("category") || "",
+    sortBy: searchParams.get("sortBy") || "createdAt",
+    sortOrder: (searchParams.get("sortOrder") as "asc" | "desc") || "desc",
   };
 
   const page = parsePageParam(searchParams.get("page"));
@@ -102,6 +110,8 @@ export default function CatalogPage() {
           category: filters.category,
           page,
           limit,
+          sortBy: filters.sortBy,
+          sortOrder: filters.sortOrder,
         });
 
         setData({
@@ -123,7 +133,7 @@ export default function CatalogPage() {
     }, 300);
 
     return () => window.clearTimeout(timer);
-  }, [filters.q, filters.category, page, limit, reloadKey]);
+  }, [filters.q, filters.category, filters.sortBy, filters.sortOrder, page, limit, reloadKey]);
 
   useEffect(() => {
     if (data.items.length > 0) {
@@ -149,6 +159,13 @@ export default function CatalogPage() {
       nextParams.set("category", nextCategory);
     } else {
       nextParams.delete("category");
+    }
+
+    if (payload.sortBy) {
+      nextParams.set("sortBy", payload.sortBy);
+    }
+    if (payload.sortOrder) {
+      nextParams.set("sortOrder", payload.sortOrder);
     }
 
     nextParams.delete("page");
@@ -271,9 +288,30 @@ export default function CatalogPage() {
                   </Box>
                 </Typography>
 
-                <Typography variant="body2" color="text.secondary">
-                  صفحة {page} / {data.totalPages}
-                </Typography>
+                <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
+                  <Typography variant="body2" color="text.secondary" sx={{ display: { xs: "none", sm: "block" } }}>
+                    صفحة {page} / {data.totalPages}
+                  </Typography>
+
+                  <FormControl size="small" sx={{ minWidth: 160 }}>
+                    <InputLabel id="sort-select-label">ترتيب حسب</InputLabel>
+                    <Select
+                      labelId="sort-select-label"
+                      value={`${filters.sortBy}-${filters.sortOrder}`}
+                      label="ترتيب حسب"
+                      onChange={(e) => {
+                        const [sortBy, sortOrder] = e.target.value.split("-");
+                        handleFilterChange({ sortBy, sortOrder: sortOrder as "asc" | "desc" });
+                      }}
+                      sx={{ borderRadius: 2 }}
+                    >
+                      <MenuItem value="createdAt-desc">الأحدث أولاً</MenuItem>
+                      <MenuItem value="createdAt-asc">الأقدم أولاً</MenuItem>
+                      <MenuItem value="productName-asc">الاسم (أ-ي)</MenuItem>
+                      <MenuItem value="productName-desc">الاسم (ي-أ)</MenuItem>
+                    </Select>
+                  </FormControl>
+                </Box>
               </Paper>
 
               <Box

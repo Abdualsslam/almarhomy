@@ -1,0 +1,46 @@
+{
+  "common": {
+    "loading": "جاري التحميل...",
+    "error": "حدث خطأ ما",
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "delete": "حذف",
+    "edit": "تعديل",
+    "search": "بحث",
+    "no_data": "لا توجد بيانات"
+  },
+  "admin": {
+    "products": {
+      "title": "إدارة المنتجات",
+      "subtitle": "تحكم كامل في بيانات المنتجات وربطها بالصور",
+      "new_product": "منتج جديد",
+      "edit_product": "تعديل المنتج",
+      "delete_confirm": "تأكيد الحذف",
+      "delete_message": "هل أنت متأكد من حذف المنتج \"{{name}}\"؟ لا يمكن التراجع عن هذا الإجراء.",
+      "table": {
+        "product": "المنتج",
+        "code": "الكود",
+        "category": "الفئة",
+        "model": "الماركة",
+        "image_count": "عدد الصور",
+        "actions": "الإجراءات"
+      },
+      "filters": {
+        "search_placeholder": "ابحث باسم المنتج، الكود أو الوصف...",
+        "category": "الفئة",
+        "all_categories": "كل الفئات",
+        "model": "الماركة",
+        "images": "الصور",
+        "all": "الكل",
+        "with_images": "بصور",
+        "without_images": "بدون صور"
+      }
+    }
+  },
+  "catalog": {
+    "title": "كتالوج المنتجات",
+    "filters": "الفلاتر",
+    "sort_by": "ترتيب حسب",
+    "categories": "الفئات"
+  }
+}

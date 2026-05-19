@@ -9,7 +9,6 @@ import {
   Container,
   Typography,
   Box,
-  Link,
   IconButton,
   InputAdornment,
   Fade,
@@ -226,22 +225,7 @@ export default function LoginPage() {
                 }}
               />
 
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "space-between",
-                  alignItems: "center",
-                  mt: 1,
-                  mb: 2,
-                }}
-              >
-                <Box sx={{ display: "flex", alignItems: "center" }}>
-                  {/* يمكن إضافة "تذكرني" لاحقًا */}
-                </Box>
-                <Link href="#" variant="body2" color="primary">
-                  نسيت كلمة المرور؟
-                </Link>
-              </Box>
+              <Box sx={{ mt: 1, mb: 2 }}></Box>
 
               {error && (
                 <Fade in={error !== ""}>
@@ -288,21 +272,6 @@ export default function LoginPage() {
                 )}
               </Button>
 
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  mt: 3,
-                  gap: 1,
-                }}
-              >
-                <Typography variant="body2" color="text.secondary">
-                  ليس لديك حساب؟
-                </Typography>
-                <Link href="#" variant="body2" color="primary">
-                  إنشاء حساب جديد
-                </Link>
-              </Box>
             </form>
           </Box>
 

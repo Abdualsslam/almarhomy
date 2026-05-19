@@ -16,6 +16,10 @@ import {
   Card,
   CardContent,
   alpha,
+  IconButton,
+  Tooltip,
+  Snackbar,
+  Alert as MuiAlert,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
 import {
@@ -26,11 +30,16 @@ import {
   CalendarToday,
   LocalOffer,
   Info,
+  ContentCopy,
 } from "@mui/icons-material";
 import ImageGrid from "../components/ImageGrid";
 import { getProductById } from "../api/products";
 import { getRelatedImages } from "../api/images";
 import SEO from "../components/SEO";
+import ImageThumbnails from "../components/ImageThumbnails";
+import ImageLightbox from "../components/ImageLightbox";
+import { Helmet } from "react-helmet-async";
+import { getWhatsAppUrl } from "../utils/whatsapp";
 import {
   getProductSchema,
   getBreadcrumbSchema,
@@ -58,6 +67,14 @@ export default function ProductDetail() {
   const [loading, setLoading] = useState(true);
   const [relatedLoading, setRelatedLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [copySuccess, setCopySuccess] = useState(false);
+  const [selectedImageIndex, setSelectedImageIndex] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+
+  const handleCopyCode = (code: string) => {
+    navigator.clipboard.writeText(code);
+    setCopySuccess(true);
+  };
 
   useEffect(() => {
     (async () => {
@@ -154,9 +171,10 @@ export default function ProductDetail() {
       },
       {
         label: "الكود",
-        value: product._id?.slice(-8)?.toUpperCase(),
+        value: product.productCode || product._id?.slice(-8)?.toUpperCase(),
         icon: QrCode,
         color: "info" as const,
+        copyable: true,
       },
       {
         label: "تاريخ الإنشاء",
@@ -191,6 +209,14 @@ export default function ProductDetail() {
         image={product?.images && product.images.length > 0 ? (product.images[0].watermarkedUrl || product.images[0].originalUrl) : "/logo512.png"}
         type="product"
       />
+      <Helmet>
+        {product?.productCode && (
+          <meta property="product:retailer_item_id" content={product.productCode} />
+        )}
+        <meta property="product:brand" content="الرحومي" />
+        <meta property="product:availability" content="in stock" />
+        <meta property="product:condition" content="new" />
+      </Helmet>
       <Box
         sx={{
           bgcolor: "background.default",
@@ -269,49 +295,62 @@ export default function ProductDetail() {
                     }}
                   />
                 ) : (
-                  <Paper
-                    elevation={0}
-                    sx={{
-                      borderRadius: { xs: 3, sm: 4 },
-                      overflow: "hidden",
-                      border: `1px solid ${theme.palette.divider}`,
-                      bgcolor: alpha(theme.palette.primary.main, 0.02),
-                      position: "relative",
-                      "&::after": {
-                        content: '""',
-                        position: "absolute",
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        background: `linear-gradient(135deg, ${alpha(
-                          theme.palette.primary.main,
-                          0.05
-                        )} 0%, ${alpha(theme.palette.secondary.main, 0.05)} 100%)`,
-                        pointerEvents: "none",
-                      },
-                    }}
-                  >
-                    <Box
-                      component="img"
-                      src={
-                        product?.images && product.images.length > 0
-                          ? (product.images[0].watermarkedUrl || product.images[0].originalUrl)
-                          : undefined
-                      }
-                      alt={product?.productName || product?.description || ""}
+                  <>
+                    <Paper
+                      elevation={0}
                       sx={{
-                        width: "100%",
-                        height: "auto",
-                        maxHeight: { xs: 400, sm: 500, md: 600, lg: 700 },
-                        objectFit: "contain",
-                        display: "block",
+                        borderRadius: { xs: 3, sm: 4 },
+                        overflow: "hidden",
+                        border: `1px solid ${theme.palette.divider}`,
+                        bgcolor: alpha(theme.palette.primary.main, 0.02),
                         position: "relative",
-                        zIndex: 1,
-                        p: { xs: 2, sm: 3 },
+                        "&::after": {
+                          content: '""',
+                          position: "absolute",
+                          top: 0,
+                          left: 0,
+                          right: 0,
+                          bottom: 0,
+                          background: `linear-gradient(135deg, ${alpha(
+                            theme.palette.primary.main,
+                            0.05
+                          )} 0%, ${alpha(theme.palette.secondary.main, 0.05)} 100%)`,
+                          pointerEvents: "none",
+                        },
                       }}
-                    />
-                  </Paper>
+                    >
+                      <Box
+                        component="img"
+                        src={
+                          product?.images && product.images.length > 0
+                            ? (product.images[selectedImageIndex]?.watermarkedUrl || product.images[selectedImageIndex]?.originalUrl)
+                            : undefined
+                        }
+                        alt={product?.productName || product?.description || ""}
+                        onClick={() => setLightboxOpen(true)}
+                        sx={{
+                          width: "100%",
+                          height: "auto",
+                          maxHeight: { xs: 400, sm: 500, md: 600, lg: 700 },
+                          objectFit: "contain",
+                          display: "block",
+                          position: "relative",
+                          zIndex: 1,
+                          p: { xs: 2, sm: 3 },
+                          cursor: "zoom-in",
+                          transition: "opacity 0.3s ease",
+                        }}
+                      />
+                    </Paper>
+
+                    {product?.images && product.images.length > 1 && (
+                      <ImageThumbnails
+                        images={product.images}
+                        selectedIndex={selectedImageIndex}
+                        onSelect={setSelectedImageIndex}
+                      />
+                    )}
+                  </>
                 )}
               </Box>
             </Grid>
@@ -484,53 +523,76 @@ export default function ProductDetail() {
                                     "&:last-child": { pb: { xs: 2, sm: 2.5 } },
                                   }}
                                 >
-                                  <Stack spacing={{ xs: 1.5, sm: 1.5 }}>
-                                    <Stack
-                                      direction="row"
-                                      spacing={1}
-                                      alignItems="center"
-                                    >
-                                      <Box
-                                        sx={{
-                                          display: "flex",
-                                          alignItems: "center",
-                                          justifyContent: "center",
-                                          width: { xs: 28, sm: 32 },
-                                          height: { xs: 28, sm: 32 },
-                                          borderRadius: { xs: 1.5, sm: 2 },
-                                          bgcolor: alpha(
-                                            theme.palette[item.color].main,
-                                            0.15
-                                          ),
-                                        }}
+                                    <Stack spacing={{ xs: 1.5, sm: 1.5 }}>
+                                      <Stack
+                                        direction="row"
+                                        justifyContent="space-between"
+                                        alignItems="center"
                                       >
-                                        <item.icon
-                                          sx={{
-                                            color: `${item.color}.main`,
-                                            fontSize: { xs: 16, sm: 18 },
-                                          }}
-                                        />
-                                      </Box>
+                                        <Stack direction="row" spacing={1} alignItems="center">
+                                          <Box
+                                            sx={{
+                                              display: "flex",
+                                              alignItems: "center",
+                                              justifyContent: "center",
+                                              width: { xs: 28, sm: 32 },
+                                              height: { xs: 28, sm: 32 },
+                                              borderRadius: { xs: 1.5, sm: 2 },
+                                              bgcolor: alpha(
+                                                theme.palette[item.color].main,
+                                                0.15
+                                              ),
+                                            }}
+                                          >
+                                            <item.icon
+                                              sx={{
+                                                color: `${item.color}.main`,
+                                                fontSize: { xs: 16, sm: 18 },
+                                              }}
+                                            />
+                                          </Box>
+                                          <Typography
+                                            variant="body2"
+                                            color="text.secondary"
+                                            sx={{
+                                              fontSize: { xs: "0.8rem", sm: "0.875rem" },
+                                            }}
+                                          >
+                                            {item.label}
+                                          </Typography>
+                                        </Stack>
+
+                                        {item.copyable && (
+                                          <Tooltip title="نسخ الكود">
+                                            <IconButton
+                                              size="small"
+                                              onClick={() => handleCopyCode(item.value!)}
+                                              sx={{
+                                                color: `${item.color}.main`,
+                                                "&:hover": {
+                                                  bgcolor: alpha(
+                                                    theme.palette[item.color].main,
+                                                    0.1
+                                                  ),
+                                                },
+                                              }}
+                                            >
+                                              <ContentCopy sx={{ fontSize: 16 }} />
+                                            </IconButton>
+                                          </Tooltip>
+                                        )}
+                                      </Stack>
                                       <Typography
-                                        variant="body2"
-                                        color="text.secondary"
                                         sx={{
-                                          fontSize: { xs: "0.8rem", sm: "0.875rem" },
+                                          fontSize: { xs: "0.9rem", sm: "1rem" },
+                                          pr: { xs: 1, sm: 1 },
+                                          wordBreak: "break-word",
+                                          fontWeight: item.copyable ? 700 : 400,
                                         }}
                                       >
-                                        {item.label}
+                                        {item.value}
                                       </Typography>
                                     </Stack>
-                                    <Typography
-                                      sx={{
-                                        fontSize: { xs: "0.9rem", sm: "1rem" },
-                                        pr: { xs: 4, sm: 5 },
-                                        wordBreak: "break-word",
-                                      }}
-                                    >
-                                      {item.value}
-                                    </Typography>
-                                  </Stack>
                                 </CardContent>
                               </Card>
                             </Grid>
@@ -588,7 +650,7 @@ export default function ProductDetail() {
                       const message = `مرحباً، أرغب في الاستفسار عن المنتج:\n${product?.productName || product?.description
                         }\n\nرابط المنتج: ${productUrl}`;
                       window.open(
-                        `https://wa.me/967775017485?text=${encodeURIComponent(message)}`,
+                        getWhatsAppUrl(message),
                         "_blank"
                       );
                     }}
@@ -699,6 +761,32 @@ export default function ProductDetail() {
           </Box>
         </Container>
       </Box>
+
+      <Snackbar
+        open={copySuccess}
+        autoHideDuration={3000}
+        onClose={() => setCopySuccess(false)}
+        anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+      >
+        <MuiAlert
+          onClose={() => setCopySuccess(false)}
+          severity="success"
+          variant="filled"
+          sx={{ width: "100%", borderRadius: 2 }}
+        >
+          تم نسخ الكود بنجاح
+        </MuiAlert>
+      </Snackbar>
+
+      {product?.images && (
+        <ImageLightbox
+          open={lightboxOpen}
+          onClose={() => setLightboxOpen(false)}
+          images={product.images}
+          currentIndex={selectedImageIndex}
+          onNavigate={setSelectedImageIndex}
+        />
+      )}
     </>
   );
 }

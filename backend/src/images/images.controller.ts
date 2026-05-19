@@ -60,11 +60,19 @@ export class ImagesController {
         destination: 'uploads/',
         filename: (req, file, cb) => {
           const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
-          cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
+          // Sanitize filename to avoid directory traversal or weird characters
+          const cleanExt = path.extname(file.originalname).replace(/[^a-zA-Z0-9.]/g, '');
+          cb(null, file.fieldname + '-' + uniqueSuffix + cleanExt);
         },
       }),
       limits: {
         fileSize: 10 * 1024 * 1024, // 10MB
+      },
+      fileFilter: (req, file, cb) => {
+        if (!file.originalname.match(/\.(jpg|jpeg|png|webp)$/i) || !file.mimetype.match(/^image\/(jpeg|png|webp)$/i)) {
+          return cb(new BadRequestException('صيغة الملف غير مدعومة. فقط (JPG, PNG, WEBP) مسموحة.'), false);
+        }
+        cb(null, true);
       },
     }),
   )

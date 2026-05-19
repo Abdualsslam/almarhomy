@@ -17,6 +17,7 @@
 | `APP_PORT` | Yes | `5000` | local, staging, prod | Coolify / local `.env` |
 | `DOMAIN` | Optional | `catalog.example.com` | prod | Coolify |
 | `API_DOMAIN` | Optional | `api.catalog.example.com` | prod | Coolify |
+| `FRONTEND_URL` | Yes | `https://catalog.example.com` | staging, prod | Coolify / local `.env` |
 | `MONGODB_URI` | Yes (preferred) | `mongodb+srv://user:pass@cluster.mongodb.net/product-catalog` | local, staging, prod | Coolify Secret (prod), 1Password (handover), local `.env` |
 | `MONGO_ROOT_USERNAME` | Optional* | `catalog_user` | local, staging | Secret Manager / local `.env` |
 | `MONGO_ROOT_PASSWORD` | Optional* | `strong-password` | local, staging | Coolify Secret / Secret Manager |

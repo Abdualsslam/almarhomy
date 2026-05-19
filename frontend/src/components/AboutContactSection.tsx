@@ -23,6 +23,7 @@ import {
   StarOutlined,
 } from "@mui/icons-material";
 import { FC, ReactElement } from "react";
+import { getWhatsAppUrl } from "../utils/whatsapp";
 
 interface ContactInfo {
   address: string;
@@ -472,7 +473,7 @@ const AboutContactSection: FC = (): ReactElement => {
                   size="large"
                   startIcon={<WhatsApp />}
                   onClick={() =>
-                    window.open("https://wa.me/967775017485", "_blank")
+                    window.open(getWhatsAppUrl(), "_blank")
                   }
                   sx={{
                     py: 1.75,

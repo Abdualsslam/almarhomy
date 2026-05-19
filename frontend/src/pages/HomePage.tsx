@@ -29,6 +29,7 @@ import CategoryShowcase from "../components/CategoryShowcase";
 import ImageGrid from "../components/ImageGrid";
 import AboutContactSection from "../components/AboutContactSection";
 import SEO from "../components/SEO";
+import { getWhatsAppUrl } from "../utils/whatsapp";
 import {
   getOrganizationSchema,
   getWebSiteSchema,
@@ -409,7 +410,7 @@ const HomePage: FC = (): ReactElement => {
                       size="large"
                       startIcon={<WhatsApp />}
                       onClick={() =>
-                        window.open("https://wa.me/967775017485", "_blank")
+                        window.open(getWhatsAppUrl(), "_blank")
                       }
                       sx={{
                         px: 4,
