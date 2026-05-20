@@ -170,15 +170,13 @@ export const getProductSchema = (product: ProductInfo): ProductSchema => ({
   },
   category: product.category || "منتجات عامة",
   sku: product.id || product.sku || "",
-  ...(product.price && {
-    offers: {
-      "@type": "Offer",
-      price: product.price,
-      priceCurrency: "YER",
-      availability: "https://schema.org/InStock",
-      url: `${window.location.origin}/product/${product.id}`,
-    },
-  }),
+  offers: {
+    "@type": "Offer",
+    price: product.price || 0,
+    priceCurrency: "YER",
+    availability: "https://schema.org/InStock",
+    url: `${window.location.origin}/product/${product.id}`,
+  },
 });
 
 /**

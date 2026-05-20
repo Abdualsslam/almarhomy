@@ -14,4 +14,4 @@ Disallow: /private/*
 Crawl-delay: 1
 
 # Sitemap location
-Sitemap: %PUBLIC_URL%/sitemap.xml
+Sitemap: https://almarohomi.smartagency-ye.com/sitemap.xml

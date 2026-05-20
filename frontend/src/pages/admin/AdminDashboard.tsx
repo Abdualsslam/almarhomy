@@ -41,12 +41,10 @@ export default function AdminDashboard() {
     let isMounted = true;
 
     const load = async () => {
-      console.log("Dashboard load started");
       setLoading(true);
 
       try {
         // 1. جلب الإحصائيات
-        console.log("→ Calling fetchStats()");
         const statsResponse = await fetchStats({ signal });
 
         // تحقق من أن المكون ما زال مرفوعًا
@@ -54,7 +52,6 @@ export default function AdminDashboard() {
 
         // تحقق من وجود البيانات
         if (statsResponse) {
-          console.log("← fetchStats returned", statsResponse);
           setStats({
             totalProducts: statsResponse.totalProducts ?? 0,
             productsWithImages: statsResponse.productsWithImages ?? 0,
@@ -69,7 +66,6 @@ export default function AdminDashboard() {
         }
 
         // 2. جلب المستخدمين
-        console.log("→ Calling fetchUsers()");
         const usersResponse = await fetchUsers({ signal });
 
         // تحقق من أن المكون ما زال مرفوعًا
@@ -77,7 +73,6 @@ export default function AdminDashboard() {
 
         // تحقق من وجود البيانات
         if (usersResponse && Array.isArray(usersResponse)) {
-          console.log("← fetchUsers returned", usersResponse);
           const sorted = usersResponse
             .sort((a: User, b: User) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
             .slice(0, 5);
@@ -103,7 +98,6 @@ export default function AdminDashboard() {
         
       } finally {
         if (isMounted) {
-          console.log("Dashboard load finished");
           setLoading(false);
         }
       }

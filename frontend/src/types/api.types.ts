@@ -82,16 +82,23 @@ export interface ProductQueryParams extends PaginationParams {
   productCode?: string;
   tags?: string[];
   search?: string;
-   hasImages?: string;
+  hasImages?: string;
+  sortBy?: string;
+  sortOrder?: "asc" | "desc";
 }
 
 export interface CreateProductRequest {
-  name: string;
-  description: string;
+  productName: string;
+  productCode: string;
+  description?: string;
   category: string;
-  images: string[];
+  subcategory?: string;
+  model?: string;
+  note?: string;
+  imageIds: string[];
+  similarProductIds?: string[];
   tags?: string[];
-  price?: number;
+  variants?: Array<{ name: string; values: string[] }>;
 }
 
 export interface UpdateProductRequest extends Partial<CreateProductRequest> { }

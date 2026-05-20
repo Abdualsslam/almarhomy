@@ -8,6 +8,8 @@ interface SEOProps {
   description?: string;
   keywords?: string;
   image?: string;
+  imageWidth?: string;
+  imageHeight?: string;
   type?: string;
   author?: string;
 }
@@ -21,6 +23,8 @@ const SEO: FC<SEOProps> = ({
   description = "استكشف مجموعة واسعة من صور المنتجات عالية الجودة في كتالوج الرحومي. صور احترافية لجميع أنواع المنتجات مع إمكانية التحميل المباشر.",
   keywords = "كتالوج منتجات, صور منتجات, كتالوج الرحومي, صور احترافية, منتجات يمنية, كتالوج إلكتروني",
   image = "/logo512.png",
+  imageWidth = "1200",
+  imageHeight = "630",
   type = "website",
   author = "كتالوج الرحومي",
 }): ReactElement => {
@@ -42,7 +46,9 @@ const SEO: FC<SEOProps> = ({
       <meta property="og:description" content={description} />
       <meta property="og:type" content={type} />
       <meta property="og:url" content={currentUrl} />
-      <meta property="og:image" content={`${baseUrl}${image}`} />
+      <meta property="og:image" content={image.startsWith('http') ? image : `${baseUrl}${image}`} />
+      <meta property="og:image:width" content={imageWidth} />
+      <meta property="og:image:height" content={imageHeight} />
       <meta property="og:image:alt" content={title} />
       <meta property="og:locale" content="ar_YE" />
       <meta property="og:locale:alternate" content="en_US" />

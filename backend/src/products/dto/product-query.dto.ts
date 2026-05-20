@@ -70,4 +70,22 @@ export class ProductQueryDto {
   @IsOptional()
   @IsString()
   hasImages?: string;
+
+  @ApiPropertyOptional({
+    description: 'الترتيب حسب الحقل',
+    enum: ['createdAt', 'productName', 'model'],
+    default: 'createdAt',
+  })
+  @IsOptional()
+  @IsString()
+  sortBy?: string = 'createdAt';
+
+  @ApiPropertyOptional({
+    description: 'نوع الترتيب',
+    enum: ['asc', 'desc'],
+    default: 'desc',
+  })
+  @IsOptional()
+  @IsString()
+  sortOrder?: 'asc' | 'desc' = 'desc';
 }

@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom/client';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
 import './App.css';
+import './i18n';
 
 import { ThemeProvider } from './contexts/ThemeContext';
 import { AuthProvider } from './contexts/AuthContext';
@@ -14,6 +15,7 @@ import { prefixer } from 'stylis';
 import rtl from 'stylis-rtl';
 import { HelmetProvider } from 'react-helmet-async';
 import App from './App';
+import ErrorBoundary from './components/ErrorBoundary';
 
 // Set RTL direction and language on HTML element
 document.documentElement.setAttribute('dir', 'rtl');
@@ -38,13 +40,15 @@ root.render(
     <React.StrictMode>
         <HelmetProvider>
             <CacheProvider value={cacheRtl}>
-                <BrowserRouter>
-                    <ThemeProvider>
-                        <AuthProvider>
-                            <App />
-                        </AuthProvider>
-                    </ThemeProvider>
-                </BrowserRouter>
+                <ErrorBoundary>
+                    <BrowserRouter>
+                        <ThemeProvider>
+                            <AuthProvider>
+                                <App />
+                            </AuthProvider>
+                        </ThemeProvider>
+                    </BrowserRouter>
+                </ErrorBoundary>
             </CacheProvider>
         </HelmetProvider>
     </React.StrictMode>

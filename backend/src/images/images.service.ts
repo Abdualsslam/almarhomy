@@ -83,53 +83,109 @@ export class ImagesService {
     const s3Key = `originals/${Date.now()}-${file.filename}${ext}`;
 
     try {
-      // Upload original file to S3
+      // 1. Upload original file to S3
       if (!fs.existsSync(tempPath)) {
-        throw new BadRequestException('الملف المؤقت غير موجود');
+        console.error(`[${new Date().toISOString()}] Temp file not found: ${tempPath}`);
+        throw new BadRequestException('الملف المؤقت غير موجود أو تم حذفه');
       }
 
       const fileStream = fs.createReadStream(tempPath);
-      const originalUrl = await this.storageService.uploadFile(s3Key, fileStream, file.mimetype);
-
-      // Delete temp file
-      if (fs.existsSync(tempPath)) {
-        fs.unlinkSync(tempPath);
+      let originalUrl: string;
+      try {
+        originalUrl = await this.storageService.uploadFile(s3Key, fileStream, file.mimetype);
+        console.log(`[${new Date().toISOString()}] S3 upload successful: ${originalUrl}`);
+      } catch (s3Error) {
+        console.error(`[${new Date().toISOString()}] S3 upload failed for ${s3Key}:`, s3Error);
+        throw new BadRequestException(
+          `فشل رفع الصورة إلى التخزين السحابي (S3). السبب: ${s3Error instanceof Error ? s3Error.message : 'خطأ غير معروف'}`,
+        );
       }
 
-      // Create image document مرتبط بالمنتج والمجلد
-      const imageDoc = await this.imageModel.create({
-        product: product?._id ?? null,
-        folder: folderId || null,
-        originalUrl,
-        watermarkedUrl: '',
-        isWatermarked: false,
-        jobId: null,
-        status: 'queued',
-        progress: 0,
-      });
+      // 2. Delete temp file after successful S3 upload
+      if (fs.existsSync(tempPath)) {
+        try {
+          fs.unlinkSync(tempPath);
+        } catch (unlinkError) {
+          console.warn(
+            `[${new Date().toISOString()}] Failed to delete temp file ${tempPath}:`,
+            unlinkError,
+          );
+        }
+      }
 
-      // Add job to queue
+      // 3. Create image document in MongoDB
+      let imageDoc;
+      try {
+        imageDoc = await this.imageModel.create({
+          product: product?._id ?? null,
+          folder: folderId || null,
+          originalUrl,
+          watermarkedUrl: '',
+          isWatermarked: false,
+          jobId: null,
+          status: 'queued',
+          progress: 0,
+        });
+        console.log(`[${new Date().toISOString()}] Database record created: ${imageDoc._id}`);
+      } catch (dbError) {
+        console.error(`[${new Date().toISOString()}] Database creation failed:`, dbError);
+        throw new BadRequestException('فشل حفظ بيانات الصورة في قاعدة البيانات');
+      }
+
+      // 4. Add job to queue
       const imageId =
         imageDoc._id instanceof Types.ObjectId ? imageDoc._id.toHexString() : String(imageDoc._id);
 
-      console.log(`[${new Date().toISOString()}] Adding job to queue for image ${imageId}, s3Key: ${s3Key}`);
+      console.log(
+        `[${new Date().toISOString()}] Adding job to queue for image ${imageId}, s3Key: ${s3Key}`,
+      );
 
-      const job = await this.imageQueue.add({
-        metadata: {
-          _id: imageId,
-          description: product?.productName ?? file.originalname,
-          s3Key,
-        },
-      });
+      let job;
+      try {
+        job = await this.imageQueue.add(
+          {
+            metadata: {
+              _id: imageId,
+              description: product?.productName ?? file.originalname,
+              s3Key,
+            },
+          },
+          {
+            attempts: 3,
+            backoff: {
+              type: 'exponential',
+              delay: 5000,
+            },
+            removeOnComplete: false, // Keep completed jobs for tracking
+            removeOnFail: false,
+          },
+        );
+      } catch (queueError) {
+        console.error(
+          `[${new Date().toISOString()}] Redis queue add failed for ${imageId}:`,
+          queueError,
+        );
+        // Mark image as failed if queue fails
+        imageDoc.status = 'failed';
+        await imageDoc
+          .save()
+          .catch((e) => console.error('Failed to update image status to failed:', e));
+        throw new BadRequestException(
+          `فشل إضافة الصورة إلى طابور المعالجة (Redis). تأكد من تشغيل خدمة Redis. الخطأ: ${
+            queueError instanceof Error ? queueError.message : 'خطأ غير معروف'
+          }`,
+        );
+      }
 
-      console.log(`[${new Date().toISOString()}] Job added successfully. Job ID: ${job.id}, Image ID: ${imageId}`);
+      console.log(
+        `[${new Date().toISOString()}] Job added successfully. Job ID: ${job.id}, Image ID: ${imageId}`,
+      );
 
-      // Check queue status
-      const counts = await this.imageQueue.getJobCounts();
-      console.log(`[${new Date().toISOString()}] Queue status after adding job:`, counts);
-
+      // 5. Update image with job ID
       imageDoc.jobId = job.id.toString();
-      await imageDoc.save();
+      await imageDoc.save().catch((e) => {
+        console.error(`[${new Date().toISOString()}] Failed to update imageDoc with jobId:`, e);
+      });
 
       return {
         message: 'Upload queued',
@@ -138,7 +194,7 @@ export class ImagesService {
         originalUrl,
       };
     } catch (error) {
-      // Clean up temp file if exists
+      // Clean up temp file if exists (in case of error before successful upload)
       if (fs.existsSync(tempPath)) {
         try {
           fs.unlinkSync(tempPath);
@@ -146,7 +202,14 @@ export class ImagesService {
           // Ignore unlink errors during cleanup
         }
       }
-      throw error;
+      // Rethrow as HttpException if not already one
+      if (error instanceof BadRequestException || error instanceof NotFoundException) {
+        throw error;
+      }
+      console.error(`[${new Date().toISOString()}] Unexpected error during upload:`, error);
+      throw new BadRequestException(
+        `حدث خطأ غير متوقع أثناء المعالجة: ${error instanceof Error ? error.message : 'خطأ غير معروف'}`,
+      );
     }
   }
 
@@ -179,9 +242,9 @@ export class ImagesService {
 
     const idList = ids
       ? ids
-        .split(',')
-        .map((id) => id.trim())
-        .filter(Boolean)
+          .split(',')
+          .map((id) => id.trim())
+          .filter(Boolean)
       : [];
 
     if (idList.length > 0) {

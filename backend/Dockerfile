@@ -44,7 +44,6 @@ COPY --from=builder --chown=nestjs:nodejs /app/dist ./dist
 # Copy scripts directory
 COPY --chown=nestjs:nodejs scripts ./scripts
 
-# بعد السطر 45 في Dockerfile
 # Copy assets directory for watermark processing
 COPY --chown=nestjs:nodejs assets ./assets
 

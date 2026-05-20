@@ -30,6 +30,8 @@ import {
   Fade,
   Avatar,
   Chip,
+  Stack,
+  Grid,
 } from "@mui/material";
 import {
   Add as AddIcon,
@@ -408,44 +410,28 @@ export default function CategoryManagement() {
   return (
     <Box sx={{ width: "100%", pb: 4 }}>
       {/* Header Section */}
-      <Box
-        sx={{
-          mb: { xs: 3, sm: 4 },
-          pb: 3,
-          borderBottom: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
-        }}
-      >
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: { xs: "flex-start", sm: "center" },
-            flexDirection: { xs: "column", sm: "row" },
-            gap: 2,
-          }}
+      <Box sx={{ mb: 6 }}>
+        <Stack 
+          direction={{ xs: "column", sm: "row" }} 
+          justifyContent="space-between" 
+          alignItems={{ xs: "flex-start", sm: "center" }}
+          spacing={3}
         >
           <Box>
             <Typography
-              variant="h4"
+              variant="h3"
               sx={{
-                fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem" },
-                mb: 0.5,
-                background:
-                  theme.palette.mode === "dark"
-                    ? `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`
-                    : `linear-gradient(135deg, #1565c0 0%, #0277bd 100%)`,
+                fontWeight: 900,
+                mb: 1,
+                background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
+                letterSpacing: "-0.02em",
               }}
             >
               {t("categoriesManagement")}
             </Typography>
-            <Typography
-              variant="body2"
-              color="text.secondary"
-              sx={{ fontSize: { xs: "0.75rem", sm: "0.875rem" } }}
-            >
+            <Typography variant="body1" color="text.secondary" fontWeight={500}>
               {t("categoriesManagementDesc")}
             </Typography>
           </Box>
@@ -453,24 +439,57 @@ export default function CategoryManagement() {
             variant="contained"
             startIcon={<AddIcon />}
             onClick={() => handleOpen()}
+            className="hover-lift"
             sx={{
               borderRadius: 3,
-              px: 3,
-              py: 1.5,
-              fontSize: { xs: "0.875rem", sm: "1rem" },
-              boxShadow: `0 4px 16px ${alpha(theme.palette.primary.main, 0.3)}`,
-              "&:hover": {
-                boxShadow: `0 6px 20px ${alpha(
-                  theme.palette.primary.main,
-                  0.4
-                )}`,
-              },
+              px: 4,
+              py: 1.8,
+              fontSize: "1rem",
+              fontWeight: 700,
+              background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+              boxShadow: `0 10px 20px ${alpha(theme.palette.primary.main, 0.2)}`,
             }}
           >
             {t("newCategory")}
           </Button>
-        </Box>
+        </Stack>
       </Box>
+
+      {/* Stats Section */}
+      <Grid container spacing={3} sx={{ mb: 4 }}>
+        <Grid size={{ xs: 12, md: 4 }}>
+          <Card
+            elevation={0}
+            className={theme.palette.mode === 'dark' ? 'glass' : 'glass-light'}
+            sx={{
+              p: 3,
+              borderRadius: 5,
+              border: `1px solid ${alpha(theme.palette.primary.main, 0.1)}`,
+            }}
+          >
+            <Stack direction="row" spacing={2} alignItems="center">
+              <Box
+                sx={{
+                  p: 2,
+                  borderRadius: 3,
+                  bgcolor: alpha(theme.palette.primary.main, 0.1),
+                  color: theme.palette.primary.main,
+                }}
+              >
+                <FolderTreeIcon />
+              </Box>
+              <Box>
+                <Typography variant="body2" color="text.secondary" fontWeight={600}>
+                  {t("totalCategories")}
+                </Typography>
+                <Typography variant="h4" fontWeight={800}>
+                  {totalCount}
+                </Typography>
+              </Box>
+            </Stack>
+          </Card>
+        </Grid>
+      </Grid>
 
       {/* Error Alert */}
       {error && (
