@@ -36,6 +36,7 @@ import ImageGrid from "../components/ImageGrid";
 import { getProductById } from "../api/products";
 import { getRelatedImages } from "../api/images";
 import SEO from "../components/SEO";
+import PageTransition from "../components/PageTransition";
 import ImageThumbnails from "../components/ImageThumbnails";
 import ImageLightbox from "../components/ImageLightbox";
 import { Helmet } from "react-helmet-async";
@@ -201,7 +202,7 @@ export default function ProductDetail() {
     : "تفاصيل المنتج في كتالوج الرحومي. صور منتجات عالية الجودة.";
 
   return (
-    <>
+    <PageTransition>
       <SEO
         title={pageTitle}
         description={pageDescription}
@@ -298,25 +299,16 @@ export default function ProductDetail() {
                   <>
                     <Paper
                       elevation={0}
+                      className={theme.palette.mode === 'dark' ? 'glass' : 'glass-light'}
                       sx={{
-                        borderRadius: { xs: 3, sm: 4 },
+                        borderRadius: 5,
                         overflow: "hidden",
                         border: `1px solid ${theme.palette.divider}`,
-                        bgcolor: alpha(theme.palette.primary.main, 0.02),
                         position: "relative",
-                        "&::after": {
-                          content: '""',
-                          position: "absolute",
-                          top: 0,
-                          left: 0,
-                          right: 0,
-                          bottom: 0,
-                          background: `linear-gradient(135deg, ${alpha(
-                            theme.palette.primary.main,
-                            0.05
-                          )} 0%, ${alpha(theme.palette.secondary.main, 0.05)} 100%)`,
-                          pointerEvents: "none",
-                        },
+                        transition: "all 0.3s ease",
+                        "&:hover": {
+                           boxShadow: theme.shadows[10],
+                        }
                       }}
                     >
                       <Box
@@ -334,11 +326,12 @@ export default function ProductDetail() {
                           maxHeight: { xs: 400, sm: 500, md: 600, lg: 700 },
                           objectFit: "contain",
                           display: "block",
-                          position: "relative",
-                          zIndex: 1,
-                          p: { xs: 2, sm: 3 },
+                          p: { xs: 2, sm: 4 },
                           cursor: "zoom-in",
-                          transition: "opacity 0.3s ease",
+                          transition: "transform 0.5s ease",
+                          "&:hover": {
+                            transform: "scale(1.02)",
+                          }
                         }}
                       />
                     </Paper>
@@ -356,68 +349,63 @@ export default function ProductDetail() {
             </Grid>
             <Grid size={{ xs: 12, sm: 12, md: 6, lg: 7 }}>
               {loading ? (
-                <Stack spacing={3} sx={{ px: { xs: 1, sm: 0 } }}>
-                  <Skeleton width="70%" height={50} />
-                  <Skeleton width="50%" height={30} />
-                  <Skeleton width="90%" height={100} />
+                <Stack spacing={3}>
+                  <Skeleton width="70%" height={60} />
+                  <Skeleton width="40%" height={30} />
+                  <Skeleton variant="rectangular" height={200} sx={{ borderRadius: 4 }} />
                 </Stack>
               ) : (
-                <Stack spacing={{ xs: 3, sm: 3.5, md: 4 }} sx={{ px: { xs: 1, sm: 0 } }}>
-                  {/* العنوان والوصف */}
+                <Stack spacing={4}>
+                  {/* Title & Badge */}
                   <Box>
                     <Typography
+                      variant="h2"
                       sx={{
-                        mb: { xs: 1.5, sm: 2 },
-                        fontSize: { xs: "1.75rem", sm: "2.25rem", md: "2.5rem", lg: "3rem" },
+                        mb: 2,
+                        fontWeight: 800,
                         background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
                         WebkitBackgroundClip: "text",
                         WebkitTextFillColor: "transparent",
-                        backgroundClip: "text",
                         lineHeight: 1.2,
                       }}
                     >
                       {product?.productName || product?.description}
                     </Typography>
-                    {product?.note && (
-                      <Paper
-                        elevation={0}
-                        sx={{
-                          p: { xs: 2, sm: 2.5 },
-                          borderRadius: { xs: 2, sm: 2.5 },
-                          bgcolor: alpha(theme.palette.info.main, 0.05),
-                          border: `1px dashed ${alpha(
-                            theme.palette.info.main,
-                            0.3
-                          )}`,
-                        }}
-                      >
-                        <Stack
-                          direction="row"
-                          spacing={{ xs: 1, sm: 1.5 }}
-                          alignItems="flex-start"
-                        >
-                          <Info
-                            sx={{
-                              color: "info.main",
-                              fontSize: { xs: 18, sm: 20 },
-                              mt: 0.3,
-                            }}
-                          />
-                          <Typography
-                            variant="body1"
-                            color="text.secondary"
-                            sx={{
-                              lineHeight: 1.8,
-                              flex: 1,
-                              fontSize: { xs: "0.9rem", sm: "1rem" },
-                            }}
-                          >
-                            {product?.note}
-                          </Typography>
-                        </Stack>
-                      </Paper>
-                    )}
+                    <Stack direction="row" spacing={1.5} alignItems="center">
+                       <Chip 
+                         label={product?.category} 
+                         color="primary" 
+                         variant="outlined"
+                         sx={{ fontWeight: 700, borderRadius: 2 }}
+                       />
+                       <Chip 
+                         label={product?.model} 
+                         color="secondary" 
+                         variant="outlined"
+                         sx={{ fontWeight: 700, borderRadius: 2 }}
+                       />
+                    </Stack>
                   </Box>
+
+                  {product?.note && (
+                    <Paper
+                      elevation={0}
+                      className="glass-light"
+                      sx={{
+                        p: 3,
+                        borderRadius: 4,
+                        border: `1px dashed ${alpha(theme.palette.primary.main, 0.2)}`,
+                        bgcolor: alpha(theme.palette.primary.main, 0.02),
+                      }}
+                    >
+                      <Stack direction="row" spacing={2} alignItems="flex-start">
+                        <Info color="primary" />
+                        <Typography variant="body1" color="text.secondary" sx={{ lineHeight: 1.7 }}>
+                          {product?.note}
+                        </Typography>
+                      </Stack>
+                    </Paper>
+                  )}
 
                   {/* التاجات */}
                   <Box>
@@ -642,6 +630,7 @@ export default function ProductDetail() {
                     variant="contained"
                     size="large"
                     fullWidth
+                    className="animate-pulse-glow"
                     endIcon={
                       <WhatsApp sx={{ fontSize: { xs: 24, sm: 28 }, ml: 1 }} />
                     }
@@ -655,17 +644,16 @@ export default function ProductDetail() {
                       );
                     }}
                     sx={{
-                      py: { xs: 1.5, sm: 2 },
-                      borderRadius: { xs: 2.5, sm: 3 },
-                      fontSize: { xs: "0.95rem", sm: "1.1rem" },
+                      py: 2.5,
+                      borderRadius: 4,
+                      fontSize: "1.2rem",
                       background: `linear-gradient(135deg, #25D366 0%, #128C7E 100%)`,
-                      boxShadow: `0 4px 14px ${alpha("#25D366", 0.4)}`,
+                      boxShadow: `0 10px 20px ${alpha("#25D366", 0.3)}`,
                       "&:hover": {
                         background: `linear-gradient(135deg, #128C7E 0%, #075E54 100%)`,
-                        transform: "translateY(-3px)",
-                        boxShadow: `0 6px 20px ${alpha("#128C7E", 0.5)}`,
+                        transform: "translateY(-4px)",
+                        boxShadow: `0 15px 30px ${alpha("#25D366", 0.5)}`,
                       },
-                      transition: "all 0.3s ease",
                     }}
                   >
                     استفسر عن المنتج عبر واتساب
@@ -787,7 +775,7 @@ export default function ProductDetail() {
           onNavigate={setSelectedImageIndex}
         />
       )}
-    </>
+    </PageTransition>
   );
 }
 

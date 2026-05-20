@@ -39,26 +39,25 @@ export default function ImageCard({
   return (
     <>
       <Card
-        className={className}
+        className={`${className} hover-lift`}
         style={style}
         elevation={0}
         sx={{
           height: "100%",
           display: "flex",
           flexDirection: "column",
-          borderRadius: 4,
+          borderRadius: 5,
           overflow: "hidden",
           border: `1px solid ${alpha(theme.palette.divider, 0.08)}`,
-          bgcolor: alpha(theme.palette.background.paper, 0.8),
-          backdropFilter: "blur(10px)",
+          bgcolor: theme.palette.mode === 'dark' ? "rgba(30, 41, 59, 0.4)" : "rgba(255, 255, 255, 0.8)",
+          backdropFilter: "blur(12px)",
           transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
           position: "relative",
           "&:hover": {
-            transform: "translateY(-10px) scale(1.02)",
-            boxShadow: `0 25px 50px ${alpha(theme.palette.primary.main, 0.18)}`,
-            borderColor: alpha(theme.palette.primary.main, 0.2),
+            boxShadow: `0 25px 50px ${alpha(theme.palette.primary.main, 0.25)}`,
+            borderColor: alpha(theme.palette.primary.main, 0.3),
             "& .image-container img": {
-              transform: "scale(1.08)",
+              transform: "scale(1.1) rotate(1deg)",
             },
             "& .image-overlay": {
               opacity: 1,
@@ -84,9 +83,9 @@ export default function ImageCard({
             sx={{
               position: "relative",
               width: "100%",
-              paddingTop: "110%",
+              paddingTop: "100%", // 1:1 Aspect ratio for consistency
               overflow: "hidden",
-              bgcolor: alpha(theme.palette.primary.main, 0.02),
+              bgcolor: theme.palette.mode === 'dark' ? "rgba(0,0,0,0.2)" : "rgba(0,0,0,0.02)",
             }}
           >
             {!imgLoaded && (
@@ -99,12 +98,6 @@ export default function ImageCard({
                   left: 0,
                   width: "100%",
                   height: "100%",
-                  "&::after": {
-                    background: `linear-gradient(90deg, transparent, ${alpha(
-                      theme.palette.background.paper,
-                      0.5
-                    )}, transparent)`,
-                  },
                 }}
               />
             )}
@@ -122,22 +115,22 @@ export default function ImageCard({
                 width: "100%",
                 height: "100%",
                 objectFit: "contain",
-                transition: "transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)",
+                transition: "transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)",
                 opacity: imgLoaded ? 1 : 0,
-                p: 2,
+                p: 3,
               }}
             />
 
-            {/* Hover Overlay */}
+            {/* Hover Overlay - Mesh-like gradient */}
             <Box
               className="image-overlay"
               sx={{
                 position: "absolute",
                 inset: 0,
                 background: `linear-gradient(to top, ${alpha(
-                  theme.palette.primary.dark,
-                  0.6
-                )} 0%, ${alpha(theme.palette.primary.main, 0.2)} 50%, transparent 100%)`,
+                  theme.palette.primary.main,
+                  0.4
+                )} 0%, transparent 100%)`,
                 opacity: 0,
                 transition: "opacity 0.4s ease",
                 pointerEvents: "none",
@@ -152,20 +145,21 @@ export default function ImageCard({
                 top: "50%",
                 left: "50%",
                 transform: "translate(-50%, -50%) scale(0.8)",
-                width: 60,
-                height: 60,
+                width: 56,
+                height:56,
                 borderRadius: "50%",
-                bgcolor: alpha(theme.palette.background.paper, 0.95),
+                bgcolor: "background.paper",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 opacity: 0,
-                transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-                boxShadow: `0 8px 25px ${alpha(theme.palette.common.black, 0.2)}`,
+                transition: "all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1)",
+                boxShadow: theme.shadows[10],
                 pointerEvents: "none",
+                zIndex: 3,
               }}
             >
-              <VisibilityOutlined sx={{ fontSize: 28, color: "primary.main" }} />
+              <VisibilityOutlined sx={{ fontSize: 24, color: "primary.main" }} />
             </Box>
 
             {/* Tags Overlay */}
@@ -182,105 +176,62 @@ export default function ImageCard({
                   zIndex: 2,
                 }}
               >
-                {image.tags.slice(0, 3).map((tag, idx) => (
+                {image.tags.slice(0, 2).map((tag, idx) => (
                   <Chip
                     key={idx}
                     label={tag}
                     size="small"
                     sx={{
-                      bgcolor: alpha(theme.palette.background.paper, 0.92),
-                      color: "text.primary",
-                      backdropFilter: "blur(12px)",
-                      border: `1px solid ${alpha(theme.palette.divider, 0.15)}`,
-                      height: 28,
-                      fontSize: "0.75rem",
-                      fontWeight: 500,
-                      boxShadow: `0 4px 12px ${alpha(
-                        theme.palette.common.black,
-                        0.1
-                      )}`,
-                      transition: "all 0.3s ease",
-                      "& .MuiChip-label": {
-                        px: 1.5,
-                      },
-                      "&:hover": {
-                        bgcolor: theme.palette.background.paper,
-                        transform: "scale(1.05)",
-                      },
+                      bgcolor: "rgba(255, 255, 255, 0.9)",
+                      color: "#1e293b",
+                      backdropFilter: "blur(8px)",
+                      height: 24,
+                      fontSize: "0.7rem",
+                      fontWeight: 700,
+                      border: "none",
                     }}
                   />
                 ))}
-                {image.tags.length > 3 && (
-                  <Chip
-                    label={`+${image.tags.length - 3}`}
-                    size="small"
-                    sx={{
-                      background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.primary.dark} 100%)`,
-                      color: "white",
-                      backdropFilter: "blur(12px)",
-                      border: "none",
-                      height: 28,
-                      fontSize: "0.75rem",
-                      fontWeight: 600,
-                      boxShadow: `0 4px 12px ${alpha(
-                        theme.palette.primary.main,
-                        0.35
-                      )}`,
-                      "& .MuiChip-label": {
-                        px: 1.5,
-                      },
-                    }}
-                  />
-                )}
               </Box>
             )}
           </Box>
 
-          <CardContent sx={{ width: "100%", p: 2.5, flexGrow: 0 }}>
-            <Stack spacing={1.5}>
+          <CardContent sx={{ width: "100%", p: 3, flexGrow: 0 }}>
+            <Stack spacing={2}>
               <Typography
-                variant="body1"
+                variant="h6"
                 sx={{
-                  lineHeight: 1.5,
+                  lineHeight: 1.4,
                   display: "-webkit-box",
                   WebkitLineClamp: 2,
                   WebkitBoxOrient: "vertical",
                   overflow: "hidden",
-                  fontSize: "1.05rem",
-                  fontWeight: 600,
-                  minHeight: "3em",
+                  fontSize: "1.1rem",
+                  fontWeight: 700,
+                  minHeight: "2.8em",
                   color: "text.primary",
                 }}
               >
                 {title}
               </Typography>
 
-              <Chip
-                label={image.category}
-                size="medium"
-                sx={{
-                  background: `linear-gradient(135deg, ${alpha(
-                    theme.palette.primary.main,
-                    0.12
-                  )} 0%, ${alpha(theme.palette.primary.main, 0.08)} 100%)`,
-                  color: "primary.main",
-                  border: `1px solid ${alpha(theme.palette.primary.main, 0.15)}`,
-                  height: 30,
-                  fontSize: "0.85rem",
-                  fontWeight: 600,
-                  width: "fit-content",
-                  transition: "all 0.3s ease",
-                  "& .MuiChip-label": {
-                    px: 1.5,
-                  },
-                  "&:hover": {
-                    background: `linear-gradient(135deg, ${alpha(
-                      theme.palette.primary.main,
-                      0.18
-                    )} 0%, ${alpha(theme.palette.primary.main, 0.12)} 100%)`,
-                  },
-                }}
-              />
+              <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <Chip
+                  label={image.category}
+                  size="small"
+                  sx={{
+                    bgcolor: alpha(theme.palette.secondary.main, 0.1),
+                    color: "secondary.main",
+                    fontWeight: 700,
+                    borderRadius: 1.5,
+                  }}
+                />
+                {image.isWatermarked && (
+                  <Typography variant="caption" color="text.secondary" fontWeight={500}>
+                    محمي
+                  </Typography>
+                )}
+              </Box>
             </Stack>
           </CardContent>
         </CardActionArea>

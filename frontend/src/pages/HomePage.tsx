@@ -29,6 +29,8 @@ import CategoryShowcase from "../components/CategoryShowcase";
 import ImageGrid from "../components/ImageGrid";
 import AboutContactSection from "../components/AboutContactSection";
 import SEO from "../components/SEO";
+import { useTranslation } from "react-i18next";
+import PageTransition from "../components/PageTransition";
 import { getWhatsAppUrl } from "../utils/whatsapp";
 import {
   getOrganizationSchema,
@@ -67,16 +69,21 @@ const FeatureCard: FC<FeatureCardProps> = ({
   return (
     <Card
       elevation={0}
+      className="hover-lift"
       sx={{
-        p: 3,
-        borderRadius: 4,
-        bgcolor: alpha(theme.palette.background.paper, 0.8),
-        backdropFilter: "blur(20px)",
-        border: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
-        transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
+        p: 4,
+        borderRadius: 5,
+        bgcolor: theme.palette.mode === 'dark' ? "rgba(30, 41, 59, 0.5)" : "rgba(255, 255, 255, 0.7)",
+        backdropFilter: "blur(12px)",
+        border: `1px solid ${theme.palette.mode === 'dark' ? "rgba(255, 255, 255, 0.05)" : "rgba(0, 0, 0, 0.05)"}`,
         animation: "fadeInUp 0.6s ease-out forwards",
         animationDelay: `${delay}ms`,
         opacity: 0,
+        height: "100%",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        textAlign: "center",
         position: "relative",
         overflow: "hidden",
         "&::before": {
@@ -84,63 +91,40 @@ const FeatureCard: FC<FeatureCardProps> = ({
           position: "absolute",
           top: 0,
           left: 0,
-          right: 0,
-          height: "3px",
-          background: `linear-gradient(90deg, ${color}, ${alpha(color, 0.3)})`,
-          opacity: 0,
-          transition: "opacity 0.3s ease",
+          width: "100%",
+          height: "4px",
+          background: color,
+          opacity: 0.5,
         },
         "&:hover": {
-          transform: "translateY(-8px) scale(1.02)",
-          boxShadow: `0 20px 40px ${alpha(color, 0.2)}`,
+          boxShadow: `0 20px 40px ${alpha(color, 0.15)}`,
           borderColor: alpha(color, 0.3),
-          "&::before": {
-            opacity: 1,
-          },
-          "& .feature-icon": {
-            transform: "scale(1.1) rotate(5deg)",
-            boxShadow: `0 8px 25px ${alpha(color, 0.4)}`,
-          },
         },
       }}
     >
-      <Stack direction="row" spacing={2.5} alignItems="center">
-        <Box
-          className="feature-icon"
-          sx={{
-            width: 60,
-            height: 60,
-            borderRadius: 3,
-            background: `linear-gradient(135deg, ${color}, ${alpha(
-              color,
-              0.7
-            )})`,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            boxShadow: `0 4px 15px ${alpha(color, 0.3)}`,
-            transition: "all 0.4s cubic-bezier(0.4, 0, 0.2, 1)",
-            "& svg": {
-              fontSize: 28,
-              color: "white",
-            },
-          }}
-        >
-          {icon}
-        </Box>
-        <Box flex={1}>
-          <Typography variant="h6" sx={{ mb: 0.5, fontWeight: 700 }}>
-            {title}
-          </Typography>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{ lineHeight: 1.5 }}
-          >
-            {subtitle}
-          </Typography>
-        </Box>
-      </Stack>
+      <Box
+        className="feature-icon"
+        sx={{
+          mb: 3,
+          p: 2,
+          borderRadius: 3,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          bgcolor: alpha(color, 0.1),
+          color: color,
+          transition: "all 0.3s ease",
+          "& svg": { fontSize: 32 },
+        }}
+      >
+        {icon}
+      </Box>
+      <Typography variant="h6" sx={{ mb: 1, fontWeight: "bold" }}>
+        {title}
+      </Typography>
+      <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6 }}>
+        {subtitle}
+      </Typography>
     </Card>
   );
 };
@@ -211,62 +195,59 @@ const HomePage: FC = (): ReactElement => {
   ];
 
   return (
-    <>
+    <PageTransition>
       <SEO
         title="كتالوج الرحومي - صور منتجات عالية الجودة"
         description="استكشف مجموعة واسعة من صور المنتجات عالية الجودة في كتالوج الرحومي. صور احترافية لجميع أنواع المنتجات مع إمكانية التحميل المباشر."
         keywords="كتالوج منتجات, صور منتجات, كتالوج الرحومي, صور احترافية, منتجات يمنية, كتالوج إلكتروني"
         type="website"
       />
-      <Box sx={{ bgcolor: "background.default" }}>
+      <Box sx={{ bgcolor: "background.default", position: "relative" }}>
         {/* Hero Section */}
         <Box
+          className={theme.palette.mode === 'dark' ? 'mesh-gradient' : 'mesh-gradient-light'}
           sx={{
             position: "relative",
             overflow: "hidden",
-            py: { xs: 10, md: 16 },
-            minHeight: { md: "85vh" },
+            pt: { xs: 12, md: 20 },
+            pb: { xs: 8, md: 15 },
+            minHeight: { md: "90vh" },
             display: "flex",
             alignItems: "center",
-            background: `linear-gradient(165deg, ${alpha(
-              theme.palette.primary.main,
-              0.06
-            )} 0%, ${alpha(theme.palette.background.default, 1)} 50%, ${alpha(
-              theme.palette.secondary.main,
-              0.06
-            )} 100%)`,
           }}
         >
           {/* Floating Decorative Elements */}
           <Box
+            className="animate-float-slow"
             sx={{
               position: "absolute",
-              top: "10%",
-              right: "5%",
-              width: { xs: 150, md: 300 },
-              height: { xs: 150, md: 300 },
+              top: "15%",
+              right: "10%",
+              width: { xs: 200, md: 400 },
+              height: { xs: 200, md: 400 },
               borderRadius: "50%",
               background: `radial-gradient(circle, ${alpha(
                 theme.palette.primary.main,
-                0.1
+                0.15
               )} 0%, transparent 70%)`,
-              animation: "float 6s ease-in-out infinite",
+              filter: "blur(40px)",
               pointerEvents: "none",
             }}
           />
           <Box
+            className="animate-float-slow"
             sx={{
               position: "absolute",
-              bottom: "15%",
-              left: "10%",
-              width: { xs: 100, md: 200 },
-              height: { xs: 100, md: 200 },
+              bottom: "10%",
+              left: "5%",
+              width: { xs: 150, md: 300 },
+              height: { xs: 150, md: 300 },
               borderRadius: "50%",
               background: `radial-gradient(circle, ${alpha(
                 theme.palette.secondary.main,
-                0.08
+                0.12
               )} 0%, transparent 70%)`,
-              animation: "float 8s ease-in-out infinite",
+              filter: "blur(40px)",
               animationDelay: "2s",
               pointerEvents: "none",
             }}
@@ -670,7 +651,7 @@ const HomePage: FC = (): ReactElement => {
 
         <AboutContactSection />
       </Box>
-    </>
+    </PageTransition>
   );
 };
 

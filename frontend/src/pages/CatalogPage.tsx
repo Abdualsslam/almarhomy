@@ -27,6 +27,7 @@ import ImageGrid from "../components/ImageGrid";
 import { searchProducts } from "../api/products";
 import { fetchCategories } from "../api/admin";
 import SEO from "../components/SEO";
+import PageTransition from "../components/PageTransition";
 import { getItemListSchema, injectStructuredData } from "../utils/structuredData";
 import type { Product, Category } from "../types/models.types";
 
@@ -201,7 +202,7 @@ export default function CatalogPage() {
     : "تصفح كتالوج المنتجات الكامل في كتالوج الرحومي. مجموعة واسعة من صور المنتجات عالية الجودة لجميع الفئات.";
 
   return (
-    <>
+    <PageTransition>
       <SEO
         title={pageTitle}
         description={pageDescription}
@@ -211,29 +212,31 @@ export default function CatalogPage() {
 
       <Container maxWidth="xl">
         <Box
+          className={theme.palette.mode === 'dark' ? 'mesh-gradient' : 'mesh-gradient-light'}
           sx={{
             position: "relative",
             overflow: "hidden",
-            py: { xs: 6, md: 8 },
+            py: { xs: 8, md: 10 },
             mb: 5,
-            background: `linear-gradient(165deg, ${theme.palette.primary.main}08 0%, ${theme.palette.secondary.main}08 100%)`,
-            borderRadius: 5,
+            borderRadius: 6,
+            boxShadow: theme.shadows[4],
           }}
         >
           <Container maxWidth="xl">
-            <Stack spacing={2.5} alignItems="center" textAlign="center">
+            <Stack spacing={3} alignItems="center" textAlign="center">
               <Typography
-                variant={isMdUp ? "h3" : "h4"}
-                sx={{ fontFamily: "'Cairo', 'Segoe UI', 'Tahoma', 'Arial', sans-serif" }}
+                variant={isMdUp ? "h2" : "h3"}
+                color="white"
+                sx={{ fontWeight: 800 }}
               >
                 كتالوج المنتجات
               </Typography>
               <Typography
-                variant="body1"
-                color="text.secondary"
-                sx={{ maxWidth: 640, lineHeight: 1.7 }}
+                variant="h6"
+                color="white"
+                sx={{ maxWidth: 700, opacity: 0.9, fontWeight: 400 }}
               >
-                استخدم الفلاتر الذكية للوصول بسرعة إلى المنتج المثالي من بين مئات الخيارات
+                استكشف مجموعتنا الواسعة من المنتجات الفاخرة بأعلى جودة وتصميم
               </Typography>
             </Stack>
           </Container>
@@ -241,11 +244,12 @@ export default function CatalogPage() {
 
         <Paper
           elevation={0}
+          className={theme.palette.mode === 'dark' ? 'glass' : 'glass-light'}
           sx={{
-            borderRadius: 4,
+            borderRadius: 5,
+            p: { xs: 3, md: 4 },
+            mb: 6,
             border: `1px solid ${theme.palette.divider}`,
-            p: { xs: 2, md: 3 },
-            mb: 4,
           }}
         >
           <SearchBar
@@ -418,6 +422,6 @@ export default function CatalogPage() {
           </Grid>
         </Grid>
       </Container>
-    </>
+    </PageTransition>
   );
 }

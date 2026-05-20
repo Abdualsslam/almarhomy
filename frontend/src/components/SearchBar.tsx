@@ -1,5 +1,5 @@
 // src/components/SearchBar.tsx
-import { TextField, Box, InputAdornment, IconButton, SxProps, Theme, TextFieldProps } from "@mui/material";
+import { TextField, Box, InputAdornment, IconButton, SxProps, Theme, TextFieldProps, alpha, useTheme } from "@mui/material";
 import { Search, Close } from "@mui/icons-material";
 import { useState, useEffect, useRef, FC, ReactElement } from "react";
 import debounce from "lodash.debounce";
@@ -20,6 +20,7 @@ const SearchBar: FC<SearchBarComponentProps> = ({
   sx,
   ...textFieldProps
 }): ReactElement => {
+  const theme = useTheme();
   const [inputValue, setInputValue] = useState<string>(value);
   const debounceRef = useRef<ReturnType<typeof debounce> | null>(null);
 
@@ -75,17 +76,27 @@ const SearchBar: FC<SearchBarComponentProps> = ({
             </InputAdornment>
           ),
           sx: {
-            borderRadius: 3,
-            height: 60,
+            borderRadius: 4,
+            height: 64,
             fontSize: "1.1rem",
+            bgcolor: "background.paper",
+            transition: "all 0.3s ease",
             "& fieldset": {
-              borderWidth: 2,
+              borderColor: "transparent",
             },
-            "&:hover fieldset": {
-              borderColor: "primary.main",
+            "&:hover": {
+              bgcolor: "background.paper",
+              "& fieldset": {
+                borderColor: "primary.main",
+                opacity: 0.5,
+              },
             },
-            "&.Mui-focused fieldset": {
-              borderWidth: 2,
+            "&.Mui-focused": {
+              boxShadow: `0 0 0 4px ${alpha(theme.palette.primary.main, 0.1)}`,
+              "& fieldset": {
+                borderColor: "primary.main",
+                borderWidth: 2,
+              },
             },
           },
         }}

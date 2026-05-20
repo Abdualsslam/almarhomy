@@ -35,7 +35,6 @@ import {
   DarkMode as DarkModeIcon,
   Inventory2 as InventoryIcon,
 } from "@mui/icons-material";
-import { blue } from "@mui/material/colors";
 import { useThemeMode } from "../contexts/ThemeContext";
 
 const drawerWidth = 260;
@@ -111,99 +110,110 @@ const AdminLayout: FC = (): ReactElement => {
   };
 
   const drawer = (
-    <div>
-      <DrawerHeader>
-        <Box sx={{ display: "flex", alignItems: "center", gap: 1, ml: 1 }}>
+    <Box sx={{ height: "100%", display: "flex", flexDirection: "column", p: 2 }}>
+      <DrawerHeader sx={{ px: 1, mb: 2 }}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1.5 }}>
           <Avatar
-            sx={{ bgcolor: blue[900], width: 40, height: 40 }}
-            src="/logo.png"
+            sx={{ 
+              background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+              width: 42, 
+              height: 42,
+              boxShadow: `0 4px 12px ${alpha(theme.palette.primary.main, 0.3)}`
+            }}
           >
             A
           </Avatar>
           {!collapsed && (
-            <Typography variant="h6" noWrap>
-              لوحة التحكم
+            <Typography variant="h6" fontWeight={800} sx={{ letterSpacing: "-0.02em" }}>
+              الرحومي
             </Typography>
           )}
         </Box>
-        <IconButton onClick={toggleCollapse}>
-          {collapsed ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+        <IconButton onClick={toggleCollapse} sx={{ bgcolor: alpha(theme.palette.primary.main, 0.05) }}>
+          {collapsed ? <ChevronRightIcon fontSize="small" /> : <ChevronLeftIcon fontSize="small" />}
         </IconButton>
       </DrawerHeader>
-      <Divider />
-      <List>
-        {navItems.map((item) => (
-          <ListItemButton
-            key={item.text}
-            selected={pathname === item.path}
-            onClick={() => navigate(item.path)}
-            sx={{
-              borderRadius: 2,
-              mx: 1,
-              my: 0.5,
-              "&.Mui-selected": {
-                backgroundColor:
-                  theme.palette.mode === "dark"
-                    ? "rgba(25, 118, 210, 0.16)"
-                    : blue[50],
-                color:
-                  theme.palette.mode === "dark"
-                    ? theme.palette.primary.light
-                    : blue[900],
-                "&:hover": {
-                  backgroundColor:
-                    theme.palette.mode === "dark"
-                      ? "rgba(25, 118, 210, 0.24)"
-                      : blue[100],
-                },
-              },
-              "&:hover": {
-                backgroundColor: theme.palette.action.hover,
-              },
-              justifyContent: "space-evenly",
-            }}
-          >
-            <ListItemIcon
+
+      <List sx={{ px: 0 }}>
+        {navItems.map((item) => {
+          const isActive = pathname === item.path;
+          return (
+            <ListItemButton
+              key={item.text}
+              selected={isActive}
+              onClick={() => navigate(item.path)}
               sx={{
-                minWidth: collapsed ? "auto" : 48,
-                color: "inherit",
-                ml: collapsed ? 0 : 2
+                borderRadius: 3,
+                mb: 1,
+                py: 1.5,
+                transition: "all 0.3s ease",
+                "&.Mui-selected": {
+                  background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+                  color: "#fff",
+                  boxShadow: `0 8px 16px ${alpha(theme.palette.primary.main, 0.25)}`,
+                  "& .MuiListItemIcon-root": {
+                    color: "#fff",
+                  },
+                  "&:hover": {
+                    background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+                    opacity: 0.9,
+                  },
+                },
+                "&:hover": {
+                  bgcolor: alpha(theme.palette.primary.main, 0.05),
+                  transform: "translateX(-4px)",
+                },
               }}
             >
-              {item.icon}
-            </ListItemIcon>
-            <ListItemText
-              primary={item.text}
-              sx={{
-                display: collapsed ? "none" : "block",
-                textAlign: "right",
-                flex: 1,
-              }}
-            />
-
-          </ListItemButton>
-        ))}
+              <ListItemIcon
+                sx={{
+                  minWidth: collapsed ? "auto" : 40,
+                  color: isActive ? "inherit" : "text.secondary",
+                  ml: collapsed ? 0 : 1.5,
+                  transition: "all 0.3s ease",
+                }}
+              >
+                {item.icon}
+              </ListItemIcon>
+              {!collapsed && (
+                <ListItemText
+                  primary={item.text}
+                  primaryTypographyProps={{
+                    fontWeight: isActive ? 700 : 500,
+                    fontSize: "0.95rem",
+                  }}
+                />
+              )}
+            </ListItemButton>
+          );
+        })}
       </List>
-      <Divider sx={{ mt: "auto" }} />
-      <List>
+
+      <Box sx={{ mt: "auto" }}>
+        <Divider sx={{ mb: 2, opacity: 0.5 }} />
         <ListItemButton
           onClick={() => navigate("/admin/logout")}
           sx={{
-            borderRadius: 2,
-            mx: 1,
-            my: 0.5,
+            borderRadius: 3,
+            color: "error.main",
             "&:hover": {
-              backgroundColor: theme.palette.action.hover,
+              bgcolor: alpha(theme.palette.error.main, 0.05),
+              transform: "translateX(-4px)",
             },
           }}
         >
-          <ListItemIcon sx={{ minWidth: collapsed ? "auto" : 48 }}>
+          <ListItemIcon sx={{ minWidth: collapsed ? "auto" : 40, color: "inherit", ml: collapsed ? 0 : 1.5 }}>
             <LogoutIcon />
           </ListItemIcon>
-          {!collapsed && <ListItemText primary="تسجيل الخروج" />}
+          {!collapsed && (
+            <ListItemText 
+              primary="تسجيل الخروج" 
+              primaryTypographyProps={{ fontWeight: 600 }}
+            />
+          )}
         </ListItemButton>
-      </List>
-    </div>
+      </Box>
+    </Box>
   );
 
   return (
@@ -212,17 +222,17 @@ const AdminLayout: FC = (): ReactElement => {
       {/* AppBar */}
       <AppBar
         position="fixed"
+        elevation={0}
         sx={{
           width: "100%",
-          backgroundColor: theme.palette.background.paper,
+          backgroundColor: alpha(theme.palette.background.paper, 0.8),
+          backdropFilter: "blur(12px)",
           color: theme.palette.text.primary,
-          boxShadow: theme.palette.mode === "dark"
-            ? "0 2px 10px rgba(0,0,0,0.3)"
-            : "0 2px 10px rgba(0,0,0,0.05)",
           zIndex: theme.zIndex.drawer + 1,
+          borderBottom: `1px solid ${theme.palette.divider}`,
         }}
       >
-        <Toolbar sx={{ minHeight: "64px", py: 1 }}>
+        <Toolbar sx={{ minHeight: "72px", px: { xs: 2, sm: 4 } }}>
           <IconButton
             color="inherit"
             edge="start"
@@ -230,36 +240,44 @@ const AdminLayout: FC = (): ReactElement => {
             sx={{
               mr: 2,
               display: { sm: "none" },
-              color: theme.palette.text.primary,
             }}
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" noWrap sx={{ flexGrow: 1 }}>
-            لوحة التحكم الإدارية
+          <Typography 
+            variant="h5" 
+            noWrap 
+            sx={{ 
+              flexGrow: 1, 
+              fontWeight: 800, 
+              letterSpacing: "-0.02em",
+              display: { xs: "none", sm: "block" }
+            }}
+          >
+            لوحة التحكم
           </Typography>
 
-          <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+          <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
             <IconButton
               onClick={toggleTheme}
-              color="inherit"
               sx={{
-                color: theme.palette.text.secondary,
-                "&:hover": {
-                  backgroundColor: theme.palette.action.hover,
-                },
+                bgcolor: alpha(theme.palette.primary.main, 0.05),
+                color: theme.palette.primary.main,
               }}
               aria-label="تبديل الوضع"
             >
-              {mode === "dark" ? <LightModeIcon /> : <DarkModeIcon />}
+              {mode === "dark" ? <LightModeIcon fontSize="small" /> : <DarkModeIcon fontSize="small" />}
             </IconButton>
 
             <Box
               sx={{
                 display: "flex",
                 alignItems: "center",
-                gap: 1,
-                cursor: "pointer",
+                gap: 1.5,
+                p: 0.5,
+                pr: 1.5,
+                borderRadius: 10,
+                bgcolor: alpha(theme.palette.primary.main, 0.05),
               }}
             >
               <StyledBadge
@@ -268,19 +286,25 @@ const AdminLayout: FC = (): ReactElement => {
                 variant="dot"
               >
                 <Avatar
-                  sx={{ bgcolor: blue[900], width: 40, height: 40 }}
+                  sx={{ 
+                    background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+                    width: 36, 
+                    height: 36,
+                    fontSize: "0.9rem",
+                    fontWeight: 700
+                  }}
                 >
                   {username ? username.charAt(0).toUpperCase() : 'م'}
                 </Avatar>
               </StyledBadge>
               {!isMobile && (
                 <Box>
-                  <Typography variant="subtitle2">
+                  <Typography variant="subtitle2" fontWeight={700}>
                     {username || t('user')}
                   </Typography>
                   <Typography
                     variant="caption"
-                    sx={{ color: theme.palette.text.secondary }}
+                    sx={{ color: theme.palette.text.secondary, fontWeight: 500 }}
                   >
                     {role === 'admin' ? t('adminRole') : t('repRole')}
                   </Typography>
@@ -295,37 +319,11 @@ const AdminLayout: FC = (): ReactElement => {
       <Box
         component="nav"
         sx={{
-          width: { sm: collapsed ? 73 : drawerWidth },
+          width: { sm: collapsed ? 100 : drawerWidth },
           flexShrink: { sm: 0 },
+          transition: "width 0.3s ease",
         }}
       >
-        {/* للهواتف */}
-        <Drawer
-          variant="temporary"
-          open={mobileOpen}
-          anchor="right"
-          onClose={handleDrawerToggle}
-          ModalProps={{ keepMounted: true }}
-          sx={{
-            display: { xs: "block", sm: "none" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-              border: "none",
-              boxShadow:
-                theme.palette.mode === "dark"
-                  ? "2px 0 10px rgba(0,0,0,0.3)"
-                  : "2px 0 10px rgba(0,0,0,0.05)",
-            },
-          }}
-          SlideProps={{
-            direction: "right",
-            timeout: 300,
-          }}
-        >
-          {drawer}
-        </Drawer>
-
         {/* للشاشات الأكبر */}
         <Drawer
           variant="permanent"
@@ -334,19 +332,20 @@ const AdminLayout: FC = (): ReactElement => {
             display: { xs: "none", sm: "block" },
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
-              width: collapsed ? 73 : drawerWidth,
+              width: collapsed ? 100 : drawerWidth,
               border: "none",
-              boxShadow: "2px 0 10px rgba(0,0,0,0.05)",
-              transition: theme.transitions.create(["width", "transform"], {
-                easing: theme.transitions.easing.sharp,
-                duration: theme.transitions.duration.enteringScreen,
-              }),
+              bgcolor: "transparent",
+              transition: "width 0.3s ease",
               overflowX: "hidden",
+              pt: 10,
+              px: 1,
             },
           }}
           open
         >
-          {drawer}
+           <Box className="glass" sx={{ height: "100%", borderRadius: 6, overflow: "hidden" }}>
+             {drawer}
+           </Box>
         </Drawer>
       </Box>
 
@@ -355,23 +354,20 @@ const AdminLayout: FC = (): ReactElement => {
         component="main"
         sx={{
           flexGrow: 1,
-          p: { xs: 2, sm: 3 },
-          width: { sm: `calc(100% - ${collapsed ? 73 : drawerWidth}px)` },
-          backgroundColor: theme.palette.background.default,
+          p: { xs: 2, sm: 4 },
+          width: { sm: `calc(100% - ${collapsed ? 100 : drawerWidth}px)` },
+          backgroundColor: "background.default",
           minHeight: "100vh",
         }}
       >
-        <Toolbar />
+        <Toolbar sx={{ mb: 2 }} />
         <Box
+          className={theme.palette.mode === 'dark' ? 'glass' : 'glass-light'}
           sx={{
-            backgroundColor: theme.palette.background.paper,
-            borderRadius: 4,
-            boxShadow:
-              theme.palette.mode === "dark"
-                ? "0 2px 10px rgba(0,0,0,0.3)"
-                : "0 2px 10px rgba(0,0,0,0.03)",
-            p: { xs: 2, sm: 3 },
-            minHeight: "calc(100vh - 100px)",
+            borderRadius: 6,
+            p: { xs: 2, sm: 4 },
+            minHeight: "calc(100vh - 140px)",
+            border: `1px solid ${theme.palette.divider}`,
           }}
         >
           <Outlet />

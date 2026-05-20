@@ -44,35 +44,54 @@ export function getTheme(mode: ThemeMode): Theme {
     palette: {
       mode,
       primary: {
-        main: mode === "dark" ? "#5c6bc0" : "#1a237e",
-        light: mode === "dark" ? "#8e99f3" : "#534bae",
-        dark: mode === "dark" ? "#26418f" : "#000051",
+        main: mode === "dark" ? "#818cf8" : "#6366f1", // Indigo
+        light: mode === "dark" ? "#a5b4fc" : "#818cf8",
+        dark: mode === "dark" ? "#4f46e5" : "#4338ca",
         contrastText: "#ffffff",
       },
       secondary: {
-        main: mode === "dark" ? "#29b6f6" : "#0277bd",
-        light: mode === "dark" ? "#4fc3f7" : "#0288d1",
-        dark: mode === "dark" ? "#0288d1" : "#01579b",
+        main: mode === "dark" ? "#22d3ee" : "#06b6d4", // Cyan
+        light: mode === "dark" ? "#67e8f9" : "#22d3ee",
+        dark: mode === "dark" ? "#0891b2" : "#0e7490",
       },
       background: {
-        default: mode === "dark" ? "#121212" : "#f9fafb",
-        paper: mode === "dark" ? "#1e1e1e" : "#ffffff",
+        default: mode === "dark" ? "#0f172a" : "#f8fafc", // Slate 900 / 50
+        paper: mode === "dark" ? "#1e293b" : "#ffffff", // Slate 800 / White
       },
       text: {
-        primary: mode === "dark" ? "#ffffff" : "#212121",
-        secondary: mode === "dark" ? "#b0b0b0" : "#757575",
+        primary: mode === "dark" ? "#f8fafc" : "#0f172a",
+        secondary: mode === "dark" ? "#94a3b8" : "#64748b",
       },
       divider:
-        mode === "dark" ? "rgba(255, 255, 255, 0.12)" : "rgba(0, 0, 0, 0.12)",
+        mode === "dark" ? "rgba(248, 250, 252, 0.08)" : "rgba(15, 23, 42, 0.08)",
     },
     typography: {
-      fontFamily: "'Cairo', 'Segoe UI', 'Tahoma', 'Arial', sans-serif",
+      fontFamily: "'Cairo', 'Inter', 'Segoe UI', sans-serif",
+      h1: { fontWeight: 800, letterSpacing: "-0.02em" },
+      h2: { fontWeight: 800, letterSpacing: "-0.02em" },
+      h3: { fontWeight: 700, letterSpacing: "-0.01em" },
+      h4: { fontWeight: 700, letterSpacing: "-0.01em" },
+      h5: { fontWeight: 600 },
+      h6: { fontWeight: 600 },
+      subtitle1: { letterSpacing: "0.01em" },
+      body1: { lineHeight: 1.7 },
+    },
+    shape: {
+      borderRadius: 12,
     },
     components: {
       MuiButton: {
         styleOverrides: {
           root: {
-            // Add spacing between icons and text in buttons
+            borderRadius: 10,
+            textTransform: "none",
+            fontWeight: 600,
+            padding: "8px 20px",
+            transition: "all 0.2s ease-in-out",
+            "&:hover": {
+              transform: "translateY(-2px)",
+              boxShadow: "0 4px 12px rgba(99, 102, 241, 0.25)",
+            },
             "& .MuiButton-startIcon": {
               marginLeft: 8,
               marginRight: -4,
@@ -82,22 +101,26 @@ export function getTheme(mode: ThemeMode): Theme {
               marginLeft: -4,
             },
           },
-        },
-      },
-      MuiIconButton: {
-        styleOverrides: {
-          root: {
-            // Add spacing for icons inside IconButton when text is present
-            "& .MuiSvgIcon-root": {
-              margin: "0 2px",
-            },
+          containedPrimary: {
+            background: "linear-gradient(135deg, #6366f1 0%, #4f46e5 100%)",
           },
         },
       },
       MuiCard: {
         styleOverrides: {
           root: {
-            backgroundColor: mode === "dark" ? "#1e1e1e" : "#ffffff",
+            borderRadius: 16,
+            boxShadow: mode === "dark" 
+              ? "0 4px 20px rgba(0,0,0,0.4)" 
+              : "0 4px 20px rgba(0,0,0,0.05)",
+            border: `1px solid ${mode === "dark" ? "rgba(255,255,255,0.05)" : "rgba(0,0,0,0.05)"}`,
+            backgroundImage: "none",
+          },
+        },
+      },
+      MuiPaper: {
+        styleOverrides: {
+          root: {
             backgroundImage: "none",
           },
         },
@@ -105,30 +128,24 @@ export function getTheme(mode: ThemeMode): Theme {
       MuiAppBar: {
         styleOverrides: {
           root: {
-            backgroundColor: mode === "dark" ? "#1e1e1e" : "#ffffff",
-            color: mode === "dark" ? "#ffffff" : "#333",
-            backgroundImage: "none",
-          },
-        },
-      },
-      MuiDrawer: {
-        styleOverrides: {
-          paper: {
-            backgroundColor: mode === "dark" ? "#1e1e1e" : "#ffffff",
-            backgroundImage: "none",
+            backgroundColor: mode === "dark" ? "rgba(15, 23, 42, 0.8)" : "rgba(255, 255, 255, 0.8)",
+            backdropFilter: "blur(12px)",
+            color: mode === "dark" ? "#f8fafc" : "#0f172a",
+            boxShadow: "none",
+            borderBottom: `1px solid ${mode === "dark" ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.08)"}`,
           },
         },
       },
     },
     custom: {
       borderRadius: {
-        small: 4,
-        medium: 8,
-        large: 16,
+        small: 6,
+        medium: 12,
+        large: 24,
       },
       spacing: {
-        section: 64,
-        card: 16,
+        section: 80,
+        card: 24,
       },
     },
   };

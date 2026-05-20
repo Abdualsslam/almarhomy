@@ -85,62 +85,69 @@ export default function LoginPage() {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        background:
-          mode === "dark"
-            ? "linear-gradient(135deg, #1a1a2e 0%, #16213e 100%)"
-            : "linear-gradient(135deg, #1565c0 0%, #0277bd 100%)",
         p: 2,
         position: "relative",
+        overflow: "hidden",
       }}
+      className={mode === 'dark' ? 'mesh-gradient' : 'mesh-gradient-light'}
     >
-      {/* زر التبديل */}
+      {/* Floating Orbs */}
+      <Box
+        sx={{
+          position: "absolute",
+          top: "10%",
+          left: "10%",
+          width: "300px",
+          height: "300px",
+          borderRadius: "50%",
+          background: `radial-gradient(circle, ${alpha(theme.palette.primary.main, 0.2)} 0%, transparent 70%)`,
+          filter: "blur(60px)",
+          zIndex: 0,
+        }}
+      />
+      <Box
+        sx={{
+          position: "absolute",
+          bottom: "10%",
+          right: "10%",
+          width: "400px",
+          height: "400px",
+          borderRadius: "50%",
+          background: `radial-gradient(circle, ${alpha(theme.palette.secondary.main, 0.2)} 0%, transparent 70%)`,
+          filter: "blur(80px)",
+          zIndex: 0,
+        }}
+      />
+
       <IconButton
         onClick={toggleTheme}
+        className="glass"
         sx={{
           position: "fixed",
           top: { xs: 16, sm: 24 },
           left: { xs: 16, sm: 24 },
-          backgroundColor: "rgba(255, 255, 255, 0.1)",
-          color: "#fff",
-          backdropFilter: "blur(10px)",
-          "&:hover": {
-            backgroundColor: "rgba(255, 255, 255, 0.2)",
-          },
+          color: "white",
           zIndex: 1000,
         }}
-        aria-label="تبديل الوضع"
       >
         {mode === "dark" ? <LightMode /> : <DarkMode />}
       </IconButton>
 
-      <Container maxWidth="sm">
+      <Container maxWidth="xs" sx={{ position: "relative", zIndex: 1 }}>
         <Box
-          component={Paper}
-          elevation={10}
+          elevation={0}
+          className={mode === 'dark' ? 'glass' : 'glass-light'}
           sx={{
-            borderRadius: { xs: 3, sm: 4 },
+            borderRadius: 6,
             overflow: "hidden",
-            boxShadow:
-              mode === "dark"
-                ? "0 15px 35px rgba(0,0,0,0.5)"
-                : "0 15px 35px rgba(0,0,0,0.2)",
-            background:
-              mode === "dark"
-                ? "rgba(30, 30, 30, 0.95)"
-                : "rgba(255, 255, 255, 0.95)",
-            backdropFilter: "blur(10px)",
-            position: "relative",
+            border: `1px solid ${alpha(theme.palette.divider, 0.1)}`,
+            boxShadow: `0 40px 80px ${alpha("#000", 0.2)}`,
           }}
         >
-          {/* تصميم الخلفية الجمالية */}
           <Box
             sx={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              right: 0,
-              height: 6,
-              background: "linear-gradient(90deg, #1565c0 0%, #0277bd 100%)",
+              height: 8,
+              background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
             }}
           />
 
@@ -190,8 +197,8 @@ export default function LoginPage() {
                 }}
                 sx={{
                   "& .MuiOutlinedInput-root": {
-                    borderRadius: 2,
-                    bgcolor: theme.palette.background.paper,
+                    borderRadius: 3,
+                    bgcolor: alpha(theme.palette.background.paper, 0.5),
                   },
                 }}
               />
@@ -219,8 +226,8 @@ export default function LoginPage() {
                 }}
                 sx={{
                   "& .MuiOutlinedInput-root": {
-                    borderRadius: 2,
-                    bgcolor: theme.palette.background.paper,
+                    borderRadius: 3,
+                    bgcolor: alpha(theme.palette.background.paper, 0.5),
                   },
                 }}
               />
@@ -252,17 +259,15 @@ export default function LoginPage() {
                 fullWidth
                 size="large"
                 disabled={loading}
+                className="hover-lift"
                 sx={{
-                  mt: 2,
-                  py: 1.5,
-                  borderRadius: 2,
+                  mt: 4,
+                  py: 1.8,
+                  borderRadius: 3,
                   fontSize: "1.1rem",
-                  boxShadow: "0 4px 15px rgba(21, 101, 192, 0.4)",
-                  background:
-                    "linear-gradient(90deg, #1565c0 0%, #0277bd 100%)",
-                  "&:hover": {
-                    boxShadow: "0 6px 20px rgba(21, 101, 192, 0.6)",
-                  },
+                  fontWeight: 700,
+                  background: `linear-gradient(90deg, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+                  boxShadow: `0 10px 20px ${alpha(theme.palette.primary.main, 0.3)}`,
                 }}
               >
                 {loading ? (

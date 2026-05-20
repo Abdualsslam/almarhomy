@@ -6,6 +6,9 @@ import {
   Card,
   TablePagination,
   Alert,
+  useTheme,
+  alpha,
+  Stack,
 } from "@mui/material";
 import { Add as AddIcon } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
@@ -15,7 +18,10 @@ import ProductFilters from "../../components/admin/ProductFilters";
 import ProductFormDialog from "../../components/admin/ProductFormDialog";
 import DeleteProductDialog from "../../components/admin/DeleteProductDialog";
 
+import PageTransition from "../../components/PageTransition";
+
 export default function ProductManagement() {
+  const theme = useTheme();
   const { t } = useTranslation();
   const {
     products, loading, page, setPage, rowsPerPage, setRowsPerPage, totalCount,
@@ -92,13 +98,50 @@ export default function ProductManagement() {
   };
 
   return (
-    <Box sx={{ p: { xs: 2, md: 3 } }}>
-      <Box sx={{ mb: 4, display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-        <Box>
-          <Typography variant="h4" fontWeight="bold">{t('admin.products.title')}</Typography>
-          <Typography variant="body1" color="text.secondary">{t('admin.products.subtitle')}</Typography>
-        </Box>
-        <Button variant="contained" startIcon={<AddIcon />} onClick={() => handleOpen()} size="large">{t('admin.products.new_product')}</Button>
+    <PageTransition>
+      <Box sx={{ mb: 6 }}>
+        <Stack 
+          direction={{ xs: "column", sm: "row" }} 
+          justifyContent="space-between" 
+          alignItems={{ xs: "flex-start", sm: "center" }}
+          spacing={3}
+        >
+          <Box>
+            <Typography
+              variant="h3"
+              sx={{
+                fontWeight: 900,
+                mb: 1,
+                background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+                letterSpacing: "-0.02em",
+              }}
+            >
+              {t('admin.products.title')}
+            </Typography>
+            <Typography variant="body1" color="text.secondary" fontWeight={500}>
+              {t('admin.products.subtitle')}
+            </Typography>
+          </Box>
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={() => handleOpen()}
+            className="hover-lift"
+            sx={{
+              borderRadius: 3,
+              px: 4,
+              py: 1.8,
+              fontSize: "1rem",
+              fontWeight: 700,
+              background: `linear-gradient(135deg, ${theme.palette.primary.main} 0%, ${theme.palette.secondary.main} 100%)`,
+              boxShadow: `0 10px 20px ${alpha(theme.palette.primary.main, 0.2)}`,
+            }}
+          >
+            {t('admin.products.new_product')}
+          </Button>
+        </Stack>
       </Box>
 
       <ProductFilters 
@@ -111,7 +154,11 @@ export default function ProductManagement() {
 
       {error && <Alert severity="error" sx={{ mb: 2 }} onClose={() => setError("")}>{error}</Alert>}
 
-      <Card sx={{ borderRadius: 4, overflow: "hidden" }}>
+      <Card 
+        elevation={0}
+        className={theme.palette.mode === 'dark' ? 'glass' : 'glass-light'}
+        sx={{ borderRadius: 5, overflow: "hidden", border: `1px solid ${theme.palette.divider}` }}
+      >
         <ProductTable 
           products={products} 
           loading={loading} 
@@ -129,6 +176,7 @@ export default function ProductManagement() {
           rowsPerPageOptions={[5, 10, 20, 50]}
           labelRowsPerPage="منتجات لكل صفحة"
           labelDisplayedRows={({ from, to, count }) => `${from}-${to} من ${count}`}
+          sx={{ borderTop: `1px solid ${theme.palette.divider}` }}
         />
       </Card>
 
@@ -171,6 +219,6 @@ export default function ProductManagement() {
             // Delete logic...
         }}
       />
-    </Box>
+    </PageTransition>
   );
 }

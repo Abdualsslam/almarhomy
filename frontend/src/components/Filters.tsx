@@ -61,76 +61,77 @@ const Filters: FC<FiltersProps> = ({
   return (
     <Paper
       elevation={0}
+      className="glass-light"
       sx={{
-        p: 3,
-        borderRadius: 4,
+        p: 4,
+        borderRadius: 5,
         position: "sticky",
-        top: 120,
+        top: 100,
         border: "1px solid",
         borderColor: "divider",
         ...sx,
       }}
     >
-      <Stack spacing={3}>
+      <Stack spacing={4}>
         <Box>
-          <Typography variant="h5" sx={{ mb: 1 }}>
-            الفلاتر
+          <Typography variant="h5" sx={{ mb: 1, fontWeight: 800 }}>
+            التصفية
           </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ lineHeight: 1.6 }}>
-            حدد معايير البحث للوصول إلى المنتج المناسب
+            اكتشف المنتجات حسب الفئات
           </Typography>
         </Box>
 
-        <Divider />
-
         <Box>
-          <Typography variant="subtitle1" sx={{ mb: 1.5 }}>
-            الفئات
+          <Typography variant="subtitle1" sx={{ mb: 2, fontWeight: 700, color: "primary.main" }}>
+            الفئات الرئيسية
           </Typography>
-          <Stack spacing={1}>
+          <Stack spacing={1.5}>
             <Chip
-              label="الكل"
+              label="جميع المنتجات"
               onClick={() => handleChange({ category: "" })}
               variant={!values?.category ? "filled" : "outlined"}
               color={!values?.category ? "primary" : "default"}
               sx={{
-                borderRadius: 3,
-                transition: "all 0.2s ease",
-                justifyContent: "flex-start",
+                borderRadius: 2,
+                py: 2.5,
+                fontSize: "0.95rem",
+                fontWeight: !values?.category ? 700 : 500,
+                justifyContent: "center",
+                transition: "all 0.3s ease",
                 "&:hover": {
-                  transform: "translateY(-2px)",
+                  transform: "translateX(-4px)",
+                  bgcolor: !values?.category ? "primary.dark" : "action.hover",
                 },
               }}
             />
             {categories.map((category) => {
               const isChild = !!category.parent;
+              const isActive = values?.category === category._id;
               const parentName =
                 category.parent && typeof category.parent === "object"
                   ? category.parent.name
                   : null;
+              
+              if (isChild && parentName) return null; // Hide subcategories for now or handle differently
+
               return (
                 <Chip
                   key={category._id}
-                  label={
-                    isChild && parentName
-                      ? `↳ ${category.name}`
-                      : category.name
-                  }
+                  label={category.name}
                   onClick={() => handleChange({ category: category._id })}
-                  variant={
-                    values?.category === category._id ? "filled" : "outlined"
-                  }
-                  color={
-                    values?.category === category._id ? "primary" : "default"
-                  }
+                  variant={isActive ? "filled" : "outlined"}
+                  color={isActive ? "primary" : "default"}
                   sx={{
-                    borderRadius: 3,
-                    transition: "all 0.2s ease",
-                    justifyContent: "flex-start",
-                    ml: isChild ? 2 : 0,
-                    fontSize: isChild ? "0.85rem" : "0.875rem",
+                    borderRadius: 2,
+                    py: 2.5,
+                    fontSize: "0.95rem",
+                    fontWeight: isActive ? 700 : 500,
+                    justifyContent: "center",
+                    transition: "all 0.3s ease",
                     "&:hover": {
-                      transform: "translateY(-2px)",
+                      transform: "translateX(-4px)",
+                      bgcolor: isActive ? "primary.dark" : "action.hover",
                     },
                   }}
                 />
