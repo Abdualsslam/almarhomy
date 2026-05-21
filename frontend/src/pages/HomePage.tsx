@@ -2,10 +2,8 @@ import {
   Box,
   Container,
   Typography,
-  Grid,
   Stack,
   Button,
-  alpha,
   useTheme,
   useMediaQuery,
 } from "@mui/material";
@@ -48,6 +46,8 @@ const HomePage: FC = (): ReactElement => {
   const [loadingProducts, setLoadingProducts] = useState<boolean>(true);
   const { t } = useTranslation();
 
+
+  // Load data from API
   useEffect(() => {
     (async () => {
       try {
@@ -74,7 +74,7 @@ const HomePage: FC = (): ReactElement => {
         keywords="premium catalog, professional equipment, high-end tools, Alrhomi"
         type="website"
       />
-      
+
       <Box sx={{ position: "relative", overflow: "hidden" }}>
         {/* Cinematic Hero Section */}
         <Box
@@ -133,8 +133,8 @@ const HomePage: FC = (): ReactElement => {
                 <Typography
                   variant={isMdUp ? "h1" : "h2"}
                   className="text-gradient"
-                  sx={{ 
-                    fontWeight: 800, 
+                  sx={{
+                    fontWeight: 800,
                     lineHeight: 1.1,
                     fontSize: { xs: "3rem", md: "5rem" }
                   }}
@@ -144,8 +144,8 @@ const HomePage: FC = (): ReactElement => {
 
                 <Typography
                   variant="h5"
-                  sx={{ 
-                    color: "var(--text-secondary)", 
+                  sx={{
+                    color: "var(--text-secondary)",
                     lineHeight: 1.6,
                     maxWidth: 700,
                     fontWeight: 400
@@ -197,7 +197,7 @@ const HomePage: FC = (): ReactElement => {
                     مجموعة مختارة من أرقى المعدات والأدوات الاحترافية المصنفة بدقة لتسهيل وصولك لما تحتاجه.
                   </Typography>
                 </Box>
-                
+
                 <CategoryShowcase
                   categories={categories}
                   loading={loadingCategories}

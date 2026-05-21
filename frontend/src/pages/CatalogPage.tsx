@@ -14,12 +14,12 @@ import {
   FormControl,
   Select,
   MenuItem,
-  InputLabel,
   useTheme,
 } from "@mui/material";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import { Refresh, Tune } from "@mui/icons-material";
+import { Tune } from "@mui/icons-material";
 import { motion, AnimatePresence } from "framer-motion";
+
 
 import SearchBar from "../components/SearchBar";
 import Filters from "../components/Filters";
@@ -58,7 +58,7 @@ export default function CatalogPage() {
   };
 
   const page = parsePageParam(searchParams.get("page"));
-  const [data, setData] = useState({ items: [], totalPages: 1, totalItems: 0 });
+  const [data, setData] = useState<{ items: Product[]; totalPages: number; totalItems: number }>({ items: [], totalPages: 1, totalItems: 0 });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const [categories, setCategories] = useState<Category[]>([]);
@@ -159,17 +159,17 @@ export default function CatalogPage() {
                   <Typography variant="body1" sx={{ fontWeight: 500 }}>
                     {t('catalog.results_found', { count: data.totalItems })}
                   </Typography>
-                  
+
                   <Stack direction="row" spacing={2} alignItems="center">
-                    <Button 
+                    <Button
                       sx={{ display: { md: "none" } }}
-                      variant="outlined" 
+                      variant="outlined"
                       startIcon={<Tune />}
                       onClick={() => setShowMobileFilters(!showMobileFilters)}
                     >
                       الفلاتر
                     </Button>
-                    
+
                     <FormControl size="small" sx={{ minWidth: 180 }}>
                       <Select
                         value={`${filters.sortBy}-${filters.sortOrder}`}
@@ -212,7 +212,7 @@ export default function CatalogPage() {
                         withDownload
                         onSelect={(img) => navigate(`/product/${img._id}`)}
                       />
-                      
+
                       {data.totalPages > 1 && (
                         <Box sx={{ display: "flex", justifyContent: "center", mt: 8 }}>
                           <Pagination

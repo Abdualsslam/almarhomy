@@ -9,10 +9,8 @@ import {
   Breadcrumbs,
   Link,
   Skeleton,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   Chip,
   Stack,
-
   Divider,
   Paper,
   Button,
@@ -311,7 +309,7 @@ export default function ProductDetail() {
                         position: "relative",
                         transition: "all 0.3s ease",
                         "&:hover": {
-                           boxShadow: theme.shadows[10],
+                          boxShadow: theme.shadows[10],
                         }
                       }}
                     >
@@ -376,18 +374,18 @@ export default function ProductDetail() {
                       {product?.productName || product?.description}
                     </Typography>
                     <Stack direction="row" spacing={1.5} alignItems="center">
-                       <Chip 
-                         label={product?.category} 
-                         color="primary" 
-                         variant="outlined"
-                         sx={{ fontWeight: 700, borderRadius: 2 }}
-                       />
-                       <Chip 
-                         label={product?.model} 
-                         color="secondary" 
-                         variant="outlined"
-                         sx={{ fontWeight: 700, borderRadius: 2 }}
-                       />
+                      <Chip
+                        label={product?.category}
+                        color="primary"
+                        variant="outlined"
+                        sx={{ fontWeight: 700, borderRadius: 2 }}
+                      />
+                      <Chip
+                        label={product?.model}
+                        color="secondary"
+                        variant="outlined"
+                        sx={{ fontWeight: 700, borderRadius: 2 }}
+                      />
                     </Stack>
                   </Box>
 
@@ -515,76 +513,76 @@ export default function ProductDetail() {
                                     "&:last-child": { pb: { xs: 2, sm: 2.5 } },
                                   }}
                                 >
-                                    <Stack spacing={{ xs: 1.5, sm: 1.5 }}>
-                                      <Stack
-                                        direction="row"
-                                        justifyContent="space-between"
-                                        alignItems="center"
-                                      >
-                                        <Stack direction="row" spacing={1} alignItems="center">
-                                          <Box
+                                  <Stack spacing={{ xs: 1.5, sm: 1.5 }}>
+                                    <Stack
+                                      direction="row"
+                                      justifyContent="space-between"
+                                      alignItems="center"
+                                    >
+                                      <Stack direction="row" spacing={1} alignItems="center">
+                                        <Box
+                                          sx={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            width: { xs: 28, sm: 32 },
+                                            height: { xs: 28, sm: 32 },
+                                            borderRadius: { xs: 1.5, sm: 2 },
+                                            bgcolor: alpha(
+                                              theme.palette[item.color].main,
+                                              0.15
+                                            ),
+                                          }}
+                                        >
+                                          <item.icon
                                             sx={{
-                                              display: "flex",
-                                              alignItems: "center",
-                                              justifyContent: "center",
-                                              width: { xs: 28, sm: 32 },
-                                              height: { xs: 28, sm: 32 },
-                                              borderRadius: { xs: 1.5, sm: 2 },
-                                              bgcolor: alpha(
-                                                theme.palette[item.color].main,
-                                                0.15
-                                              ),
+                                              color: `${item.color}.main`,
+                                              fontSize: { xs: 16, sm: 18 },
                                             }}
-                                          >
-                                            <item.icon
-                                              sx={{
-                                                color: `${item.color}.main`,
-                                                fontSize: { xs: 16, sm: 18 },
-                                              }}
-                                            />
-                                          </Box>
-                                          <Typography
-                                            variant="body2"
-                                            color="text.secondary"
-                                            sx={{
-                                              fontSize: { xs: "0.8rem", sm: "0.875rem" },
-                                            }}
-                                          >
-                                            {item.label}
-                                          </Typography>
-                                        </Stack>
-
-                                        {item.copyable && (
-                                          <Tooltip title={t('product.copy_code')}>
-                                            <IconButton
-                                              size="small"
-                                              onClick={() => handleCopyCode(item.value!)}
-                                              sx={{
-                                                color: `${item.color}.main`,
-                                                "&:hover": {
-                                                  bgcolor: alpha(
-                                                    theme.palette[item.color].main,
-                                                    0.1
-                                                  ),
-                                                },
-                                              }}
-                                            >
-                                              <ContentCopy sx={{ fontSize: 16 }} />
-                                            </IconButton>
-                                          </Tooltip>
-                                        )}
+                                          />
+                                        </Box>
+                                        <Typography
+                                          variant="body2"
+                                          color="text.secondary"
+                                          sx={{
+                                            fontSize: { xs: "0.8rem", sm: "0.875rem" },
+                                          }}
+                                        >
+                                          {item.label}
+                                        </Typography>
                                       </Stack>
-                                      <Typography
-                                        sx={{
-                                          fontSize: { xs: "0.9rem", sm: "1rem" },
-                                          pr: { xs: 1, sm: 1 },
-                                          wordBreak: "break-word",
-                                          fontWeight: item.copyable ? 700 : 400,
-                                        }}
-                                      >
-                                        {item.value}
-                                      </Typography>
+
+                                      {item.copyable && (
+                                        <Tooltip title={t('product.copy_code')}>
+                                          <IconButton
+                                            size="small"
+                                            onClick={() => handleCopyCode(item.value!)}
+                                            sx={{
+                                              color: `${item.color}.main`,
+                                              "&:hover": {
+                                                bgcolor: alpha(
+                                                  theme.palette[item.color].main,
+                                                  0.1
+                                                ),
+                                              },
+                                            }}
+                                          >
+                                            <ContentCopy sx={{ fontSize: 16 }} />
+                                          </IconButton>
+                                        </Tooltip>
+                                      )}
                                     </Stack>
+                                    <Typography
+                                      sx={{
+                                        fontSize: { xs: "0.9rem", sm: "1rem" },
+                                        pr: { xs: 1, sm: 1 },
+                                        wordBreak: "break-word",
+                                        fontWeight: item.copyable ? 700 : 400,
+                                      }}
+                                    >
+                                      {item.value}
+                                    </Typography>
+                                  </Stack>
                                 </CardContent>
                               </Card>
                             </Grid>
