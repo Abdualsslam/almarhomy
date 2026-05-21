@@ -14,9 +14,7 @@ declare module "@mui/material/styles" {
   }
 }
 
-export function getTheme(mode: ThemeMode): Theme {
-  const isDark = mode === "dark";
-  
+export function getTheme(_mode: ThemeMode): Theme {
   const themeOptions: ThemeOptions = {
     direction: "rtl",
     palette: {
