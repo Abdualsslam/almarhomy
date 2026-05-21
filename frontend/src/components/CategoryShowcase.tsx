@@ -3,7 +3,6 @@ import {
   Typography,
   Grid,
   Skeleton,
-  Stack,
 } from "@mui/material";
 import { useMemo, FC, ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
