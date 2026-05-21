@@ -1,0 +1,297 @@
+2026-May-20 02:04:26.618256 Docker 29.3.1 with BuildKit and Buildx detected on deployment server (apps-01).
+2026-May-20 02:04:26.646952 Starting deployment of alrhomi-catalog:main-plcy0gkoh9y57e6mronftfmd to apps-01.
+2026-May-20 02:04:27.176423 Preparing container with helper image: ghcr.io/coollabsio/coolify-helper:1.0.13
+2026-May-20 02:04:27.475625 [DEBUG] [CMD]: docker stop -t 30 vcqckeo4dmn7kvwllrxbxu6s
+2026-May-20 02:04:27.475625 [DEBUG] Error response from daemon: No such container: vcqckeo4dmn7kvwllrxbxu6s
+2026-May-20 02:04:28.490611 [DEBUG] [CMD]: docker run -d --network 'coolify' --name vcqckeo4dmn7kvwllrxbxu6s  --rm -v /var/run/docker.sock:/var/run/docker.sock ghcr.io/coollabsio/coolify-helper:1.0.13
+2026-May-20 02:04:28.490611 [DEBUG] 1177877da9355f77bcf90032c4514014934804baa9dc7eacebdd84206d3fe9aa
+2026-May-20 02:04:31.230851 [DEBUG] [CMD]: docker exec vcqckeo4dmn7kvwllrxbxu6s bash -c 'GIT_SSH_COMMAND="ssh -o ConnectTimeout=30 -p 22 -o Port=22 -o LogLevel=ERROR -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" git ls-remote https://github.com/mpro775/alrhomi-catalog refs/heads/main'
+2026-May-20 02:<REDACTED>@\(.*\):#https://\1/#g" '\''/artifacts/vcqckeo4dmn7kvwllrxbxu6s'\''/.gitmodules || true && git submodule sync && GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" git submodule update --init --recursive --depth=1; fi && cd '\''/artifacts/vcqckeo4dmn7kvwllrxbxu6s'\'' && GIT_SSH_COMMAND="ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" git lfs pull'
+2026-May-20 02:<REDACTED>@sha256:2f07d83bf561b506400dc183b1b2003803e39efbd22451f848adaba14d28c7c7
+2026-May-20 02:04:49.848229 [DEBUG] #10 resolve docker.io/library/nginx:alpine@sha256:2f07d83bf561b506400dc183b1b2003803e39efbd22451f848adaba14d28c7c7 0.1s done
+2026-May-20 02:04:49.848229 [DEBUG] #10 DONE 0.1s
+2026-May-20 02:04:49.848229 [DEBUG] 
+2026-May-20 02:04:49.848229 [DEBUG] #11 [api builder 1/6] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+2026-May-20 02:04:49.848229 [DEBUG] #11 resolve docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+2026-May-20 02:04:49.968773 [DEBUG] #11 resolve docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293 0.1s done
+2026-May-20 02:04:49.968773 [DEBUG] #11 DONE 0.2s
+2026-May-20 02:04:49.968773 [DEBUG] 
+2026-May-20 02:04:49.968773 [DEBUG] #12 [frontend stage-1 1/3] FROM docker.io/library/nginx:alpine@sha256:2f07d83bf561b506400dc183b1b2003803e39efbd22451f848adaba14d28c7c7
+2026-May-20 02:04:49.968773 [DEBUG] #12 resolve docker.io/library/nginx:alpine@sha256:2f07d83bf561b506400dc183b1b2003803e39efbd22451f848adaba14d28c7c7 0.3s done
+2026-May-20 02:04:49.968773 [DEBUG] #12 DONE 0.3s
+2026-May-20 02:04:49.968773 [DEBUG] 
+2026-May-20 02:04:49.968773 [DEBUG] #13 [api builder 1/8] FROM docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293
+2026-May-20 02:04:49.968773 [DEBUG] #13 resolve docker.io/library/node:20-alpine@sha256:fb4cd12c85ee03686f6af5362a0b0d56d50c58a04632e6c0fb8363f609372293 0.3s done
+2026-May-20 02:04:49.968773 [DEBUG] #13 DONE 0.4s
+2026-May-20 02:04:49.968773 [DEBUG] 
+2026-May-20 02:04:49.968773 [DEBUG] #9 [api internal] load build context
+2026-May-20 02:04:50.355291 [DEBUG] #9 transferring context: 840.16kB 0.3s done
+2026-May-20 02:04:50.472632 [DEBUG] #9 DONE 0.4s
+2026-May-20 02:04:50.472632 [DEBUG] 
+2026-May-20 02:04:50.472632 [DEBUG] #14 [api builder 2/6] WORKDIR /app
+2026-May-20 02:04:50.472632 [DEBUG] #14 CACHED
+2026-May-20 02:04:50.472632 [DEBUG] 
+2026-May-20 02:04:50.472632 [DEBUG] #15 [api production  3/10] RUN apk add --no-cache dumb-init
+2026-May-20 02:04:50.472632 [DEBUG] #15 CACHED
+2026-May-20 02:04:50.472632 [DEBUG] 
+2026-May-20 02:04:50.472632 [DEBUG] #8 [frontend internal] load build context
+2026-May-20 02:04:50.472632 [DEBUG] #8 transferring context: 2.18MB 0.3s done
+2026-May-20 02:04:50.472632 [DEBUG] #8 DONE 0.4s
+2026-May-20 02:04:50.472632 [DEBUG] 
+2026-May-20 02:04:50.472632 [DEBUG] #16 [frontend builder 2/8] WORKDIR /app
+2026-May-20 02:04:50.472632 [DEBUG] #16 CACHED
+2026-May-20 02:04:50.472632 [DEBUG] 
+2026-May-20 02:04:50.472632 [DEBUG] #17 [api production  4/10] RUN addgroup -g 1001 -S nodejs &&     adduser -S nestjs -u 1001
+2026-May-20 02:04:50.472632 [DEBUG] #17 CACHED
+2026-May-20 02:04:50.641453 [DEBUG] #14 [frontend builder 2/6] WORKDIR /app
+2026-May-20 02:04:50.641453 [DEBUG] #14 CACHED
+2026-May-20 02:04:50.641453 [DEBUG] 
+2026-May-20 02:04:50.641453 [DEBUG] #18 [api production  5/10] COPY package*.json ./
+2026-May-20 02:04:50.983723 [DEBUG] #18 DONE 0.5s
+2026-May-20 02:04:50.983723 [DEBUG] 
+2026-May-20 02:04:50.983723 [DEBUG] #19 [api builder 3/8] COPY package*.json ./
+2026-May-20 02:04:51.175063 [DEBUG] #19 DONE 0.5s
+2026-May-20 02:04:51.175063 [DEBUG] 
+2026-May-20 02:04:51.175063 [DEBUG] #20 [frontend builder 3/6] COPY package*.json ./
+2026-May-20 02:04:51.175063 [DEBUG] #20 DONE 0.5s
+2026-May-20 02:04:51.175063 [DEBUG] 
+2026-May-20 02:04:51.175063 [DEBUG] #21 [frontend builder 4/6] RUN npm ci --legacy-peer-deps
+2026-May-20 02:04:51.732917 [DEBUG] #21 ...
+2026-May-20 02:04:51.732917 [DEBUG] 
+2026-May-20 02:04:51.732917 [DEBUG] #22 [api builder 4/8] COPY tsconfig*.json ./
+2026-May-20 02:04:51.732917 [DEBUG] #22 DONE 0.7s
+2026-May-20 02:04:51.883302 [DEBUG] #23 [api builder 5/8] COPY nest-cli.json ./
+2026-May-20 02:04:51.961554 [DEBUG] #23 DONE 0.2s
+2026-May-20 02:04:51.961554 [DEBUG] 
+2026-May-20 02:04:51.961554 [DEBUG] #24 [api production  6/10] RUN npm ci --omit=dev &&     npm cache clean --force
+2026-May-20 02:05:00.589668 [DEBUG] #24 ...
+2026-May-20 02:05:00.589668 [DEBUG] 
+2026-May-20 02:05:00.589668 [DEBUG] #25 [api builder 6/8] RUN npm ci
+2026-May-20 02:05:22.308195 [DEBUG] #25 30.33 npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+2026-May-20 02:05:27.732280 [DEBUG] #25 35.75 npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+2026-May-20 02:05:28.124439 [DEBUG] #25 36.15 npm warn deprecated glob@7.1.6: Glob versions prior to v9 are no longer supported
+2026-May-20 02:05:28.535520 [DEBUG] #25 ...
+2026-May-20 02:05:28.535520 [DEBUG] 
+2026-May-20 02:05:28.535520 [DEBUG] #21 [frontend builder 4/6] RUN npm ci --legacy-peer-deps
+2026-May-20 02:05:28.535520 [DEBUG] #21 37.51 npm warn deprecated w3c-hr-time@1.0.2: Use your platform's native performance.now() and performance.timeOrigin.
+2026-May-20 02:05:31.433646 [DEBUG] #21 40.41 npm warn deprecated stable@0.1.8: Modern JS already guarantees Array#sort() is a stable sort, so this library is deprecated. See the compatibility table on MDN: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/sort#browser_compatibility
+2026-May-20 02:<REDACTED>@1.4.8: Please use @jridgewell/sourcemap-codec instead
+2026-May-20 02:05:34.208897 [DEBUG] #21 43.17 npm warn deprecated rimraf@3.0.2: Rimraf versions prior to v4 are no longer supported
+2026-May-20 02:05:34.532040 [DEBUG] #21 43.51 npm warn deprecated rollup-plugin-terser@7.0.2: This package has been deprecated and is no longer maintained. Please use @rollup/plugin-terser
+2026-May-20 02:05:34.707577 [DEBUG] #21 43.53 npm warn deprecated workbox-cacheable-response@6.6.0: workbox-background-sync@6.6.0
+2026-May-20 02:05:35.964266 [DEBUG] #21 44.90 npm warn deprecated workbox-google-analytics@6.6.0: It is not compatible with newer versions of GA starting with v4, as long as you are using GAv3 it should be ok, but the package is not longer being maintained
+2026-May-20 02:05:36.694804 [DEBUG] #21 45.68 npm warn deprecated q@1.5.1: You or someone you depend on is using Q, the JavaScript Promise library that gave JavaScript developers strong feelings about promises. They can almost certainly migrate to the native JavaScript promise now. Thank you literally everyone for joining me in this bet against the odds. Be excellent to each other.
+2026-May-20 02:05:36.694804 [DEBUG] #21 45.68 npm warn deprecated
+2026-May-20 02:05:36.694804 [DEBUG] #21 45.68 npm warn deprecated (For a CapTP with native promises, see @endo/eventual-send and @endo/captp)
+2026-May-20 02:05:38.240501 [DEBUG] #21 ...
+2026-May-20 02:05:38.240501 [DEBUG] 
+2026-May-20 02:05:38.240501 [DEBUG] #25 [api builder 6/8] RUN npm ci
+2026-May-20 02:05:38.240501 [DEBUG] #25 46.26 npm warn deprecated @humanwhocodes/object-schema@2.0.3: Use @eslint/object-schema instead
+2026-May-20 02:05:38.391447 [DEBUG] #25 46.27 npm warn deprecated @humanwhocodes/config-array@0.13.0: Use @eslint/config-array instead
+2026-May-20 02:05:45.759976 [DEBUG] #25 ...
+2026-May-20 02:05:45.759976 [DEBUG] 
+2026-May-20 02:05:45.759976 [DEBUG] #12 [frontend stage-1 1/3] FROM docker.io/library/nginx:alpine@sha256:2f07d83bf561b506400dc183b1b2003803e39efbd22451f848adaba14d28c7c7
+2026-May-20 02:05:45.913697 [DEBUG] #12 CACHED
+2026-May-20 02:05:45.913697 [DEBUG] 
+2026-May-20 02:05:45.913697 [DEBUG] #21 [frontend builder 4/6] RUN npm ci --legacy-peer-deps
+2026-May-20 02:05:45.913697 [DEBUG] #21 52.09 npm warn deprecated inflight@1.0.6: This module is not supported, and leaks memory. Do not use it. Check out lru-cache if you want a good and tested way to coalesce async requests by a key value, which is much more comprehensive and powerful.
+2026-May-20 02:05:47.108236 [DEBUG] #21 56.08 npm warn deprecated domexception@2.0.1: Use your platform's native DOMException instead
+2026-May-20 02:05:48.157078 [DEBUG] #21 57.14 npm warn deprecated glob@7.2.3: Glob versions prior to v9 are no longer supported
+2026-May-20 02:05:49.959702 [DEBUG] #21 58.93 npm warn deprecated abab@2.0.6: Use your platform's native atob() and btoa() methods instead
+2026-May-20 02:05:54.714653 [DEBUG] #21 63.69 npm warn deprecated @humanwhocodes/object-schema@2.0.3: Use @eslint/object-schema instead
+2026-May-20 02:05:55.068690 [DEBUG] #21 63.71 npm warn deprecated @humanwhocodes/config-array@0.13.0: Use @eslint/config-array instead
+2026-May-20 02:05:56.990133 [DEBUG] #21 65.96 npm warn deprecated @babel/plugin-proposal-private-methods@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-private-methods instead.
+2026-May-20 02:05:56.990133 [DEBUG] #21 65.96 npm warn deprecated @babel/plugin-proposal-optional-chaining@7.21.0: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-optional-chaining instead.
+2026-May-20 02:05:56.990133 [DEBUG] #21 65.96 npm warn deprecated @babel/plugin-proposal-nullish-coalescing-operator@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-nullish-coalescing-operator instead.
+2026-May-20 02:05:57.258655 [DEBUG] #21 66.24 npm warn deprecated @babel/plugin-proposal-class-properties@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-class-properties instead.
+2026-May-20 02:05:57.453599 [DEBUG] #21 66.24 npm warn deprecated @babel/plugin-proposal-numeric-separator@7.18.6: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-numeric-separator instead.
+2026-May-20 02:05:57.453599 [DEBUG] #21 ...
+2026-May-20 02:05:57.453599 [DEBUG] 
+2026-May-20 02:05:57.453599 [DEBUG] #24 [api production  6/10] RUN npm ci --omit=dev &&     npm cache clean --force
+2026-May-20 02:05:57.453599 [DEBUG] #24 66.29
+2026-May-20 02:05:57.453599 [DEBUG] #24 66.29 added 366 packages, and audited 367 packages in 1m
+2026-May-20 02:05:57.453599 [DEBUG] #24 66.30
+2026-May-20 02:05:57.453599 [DEBUG] #24 66.30 46 packages are looking for funding
+2026-May-20 02:05:57.453599 [DEBUG] #24 66.30   run `npm fund` for details
+2026-May-20 02:05:57.564063 [DEBUG] #24 66.57
+2026-May-20 02:05:57.564063 [DEBUG] #24 66.57 40 vulnerabilities (1 low, 30 moderate, 8 high, 1 critical)
+2026-May-20 02:05:57.564063 [DEBUG] #24 66.57
+2026-May-20 02:05:57.564063 [DEBUG] #24 66.57 To address issues that do not require attention, run:
+2026-May-20 02:05:57.564063 [DEBUG] #24 66.57   npm audit fix
+2026-May-20 02:05:57.564063 [DEBUG] #24 66.57
+2026-May-20 02:05:57.564063 [DEBUG] #24 66.57 To address all issues (including breaking changes), run:
+2026-May-20 02:05:57.564063 [DEBUG] #24 66.57   npm audit fix --force
+2026-May-20 02:05:57.564063 [DEBUG] #24 66.57
+2026-May-20 02:05:57.564063 [DEBUG] #24 66.57 Run `npm audit` for details.
+2026-May-20 02:05:57.723360 [DEBUG] #24 66.57 npm notice
+2026-May-20 02:05:57.723360 [DEBUG] #24 66.57 npm notice New major version of npm available! 10.8.2 -> 11.14.1
+2026-May-20 02:05:57.723360 [DEBUG] #24 66.57 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.14.1
+2026-May-20 02:<REDACTED>@11.14.1
+2026-May-20 02:05:57.723360 [DEBUG] #24 66.57 npm notice
+2026-May-20 02:05:58.124703 [DEBUG] #24 67.12 npm warn using --force Recommended protections disabled.
+2026-May-20 02:06:05.192530 [DEBUG] #24 DONE 74.2s
+2026-May-20 02:06:05.192530 [DEBUG] 
+2026-May-20 02:06:05.192530 [DEBUG] #21 [frontend builder 4/6] RUN npm ci --legacy-peer-deps
+2026-May-20 02:06:05.192530 [DEBUG] #21 68.90 npm warn deprecated svgo@1.3.2: This SVGO version is no longer supported. Upgrade to v2.x.x.
+2026-May-20 02:06:05.192530 [DEBUG] #21 69.39 npm warn deprecated @babel/plugin-proposal-private-property-in-object@7.21.11: This proposal has been merged to the ECMAScript standard and thus this plugin is no longer maintained. Please use @babel/plugin-transform-private-property-in-object instead.
+2026-May-20 02:06:08.707835 [DEBUG] #21 ...
+2026-May-20 02:06:08.707835 [DEBUG] 
+2026-May-20 02:06:08.707835 [DEBUG] #25 [api builder 6/8] RUN npm ci
+2026-May-20 02:06:08.707835 [DEBUG] #25 66.65 npm warn deprecated eslint@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+2026-May-20 02:<REDACTED>@8.57.1: This version is no longer supported. Please see https://eslint.org/version-support for other options.
+2026-May-20 02:<REDACTED>@11.14.1
+2026-May-20 02:06:33.396102 [DEBUG] #25 101.2 npm notice
+2026-May-20 02:06:34.166523 [DEBUG] #25 DONE 102.2s
+2026-May-20 02:06:34.166523 [DEBUG] 
+2026-May-20 02:06:34.166523 [DEBUG] #21 [frontend builder 4/6] RUN npm ci --legacy-peer-deps
+2026-May-20 02:06:34.320413 [DEBUG] #21 ...
+2026-May-20 02:06:34.320413 [DEBUG] 
+2026-May-20 02:06:34.320413 [DEBUG] #26 [api builder 7/8] COPY src ./src
+2026-May-20 02:06:35.401633 [DEBUG] #26 DONE 1.2s
+2026-May-20 02:06:35.401633 [DEBUG] 
+2026-May-20 02:06:35.401633 [DEBUG] #21 [frontend builder 4/6] RUN npm ci --legacy-peer-deps
+2026-May-20 02:06:35.553501 [DEBUG] #21 ...
+2026-May-20 02:06:35.553501 [DEBUG] 
+2026-May-20 02:06:35.553501 [DEBUG] #27 [api builder 8/8] RUN npm run build
+2026-May-20 02:06:37.688445 [DEBUG] #27 2.265
+2026-May-20 02:06:37.688445 [DEBUG] #27 2.265 > backend@1.0.0 build
+2026-May-20 02:06:37.688445 [DEBUG] #27 2.265 > nest build
+2026-May-20 02:06:37.688445 [DEBUG] #27 2.265
+2026-May-20 02:07:32.418274 [DEBUG] #27 ...
+2026-May-20 02:07:32.418274 [DEBUG] 
+2026-May-20 02:07:32.418274 [DEBUG] #21 [frontend builder 4/6] RUN npm ci --legacy-peer-deps
+2026-May-20 02:07:32.418274 [DEBUG] #21 161.3
+2026-May-20 02:07:32.418274 [DEBUG] #21 161.3 added 1471 packages, and audited 1472 packages in 3m
+2026-May-20 02:07:32.418274 [DEBUG] #21 161.3
+2026-May-20 02:07:32.418274 [DEBUG] #21 161.3 281 packages are looking for funding
+2026-May-20 02:07:32.418274 [DEBUG] #21 161.3   run `npm fund` for details
+2026-May-20 02:07:32.887745 [DEBUG] #21 161.9
+2026-May-20 02:07:32.887745 [DEBUG] #21 161.9 52 vulnerabilities (13 low, 11 moderate, 27 high, 1 critical)
+2026-May-20 02:07:32.887745 [DEBUG] #21 161.9
+2026-May-20 02:07:32.887745 [DEBUG] #21 161.9 To address issues that do not require attention, run:
+2026-May-20 02:07:32.887745 [DEBUG] #21 161.9   npm audit fix
+2026-May-20 02:07:32.887745 [DEBUG] #21 161.9
+2026-May-20 02:07:32.887745 [DEBUG] #21 161.9 To address all issues (including breaking changes), run:
+2026-May-20 02:07:32.887745 [DEBUG] #21 161.9   npm audit fix --force
+2026-May-20 02:07:32.887745 [DEBUG] #21 161.9
+2026-May-20 02:07:32.887745 [DEBUG] #21 161.9 Run `npm audit` for details.
+2026-May-20 02:07:33.054819 [DEBUG] #21 161.9 npm notice
+2026-May-20 02:07:33.054819 [DEBUG] #21 161.9 npm notice New major version of npm available! 10.8.2 -> 11.14.1
+2026-May-20 02:07:33.054819 [DEBUG] #21 161.9 npm notice Changelog: https://github.com/npm/cli/releases/tag/v11.14.1
+2026-May-20 02:<REDACTED>@11.14.1
+2026-May-20 02:07:33.054819 [DEBUG] #21 161.9 npm notice
+2026-May-20 02:07:35.456192 [DEBUG] #21 ...
+2026-May-20 02:07:35.456192 [DEBUG] 
+2026-May-20 02:07:35.456192 [DEBUG] #27 [api builder 8/8] RUN npm run build
+2026-May-20 02:07:35.456192 [DEBUG] #27 DONE 60.0s
+2026-May-20 02:07:35.679502 [DEBUG] #21 [frontend builder 4/6] RUN npm ci --legacy-peer-deps
+2026-May-20 02:07:35.679502 [DEBUG] #21 DONE 164.5s
+2026-May-20 02:07:35.679502 [DEBUG] 
+2026-May-20 02:07:35.679502 [DEBUG] #28 [frontend builder 5/6] COPY . .
+2026-May-20 02:07:37.658683 [DEBUG] #28 DONE 2.2s
+2026-May-20 02:07:37.658683 [DEBUG] 
+2026-May-20 02:07:37.658683 [DEBUG] #29 [api production  7/10] COPY --from=builder --chown=nestjs:nodejs /app/dist ./dist
+2026-May-20 02:07:38.125055 [DEBUG] #29 DONE 0.6s
+2026-May-20 02:07:38.125055 [DEBUG] 
+2026-May-20 02:07:38.125055 [DEBUG] #30 [frontend builder 6/6] RUN npm run build
+2026-May-20 02:07:38.391286 [DEBUG] #30 ...
+2026-May-20 02:07:38.391286 [DEBUG] 
+2026-May-20 02:07:38.391286 [DEBUG] #31 [api production  8/10] COPY --chown=nestjs:nodejs scripts ./scripts
+2026-May-20 02:07:38.391286 [DEBUG] #31 DONE 0.2s
+2026-May-20 02:07:38.549671 [DEBUG] #32 [api production  9/10] COPY --chown=nestjs:nodejs assets ./assets
+2026-May-20 02:07:38.600913 [DEBUG] #32 DONE 0.2s
+2026-May-20 02:07:38.600913 [DEBUG] 
+2026-May-20 02:07:38.600913 [DEBUG] #30 [frontend builder 6/6] RUN npm run build
+2026-May-20 02:07:38.954275 [DEBUG] #30 1.287
+2026-May-20 02:07:38.954275 [DEBUG] #30 1.287 > frontend@0.1.0 build
+2026-May-20 02:07:38.954275 [DEBUG] #30 1.287 > react-scripts build
+2026-May-20 02:07:38.954275 [DEBUG] #30 1.287
+2026-May-20 02:07:39.426679 [DEBUG] #30 ...
+2026-May-20 02:07:39.426679 [DEBUG] 
+2026-May-20 02:07:39.426679 [DEBUG] #33 [api production 10/10] RUN mkdir -p uploads tmp &&     chown -R nestjs:nodejs uploads tmp
+2026-May-20 02:07:39.426679 [DEBUG] #33 DONE 0.8s
+2026-May-20 02:07:39.593574 [DEBUG] #34 [api] exporting to image
+2026-May-20 02:07:39.593574 [DEBUG] #34 exporting layers
+2026-May-20 02:07:45.296661 [DEBUG] #34 ...
+2026-May-20 02:07:45.296661 [DEBUG] 
+2026-May-20 02:07:45.296661 [DEBUG] #30 [frontend builder 6/6] RUN npm run build
+2026-May-20 02:07:45.296661 [DEBUG] #30 7.559 Creating an optimized production build...
+2026-May-20 02:07:46.012290 [DEBUG] #30 8.351 Browserslist: browsers data (caniuse-lite) is 11 months old. Please run:
+2026-May-20 02:07:46.012290 [DEBUG] #30 8.351   npx update-browserslist-db@latest
+2026-May-20 02:07:46.012290 [DEBUG] #30 8.351   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+2026-May-20 02:<REDACTED>@latest
+2026-May-20 02:13:16.721978 [DEBUG] #30 339.0   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+2026-May-20 02:<REDACTED>@latest
+2026-May-20 02:13:16.811944 [DEBUG] #30 339.1   Why you should do it regularly: https://github.com/browserslist/update-db#readme
+2026-May-20 02:<REDACTED>@mui/material";
+2026-May-20 02:13:21.068535 [DEBUG] #30 343.4     8 | import { useMemo, FC, ReactElement } from "react";
+2026-May-20 02:13:21.068535 [DEBUG] #30 343.4     9 | import { useNavigate } from "react-router-dom";
+2026-May-20 02:13:21.068535 [DEBUG] #30 343.4
+2026-May-20 02:13:21.068535 [DEBUG] #30 343.4
+2026-May-20 02:13:22.435052 [DEBUG] #30 ERROR: process "/bin/sh -c npm run build" did not complete successfully: exit code: 1
+2026-May-20 02:13:22.611519 [DEBUG] ------
+2026-May-20 02:13:22.611519 [DEBUG] > [frontend builder 6/6] RUN npm run build:
+2026-May-20 02:13:22.611519 [DEBUG] 343.4 TS6133: 'Stack' is declared but its value is never read.
+2026-May-20 02:13:22.611519 [DEBUG] 343.4     4 |   Grid,
+2026-May-20 02:13:22.611519 [DEBUG] 343.4     5 |   Skeleton,
+2026-May-20 02:13:22.611519 [DEBUG] 343.4   > 6 |   Stack,
+2026-May-20 02:13:22.611519 [DEBUG] 343.4       |   ^^^^^
+2026-May-20 02:13:22.611519 [DEBUG] 343.4     7 | } from "@mui/material";
+2026-May-20 02:13:22.611519 [DEBUG] 343.4     8 | import { useMemo, FC, ReactElement } from "react";
+2026-May-20 02:13:22.611519 [DEBUG] 343.4     9 | import { useNavigate } from "react-router-dom";
+2026-May-20 02:13:22.611519 [DEBUG] 343.4
+2026-May-20 02:13:22.611519 [DEBUG] 343.4
+2026-May-20 02:13:22.611519 [DEBUG] ------
+2026-May-20 02:13:22.651375 [DEBUG] Dockerfile:40
+2026-May-20 02:13:22.651375 [DEBUG] 
+2026-May-20 02:13:22.651375 [DEBUG] --------------------
+2026-May-20 02:13:22.651375 [DEBUG] 
+2026-May-20 02:13:22.651375 [DEBUG] 38 |
+2026-May-20 02:13:22.651375 [DEBUG] 
+2026-May-20 02:13:22.651375 [DEBUG] 39 |     # Build the application
+2026-May-20 02:13:22.651375 [DEBUG] 
+2026-May-20 02:13:22.651375 [DEBUG] 40 | >>> RUN npm run build
+2026-May-20 02:13:22.651375 [DEBUG] 
+2026-May-20 02:13:22.651375 [DEBUG] 41 |
+2026-May-20 02:13:22.651375 [DEBUG] 
+2026-May-20 02:13:22.651375 [DEBUG] 42 |     # Stage 2: Production with Nginx
+2026-May-20 02:13:22.651375 [DEBUG] 
+2026-May-20 02:13:22.651375 [DEBUG] --------------------
+2026-May-20 02:13:22.651375 [DEBUG] 
+2026-May-20 02:13:22.651375 [DEBUG] target frontend: failed to solve: process "/bin/sh -c npm run build" did not complete successfully: exit code: 1
+2026-May-20 02:13:22.696122 [DEBUG] exit status 1
+2026-May-20 02:13:22.958915 ========================================
+2026-May-20 02:13:22.982587 Deployment failed: Command execution failed (exit code 1): docker exec vcqckeo4dmn7kvwllrxbxu6s bash -c 'DOCKER_BUILDKIT=1 COOLIFY_BRANCH=main COOLIFY_RESOURCE_UUID=g898bxh8j23tmtzjnf417j90  docker compose --env-file /artifacts/build-time.env --project-name g898bxh8j23tmtzjnf417j90 --project-directory /artifacts/vcqckeo4dmn7kvwllrxbxu6s -f /artifacts/vcqckeo4dmn7kvwllrxbxu6s/docker-compose.unified.prod.yml build --pull --build-arg COOLIFY_FQDN --build-arg APP_PORT --build-arg REDIS_URL --build-arg JWT_SECRET --build-arg JWT_EXPIRES_IN --build-arg REFRESH_TOKEN_EXPIRES_IN --build-arg AWS_REGION --build-arg AWS_SECRET_ACCESS_KEY --build-arg S3_BUCKET --build-arg REACT_APP_API_BASE_URL --build-arg SERVICE_URL_API --build-arg AWS_ACCESS_KEY_ID --build-arg SERVICE_URL_FRONTEND --build-arg SERVICE_FQDN_FRONTEND --build-arg SERVICE_FQDN_API --build-arg MONGODB_URI --build-arg COOLIFY_BUILD_SECRETS_HASH=15aedf20bc338f83708fa075fd5a49a162215b71f289902420e55f3dc31aea3e'
+2026-May-20 02:13:22.982587 Error: time="2026-05-20T02:04:47Z" level=warning msg="The \"PROJECT_SLUG\" variable is not set. Defaulting to a blank string."
+2026-May-20 02:13:22.982587 Dockerfile:40
+2026-May-20 02:13:22.982587 
+2026-May-20 02:13:22.982587 --------------------
+2026-May-20 02:13:22.982587 
+2026-May-20 02:13:22.982587 38 |
+2026-May-20 02:13:22.982587 
+2026-May-20 02:13:22.982587 39 |     # Build the application
+2026-May-20 02:13:22.982587 
+2026-May-20 02:13:22.982587 40 | >>> RUN npm run build
+2026-May-20 02:13:22.982587 
+2026-May-20 02:13:22.982587 41 |
+2026-May-20 02:13:22.982587 
+2026-May-20 02:13:22.982587 42 |     # Stage 2: Production with Nginx
+2026-May-20 02:13:22.982587 
+2026-May-20 02:13:22.982587 --------------------
+2026-May-20 02:13:22.982587 
+2026-May-20 02:13:22.982587 target frontend: failed to solve: process "/bin/sh -c npm run build" did not complete successfully: exit code: 1
+2026-May-20 02:13:22.982587 
+2026-May-20 02:13:22.982587 exit status 1
+2026-May-20 02:13:23.007674 [DEBUG] Error type: App\Exceptions\DeploymentException
+2026-May-20 02:13:23.053138 [DEBUG] Error code: 0
+2026-May-20 02:13:23.073368 [DEBUG] Location: /var/www/html/app/Traits/ExecuteRemoteCommand.php:242
+2026-May-20 02:13:23.096331 [DEBUG] Stack trace (first 5 lines):
+2026-May-20 02:13:23.115874 [DEBUG] #0 /var/www/html/app/Traits/ExecuteRemoteCommand.php(106): App\Jobs\ApplicationDeploymentJob->executeCommandWithProcess()
+2026-May-20 02:13:23.141248 [DEBUG] #1 /var/www/html/vendor/laravel/framework/src/Illuminate/Collections/Traits/EnumeratesValues.php(275): App\Jobs\ApplicationDeploymentJob->{closure:App\Traits\ExecuteRemoteCommand::execute_remote_command():72}()
+2026-May-20 02:13:23.162878 [DEBUG] #2 /var/www/html/app/Traits/ExecuteRemoteCommand.php(72): Illuminate\Support\Collection->each()
+2026-May-20 02:13:23.184156 [DEBUG] #3 /var/www/html/app/Jobs/ApplicationDeploymentJob.php(759): App\Jobs\ApplicationDeploymentJob->execute_remote_command()
+2026-May-20 02:13:23.205306 [DEBUG] #4 /var/www/html/app/Jobs/ApplicationDeploymentJob.php(482): App\Jobs\ApplicationDeploymentJob->deploy_docker_compose_buildpack()
+2026-May-20 02:13:23.230615 ========================================
+2026-May-20 02:13:23.985918 Gracefully shutting down build container: vcqckeo4dmn7kvwllrxbxu6s
+2026-May-20 02:13:24.866689 [DEBUG] [CMD]: docker stop -t 30 vcqckeo4dmn7kvwllrxbxu6s
+2026-May-20 02:13:24.866689 [DEBUG] vcqckeo4dmn7kvwllrxbxu6s
