@@ -43,7 +43,7 @@ const HomePage: FC = (): ReactElement => {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loadingCategories, setLoadingCategories] = useState<boolean>(true);
   const [products, setProducts] = useState<Product[]>([]);
-  const [loadingProducts, setLoadingProducts] = useState<boolean>(true);
+  const [, setLoadingProducts] = useState<boolean>(true);
   const { t } = useTranslation();
 
 
