@@ -40,12 +40,13 @@ export function ThemeProvider({ children }: ThemeProviderProps): ReactElement {
     setMode((prevMode) => (prevMode === "light" ? "dark" : "light"));
   };
 
-  // Ensure HTML direction is set to RTL
+  // Ensure HTML direction is set to RTL and theme attribute
   useEffect(() => {
     document.documentElement.setAttribute("dir", "rtl");
     document.documentElement.setAttribute("lang", "ar");
+    document.documentElement.setAttribute("data-theme", mode);
     document.body.setAttribute("dir", "rtl");
-  }, []);
+  }, [mode]);
 
   const value: ThemeContextValue = {
     mode,

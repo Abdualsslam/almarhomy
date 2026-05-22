@@ -14,27 +14,29 @@ declare module "@mui/material/styles" {
   }
 }
 
-export function getTheme(_mode: ThemeMode): Theme {
+export function getTheme(mode: ThemeMode): Theme {
+  const isDark = mode === "dark";
+
   const themeOptions: ThemeOptions = {
     direction: "rtl",
     palette: {
-      mode: "dark", // We force dark mode feel for the "insane" UI
+      mode,
       primary: {
-        main: "#3b82f6",
+        main: isDark ? "#3b82f6" : "#2563eb",
         contrastText: "#ffffff",
       },
       secondary: {
-        main: "#06b6d4",
+        main: isDark ? "#06b6d4" : "#0891b2",
       },
       background: {
-        default: "#050507",
-        paper: "#0d0d12",
+        default: isDark ? "#050507" : "#f8fafc",
+        paper: isDark ? "#0d0d12" : "#ffffff",
       },
       text: {
-        primary: "#ffffff",
-        secondary: "rgba(255, 255, 255, 0.7)",
+        primary: isDark ? "#ffffff" : "#0f172a",
+        secondary: isDark ? "rgba(255, 255, 255, 0.7)" : "rgba(15, 23, 42, 0.7)",
       },
-      divider: "rgba(255, 255, 255, 0.1)",
+      divider: isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(15, 23, 42, 0.1)",
     },
     typography: {
       fontFamily: "'Outfit', 'Noto Sans Arabic', sans-serif",
@@ -59,10 +61,14 @@ export function getTheme(_mode: ThemeMode): Theme {
             transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
           },
           containedPrimary: {
-            background: "linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%)",
+            background: isDark
+              ? "linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%)"
+              : "linear-gradient(135deg, #2563eb 0%, #0891b2 100%)",
             "&:hover": {
               transform: "translateY(-2px)",
-              boxShadow: "0 8px 25px rgba(59, 130, 246, 0.5)",
+              boxShadow: isDark
+                ? "0 8px 25px rgba(59, 130, 246, 0.5)"
+                : "0 8px 25px rgba(37, 99, 235, 0.4)",
             },
           },
         },
@@ -70,11 +76,12 @@ export function getTheme(_mode: ThemeMode): Theme {
       MuiCard: {
         styleOverrides: {
           root: {
-            background: "rgba(255, 255, 255, 0.03)",
+            background: isDark ? "rgba(255, 255, 255, 0.03)" : "rgba(255, 255, 255, 0.8)",
             backdropFilter: "blur(20px)",
-            border: "1px solid rgba(255, 255, 255, 0.1)",
+            border: isDark ? "1px solid rgba(255, 255, 255, 0.1)" : "1px solid rgba(15, 23, 42, 0.1)",
             borderRadius: 24,
             backgroundImage: "none",
+            boxShadow: isDark ? undefined : "0 4px 24px rgba(15, 23, 42, 0.08)",
           },
         },
       },
@@ -82,7 +89,46 @@ export function getTheme(_mode: ThemeMode): Theme {
         styleOverrides: {
           root: {
             backgroundImage: "none",
-            background: "#0d0d12",
+            background: isDark ? "#0d0d12" : "#ffffff",
+          },
+        },
+      },
+      MuiAppBar: {
+        styleOverrides: {
+          root: {
+            background: isDark ? "rgba(13, 13, 18, 0.8)" : "rgba(255, 255, 255, 0.9)",
+            backdropFilter: "blur(20px)",
+            borderBottom: isDark ? "1px solid rgba(255, 255, 255, 0.1)" : "1px solid rgba(15, 23, 42, 0.1)",
+          },
+        },
+      },
+      MuiDrawer: {
+        styleOverrides: {
+          paper: {
+            background: isDark ? "#0d0d12" : "#ffffff",
+            borderLeft: isDark ? "1px solid rgba(255, 255, 255, 0.1)" : "1px solid rgba(15, 23, 42, 0.1)",
+            borderRight: "none",
+          },
+        },
+      },
+      MuiIconButton: {
+        styleOverrides: {
+          root: {
+            transition: "all 0.3s ease",
+            "&:hover": {
+              background: isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(15, 23, 42, 0.05)",
+            },
+          },
+        },
+      },
+      MuiInputBase: {
+        styleOverrides: {
+          root: {
+            "&.Mui-focused": {
+              "& .MuiOutlinedInput-notchedOutline": {
+                borderColor: isDark ? "#3b82f6" : "#2563eb",
+              },
+            },
           },
         },
       },

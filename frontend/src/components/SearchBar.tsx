@@ -1,4 +1,4 @@
-import { TextField, Box, InputAdornment, IconButton, SxProps, Theme, TextFieldProps } from "@mui/material";
+import { TextField, Box, InputAdornment, IconButton, SxProps, Theme, TextFieldProps, useTheme } from "@mui/material";
 import { Search, Close } from "@mui/icons-material";
 import { useState, useEffect, useRef, FC, ReactElement } from "react";
 import debounce from "lodash.debounce";
@@ -21,6 +21,7 @@ const SearchBar: FC<SearchBarComponentProps> = ({
 }): ReactElement => {
   const [inputValue, setInputValue] = useState<string>(value);
   const debounceRef = useRef<ReturnType<typeof debounce> | null>(null);
+  const theme = useTheme();
 
   useEffect(() => {
     debounceRef.current = debounce((v: string) => {
@@ -48,22 +49,22 @@ const SearchBar: FC<SearchBarComponentProps> = ({
           disableUnderline: true,
           startAdornment: (
             <InputAdornment position="start">
-              <Search sx={{ color: "var(--accent-primary)", fontSize: 28 }} />
+              <Search sx={{ color: theme.palette.primary.main, fontSize: 28 }} />
             </InputAdornment>
           ),
           endAdornment: inputValue && (
             <InputAdornment position="end">
               <IconButton onClick={() => { setInputValue(""); onSearch(""); }} size="small">
-                <Close sx={{ color: "var(--text-secondary)" }} />
+                <Close sx={{ color: theme.palette.text.secondary }} />
               </IconButton>
             </InputAdornment>
           ),
           sx: {
             px: 3,
             py: 1,
-            color: "white",
+            color: theme.palette.text.primary,
             fontSize: "1.2rem",
-            "& input::placeholder": { color: "rgba(255,255,255,0.3)", opacity: 1 }
+            "& input::placeholder": { color: theme.palette.text.secondary, opacity: 0.7 }
           },
         }}
         {...textFieldProps}

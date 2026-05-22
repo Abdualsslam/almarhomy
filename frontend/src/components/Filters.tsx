@@ -5,6 +5,7 @@ import {
   Button,
   Stack,
   Divider,
+  useTheme,
 } from "@mui/material";
 import { useMemo, FC, ReactElement } from "react";
 import { ClearAll } from "@mui/icons-material";
@@ -29,6 +30,8 @@ const Filters: FC<FiltersProps> = ({
   onChange,
   onReset,
 }): ReactElement => {
+  const theme = useTheme();
+  const isDark = theme.palette.mode === "dark";
 
   const activeFilters = useMemo(() => {
     if (!values) return [];
@@ -46,13 +49,13 @@ const Filters: FC<FiltersProps> = ({
         <Typography variant="h5" sx={{ mb: 1, fontWeight: 800 }}>
           التصفية
         </Typography>
-        <Typography variant="body2" sx={{ color: "var(--text-secondary)", lineHeight: 1.6 }}>
+        <Typography variant="body2" sx={{ color: theme.palette.text.secondary, lineHeight: 1.6 }}>
           اكتشف المنتجات حسب الفئات
         </Typography>
       </Box>
 
       <Box>
-        <Typography variant="subtitle2" sx={{ mb: 2, fontWeight: 700, color: "var(--accent-secondary)", textTransform: "uppercase", letterSpacing: 1 }}>
+        <Typography variant="subtitle2" sx={{ mb: 2, fontWeight: 700, color: theme.palette.secondary.main, textTransform: "uppercase", letterSpacing: 1 }}>
           الفئات الرئيسية
         </Typography>
         <Stack spacing={1}>
@@ -63,13 +66,13 @@ const Filters: FC<FiltersProps> = ({
               borderRadius: "12px",
               cursor: "pointer",
               transition: "all 0.3s ease",
-              background: !values?.category ? "rgba(59, 130, 246, 0.1)" : "transparent",
+              background: !values?.category ? `${theme.palette.primary.main}15` : "transparent",
               border: "1px solid",
-              borderColor: !values?.category ? "rgba(59, 130, 246, 0.4)" : "transparent",
-              color: !values?.category ? "var(--accent-primary)" : "var(--text-secondary)",
+              borderColor: !values?.category ? `${theme.palette.primary.main}66` : "transparent",
+              color: !values?.category ? theme.palette.primary.main : theme.palette.text.secondary,
               "&:hover": {
-                background: "rgba(255, 255, 255, 0.05)",
-                color: "white"
+                background: isDark ? "rgba(255, 255, 255, 0.05)" : "rgba(15, 23, 42, 0.05)",
+                color: theme.palette.text.primary
               }
             }}
           >
@@ -86,13 +89,13 @@ const Filters: FC<FiltersProps> = ({
                 borderRadius: "12px",
                 cursor: "pointer",
                 transition: "all 0.3s ease",
-                background: values?.category === category._id ? "rgba(59, 130, 246, 0.1)" : "transparent",
+                background: values?.category === category._id ? `${theme.palette.primary.main}15` : "transparent",
                 border: "1px solid",
-                borderColor: values?.category === category._id ? "rgba(59, 130, 246, 0.4)" : "transparent",
-                color: values?.category === category._id ? "var(--accent-primary)" : "var(--text-secondary)",
+                borderColor: values?.category === category._id ? `${theme.palette.primary.main}66` : "transparent",
+                color: values?.category === category._id ? theme.palette.primary.main : theme.palette.text.secondary,
                 "&:hover": {
-                  background: "rgba(255, 255, 255, 0.05)",
-                  color: "white"
+                  background: isDark ? "rgba(255, 255, 255, 0.05)" : "rgba(15, 23, 42, 0.05)",
+                  color: theme.palette.text.primary
                 }
               }}
             >
@@ -106,7 +109,7 @@ const Filters: FC<FiltersProps> = ({
 
       {!!activeFilters.length && (
         <>
-          <Divider sx={{ borderColor: "rgba(255,255,255,0.1)" }} />
+          <Divider sx={{ borderColor: theme.palette.divider }} />
           <Stack spacing={2}>
             <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
               الفلاتر النشطة
@@ -119,10 +122,10 @@ const Filters: FC<FiltersProps> = ({
                   onDelete={() => onChange?.({ [field]: "" })}
                   sx={{
                     borderRadius: "8px",
-                    background: "rgba(255,255,255,0.05)",
-                    color: "white",
-                    border: "1px solid rgba(255,255,255,0.1)",
-                    "& .MuiChip-deleteIcon": { color: "rgba(255,255,255,0.5)" }
+                    background: isDark ? "rgba(255,255,255,0.05)" : "rgba(15,23,42,0.05)",
+                    color: theme.palette.text.primary,
+                    border: `1px solid ${theme.palette.divider}`,
+                    "& .MuiChip-deleteIcon": { color: theme.palette.text.secondary }
                   }}
                 />
               ))}

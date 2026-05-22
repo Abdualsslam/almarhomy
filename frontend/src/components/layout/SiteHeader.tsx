@@ -7,11 +7,13 @@ import {
   Stack,
   Button,
   IconButton,
+  useTheme,
 } from "@mui/material";
 import { NavLink, useNavigate } from "react-router-dom";
-import { WhatsApp } from "@mui/icons-material";
+import { WhatsApp, LightMode, DarkMode } from "@mui/icons-material";
 import { FC, ReactElement } from "react";
 import { getWhatsAppUrl } from "../../utils/whatsapp";
+import { useThemeMode } from "../../contexts/ThemeContext";
 
 interface NavLinkItem {
   label: string;
@@ -26,6 +28,9 @@ const navLinks: NavLinkItem[] = [
 
 const SiteHeader: FC = (): ReactElement => {
   const navigate = useNavigate();
+  const { mode, toggleTheme } = useThemeMode();
+  const theme = useTheme();
+  const isDark = mode === "dark";
 
   return (
     <Box sx={{ position: "sticky", top: 0, zIndex: 1100, p: { xs: 1, md: 2 } }}>
@@ -34,11 +39,11 @@ const SiteHeader: FC = (): ReactElement => {
         className="glass"
         elevation={0}
         sx={{
-          background: "rgba(255, 255, 255, 0.05)",
+          background: theme.palette.mode === "dark" ? "rgba(255, 255, 255, 0.05)" : "rgba(255, 255, 255, 0.8)",
           backdropFilter: "blur(20px)",
-          border: "1px solid rgba(255, 255, 255, 0.1)",
+          border: `1px solid ${theme.palette.divider}`,
           borderRadius: { xs: "16px", md: "24px" },
-          color: "white",
+          color: theme.palette.text.primary,
         }}
       >
         <Toolbar
@@ -81,15 +86,18 @@ const SiteHeader: FC = (): ReactElement => {
                 component={NavLink}
                 to={link.path}
                 sx={{
-                  color: "var(--text-secondary)",
+                  color: theme.palette.text.secondary,
                   borderRadius: "12px",
                   px: 2,
                   fontWeight: 500,
                   transition: "all 0.3s ease",
-                  "&:hover": { color: "white", background: "rgba(255,255,255,0.05)" },
+                  "&:hover": { 
+                    color: theme.palette.text.primary, 
+                    background: isDark ? "rgba(255,255,255,0.05)" : "rgba(15,23,42,0.05)" 
+                  },
                   "&.active": {
-                    color: "white",
-                    background: "rgba(255, 255, 255, 0.1)",
+                    color: theme.palette.primary.main,
+                    background: isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(37, 99, 235, 0.1)",
                     fontWeight: 700,
                   },
                 }}
@@ -110,6 +118,19 @@ const SiteHeader: FC = (): ReactElement => {
               اكتشف الآن
             </Button>
             
+            <IconButton
+              onClick={toggleTheme}
+              sx={{
+                background: isDark ? "rgba(255, 255, 255, 0.05)" : "rgba(15, 23, 42, 0.05)",
+                color: theme.palette.primary.main,
+                "&:hover": { 
+                  background: isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(15, 23, 42, 0.1)" 
+                }
+              }}
+            >
+              {isDark ? <LightMode /> : <DarkMode />}
+            </IconButton>
+
             <IconButton
               onClick={() => window.open(getWhatsAppUrl(), "_blank")}
               sx={{
