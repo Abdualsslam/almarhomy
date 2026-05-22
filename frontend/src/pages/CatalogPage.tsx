@@ -16,18 +16,19 @@ import {
   MenuItem,
   useTheme,
 } from "@mui/material";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import { Tune } from "@mui/icons-material";
+import { useSearchParams } from "react-router-dom";
+import { Tune, WhatsApp } from "@mui/icons-material";
 import { motion, AnimatePresence } from "framer-motion";
 
 
 import SearchBar from "../components/SearchBar";
 import Filters from "../components/Filters";
-import ImageGrid from "../components/ImageGrid";
+import ProductCard from "../components/ProductCard";
 import { searchProducts } from "../api/products";
 import { fetchCategories } from "../api/admin";
 import SEO from "../components/SEO";
 import PageTransition from "../components/PageTransition";
+import { getWhatsAppUrl } from "../utils/whatsapp";
 import type { Product, Category } from "../types/models.types";
 
 type CatalogFilters = {
@@ -45,7 +46,6 @@ const parsePageParam = (value: string | null): number => {
 export default function CatalogPage() {
   const { t } = useTranslation();
   const theme = useTheme();
-  const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const isMdUp = useMediaQuery(theme.breakpoints.up("md"));
   const [showMobileFilters, setShowMobileFilters] = useState(false);
@@ -207,30 +207,56 @@ export default function CatalogPage() {
                       animate={{ opacity: 1 }}
                       exit={{ opacity: 0 }}
                     >
-                      <ImageGrid
-                        images={data.items}
-                        withDownload
-                        onSelect={(img) => navigate(`/product/${img._id}`)}
-                      />
+                      <Grid container spacing={3}>
+                        {data.items.map((product) => (
+                          <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={product._id}>
+                            <ProductCard
+                              _id={product._id}
+                              productName={product.productName}
+                              productCode={product.productCode}
+                              category={typeof product.category === "string" ? product.category : undefined}
+                              model={product.model}
+                              description={product.description}
+                              originalUrl={(product as any).originalUrl || null}
+                              watermarkedUrl={(product as any).watermarkedUrl || null}
+                              tags={product.tags}
+                            />
+                          </Grid>
+                        ))}
+                      </Grid>
+
+                      {data.items.length === 0 && !loading && (
+                        <Box sx={{ textAlign: "center", py: 8 }}>
+                          <Typography variant="h6" color="text.secondary" gutterBottom>
+                            لا توجد نتائج
+                          </Typography>
+                          <Button
+                            variant="outlined"
+                            onClick={() => setSearchParams(new URLSearchParams())}
+                            sx={{ mr: 2 }}
+                          >
+                            مسح الفلاتر
+                          </Button>
+                          <Button
+                            variant="contained"
+                            color="primary"
+                            startIcon={<WhatsApp />}
+                            href={getWhatsAppUrl()}
+                            target="_blank"
+                          >
+                            تواصل واتساب وسنساعدك
+                          </Button>
+                        </Box>
+                      )}
 
                       {data.totalPages > 1 && (
-                        <Box sx={{ display: "flex", justifyContent: "center", mt: 8 }}>
+                        <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
                           <Pagination
                             count={data.totalPages}
                             page={page}
                             onChange={(_, p) => handleFilterChange({ page: p.toString() } as any)}
                             color="primary"
                             size="large"
-                            sx={{
-                              "& .MuiPaginationItem-root": {
-                                color: "white",
-                                border: "1px solid rgba(255,255,255,0.1)",
-                                background: "rgba(255,255,255,0.05)",
-                                "&.Mui-selected": {
-                                  background: "var(--accent-primary)",
-                                }
-                              }
-                            }}
                           />
                         </Box>
                       )}

@@ -1,16 +1,29 @@
-// utils/whatsapp.ts
 const WHATSAPP_NUMBER = process.env.REACT_APP_WHATSAPP_NUMBER || '967775017485';
 
-/**
- * generates a WhatsApp URL with an optional message
- * @param message The message to pre-fill in the WhatsApp chat
- * @returns A formatted WhatsApp URL
- */
+function cleanNumber(): string {
+  return WHATSAPP_NUMBER.replace(/\D/g, '');
+}
+
 export function getWhatsAppUrl(message?: string): string {
-  // Clean the number from any non-digit characters
-  const cleanNumber = WHATSAPP_NUMBER.replace(/\D/g, '');
-  const base = `https://wa.me/${cleanNumber}`;
+  const base = `https://wa.me/${cleanNumber()}`;
   return message ? `${base}?text=${encodeURIComponent(message)}` : base;
+}
+
+export function buildProductWhatsAppMessage(product: {
+  productName?: string;
+  productCode?: string;
+  category?: string;
+  model?: string;
+  url?: string;
+}): string {
+  return [
+    'مرحبًا، أريد الاستفسار عن المنتج:',
+    product.productName ? `الاسم: ${product.productName}` : null,
+    product.productCode ? `الكود: ${product.productCode}` : null,
+    product.category ? `الفئة: ${product.category}` : null,
+    product.model ? `الموديل: ${product.model}` : null,
+    product.url ? `الرابط: ${product.url}` : null,
+  ].filter(Boolean).join('\n');
 }
 
 export const WHATSAPP_CONTACT_NUMBER = WHATSAPP_NUMBER;

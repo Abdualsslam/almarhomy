@@ -7,23 +7,30 @@ import {
   Stack,
   Button,
   IconButton,
+  Drawer,
+  List,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
   useTheme,
+  useMediaQuery,
 } from "@mui/material";
 import { NavLink, useNavigate } from "react-router-dom";
-import { WhatsApp, LightMode, DarkMode } from "@mui/icons-material";
-import { FC, ReactElement } from "react";
+import { WhatsApp, LightMode, DarkMode, Menu as MenuIcon, Home, Category, Storefront } from "@mui/icons-material";
+import { useState, FC, ReactElement } from "react";
 import { getWhatsAppUrl } from "../../utils/whatsapp";
 import { useThemeMode } from "../../contexts/ThemeContext";
 
 interface NavLinkItem {
   label: string;
   path: string;
+  icon: ReactElement;
 }
 
 const navLinks: NavLinkItem[] = [
-  { label: "الرئيسية", path: "/" },
-  { label: "المنتجات", path: "/catalog" },
-  { label: "الفئات", path: "/categories" },
+  { label: "الرئيسية", path: "/", icon: <Home /> },
+  { label: "المنتجات", path: "/catalog", icon: <Storefront /> },
+  { label: "الفئات", path: "/categories", icon: <Category /> },
 ];
 
 const SiteHeader: FC = (): ReactElement => {
@@ -31,119 +38,149 @@ const SiteHeader: FC = (): ReactElement => {
   const { mode, toggleTheme } = useThemeMode();
   const theme = useTheme();
   const isDark = mode === "dark";
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+  const [drawerOpen, setDrawerOpen] = useState(false);
 
   return (
-    <Box sx={{ position: "sticky", top: 0, zIndex: 1100, p: { xs: 1, md: 2 } }}>
+    <Box sx={{ position: "sticky", top: 0, zIndex: 1100 }}>
       <AppBar
         position="static"
-        className="glass"
         elevation={0}
         sx={{
-          background: theme.palette.mode === "dark" ? "rgba(255, 255, 255, 0.05)" : "rgba(255, 255, 255, 0.8)",
-          backdropFilter: "blur(20px)",
-          border: `1px solid ${theme.palette.divider}`,
-          borderRadius: { xs: "16px", md: "24px" },
+          background: isDark ? "rgba(5, 5, 5, 0.95)" : "rgba(255, 255, 255, 0.97)",
+          backdropFilter: "blur(12px)",
+          borderBottom: `1px solid ${theme.palette.divider}`,
           color: theme.palette.text.primary,
         }}
       >
-        <Toolbar
-          component={Container}
-          maxWidth="lg"
-          sx={{ 
-            display: "flex", 
-            justifyContent: "space-between", 
-            py: 1
-          }}
-        >
-          {/* Logo Section */}
-          <Stack 
-            direction="row" 
-            spacing={2} 
-            alignItems="center"
-            onClick={() => navigate("/")}
-            sx={{ cursor: "pointer" }}
-          >
-            <Box
-              component="img"
-              src="/logo.webp"
-              alt="Alrhomi Logo"
-              sx={{ width: 45, height: 45, filter: "brightness(0) invert(1)" }}
-            />
-            <Typography variant="h6" sx={{ fontWeight: 800, letterSpacing: -0.5, display: { xs: "none", sm: "block" } }}>
-              ALRHOMI
-            </Typography>
-          </Stack>
+        <Container maxWidth="lg">
+          <Toolbar sx={{ justifyContent: "space-between", py: 0.5, px: { xs: 0, sm: 0 } }}>
+            <Stack
+              direction="row"
+              spacing={1.5}
+              alignItems="center"
+              onClick={() => navigate("/")}
+              sx={{ cursor: "pointer" }}
+            >
+              <Box
+                component="img"
+                src="/logo.webp"
+                alt="Alrhomi Logo"
+                sx={{ width: 44, height: 44, filter: isDark ? "brightness(0) invert(1)" : "none" }}
+              />
+              <Typography
+                variant="h6"
+                fontWeight={800}
+                letterSpacing="-0.5"
+                sx={{ display: { xs: "none", sm: "block" }, color: "var(--brand-blue)" }}
+              >
+                ALRHOMI
+              </Typography>
+            </Stack>
 
-          {/* Navigation Links */}
-          <Stack
-            direction="row"
-            spacing={1}
-            sx={{ display: { xs: "none", md: "flex" } }}
-          >
-            {navLinks.map((link) => (
-              <Button
-                key={link.path}
-                component={NavLink}
-                to={link.path}
+            {!isMobile && (
+              <Stack direction="row" spacing={0.5}>
+                {navLinks.map((link) => (
+                  <Button
+                    key={link.path}
+                    component={NavLink}
+                    to={link.path}
+                    sx={{
+                      color: theme.palette.text.secondary,
+                      borderRadius: "12px",
+                      px: 2,
+                      fontWeight: 500,
+                      transition: "all 0.25s ease",
+                      "&:hover": {
+                        color: "var(--brand-blue)",
+                        background: isDark ? "rgba(36,69,143,0.1)" : "rgba(36,69,143,0.05)",
+                      },
+                      "&.active": {
+                        color: "var(--brand-blue)",
+                        background: isDark ? "rgba(36,69,143,0.15)" : "rgba(36,69,143,0.08)",
+                        fontWeight: 700,
+                      },
+                    }}
+                  >
+                    {link.label}
+                  </Button>
+                ))}
+              </Stack>
+            )}
+
+            <Stack direction="row" spacing={1.5} alignItems="center">
+              {!isMobile && (
+                <Button
+                  variant="contained"
+                  color="secondary"
+                  size="small"
+                  startIcon={<WhatsApp />}
+                  onClick={() => window.open(getWhatsAppUrl(), "_blank")}
+                  sx={{ px: 3, fontWeight: 700, borderRadius: 2 }}
+                >
+                  واتساب
+                </Button>
+              )}
+
+              <IconButton
+                onClick={toggleTheme}
                 sx={{
-                  color: theme.palette.text.secondary,
-                  borderRadius: "12px",
-                  px: 2,
-                  fontWeight: 500,
-                  transition: "all 0.3s ease",
-                  "&:hover": { 
-                    color: theme.palette.text.primary, 
-                    background: isDark ? "rgba(255,255,255,0.05)" : "rgba(15,23,42,0.05)" 
-                  },
-                  "&.active": {
-                    color: theme.palette.primary.main,
-                    background: isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(37, 99, 235, 0.1)",
-                    fontWeight: 700,
-                  },
+                  bgcolor: isDark ? "rgba(255,255,255,0.05)" : "rgba(36,69,143,0.05)",
+                  color: "var(--brand-blue)",
                 }}
               >
-                {link.label}
-              </Button>
-            ))}
-          </Stack>
+                {isDark ? <LightMode /> : <DarkMode />}
+              </IconButton>
 
-          {/* Action Buttons */}
-          <Stack direction="row" spacing={2} alignItems="center">
-            <Button
-              className="btn-premium"
-              size="small"
-              onClick={() => navigate("/catalog")}
-              sx={{ display: { xs: "none", sm: "inline-flex" }, px: 3 }}
-            >
-              اكتشف الآن
-            </Button>
-            
-            <IconButton
-              onClick={toggleTheme}
-              sx={{
-                background: isDark ? "rgba(255, 255, 255, 0.05)" : "rgba(15, 23, 42, 0.05)",
-                color: theme.palette.primary.main,
-                "&:hover": { 
-                  background: isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(15, 23, 42, 0.1)" 
-                }
-              }}
-            >
-              {isDark ? <LightMode /> : <DarkMode />}
-            </IconButton>
+              <IconButton
+                onClick={() => window.open(getWhatsAppUrl(), "_blank")}
+                sx={{
+                  display: { xs: "inline-flex", sm: "none" },
+                  bgcolor: "rgba(37,211,102,0.15)",
+                  color: "#25D366",
+                }}
+              >
+                <WhatsApp />
+              </IconButton>
 
-            <IconButton
-              onClick={() => window.open(getWhatsAppUrl(), "_blank")}
-              sx={{
-                background: "rgba(37, 211, 102, 0.15)",
-                color: "#25D366",
-                "&:hover": { background: "rgba(37, 211, 102, 0.25)" }
-              }}
-            >
-              <WhatsApp />
-            </IconButton>
-          </Stack>
-        </Toolbar>
+              {isMobile && (
+                <IconButton onClick={() => setDrawerOpen(true)} sx={{ color: "var(--brand-blue)" }}>
+                  <MenuIcon />
+                </IconButton>
+              )}
+            </Stack>
+          </Toolbar>
+        </Container>
       </AppBar>
+
+      <Drawer
+        anchor="right"
+        open={drawerOpen}
+        onClose={() => setDrawerOpen(false)}
+        PaperProps={{
+          sx: { width: 260, bgcolor: theme.palette.background.paper },
+        }}
+      >
+        <Box sx={{ p: 2, textAlign: "center" }}>
+          <Typography variant="h6" fontWeight={800} sx={{ color: "var(--brand-blue)" }}>
+            ALRHOMI
+          </Typography>
+        </Box>
+        <List>
+          {navLinks.map((link) => (
+            <ListItemButton
+              key={link.path}
+              component={NavLink}
+              to={link.path}
+              onClick={() => setDrawerOpen(false)}
+              sx={{ "&.active": { bgcolor: "rgba(36,69,143,0.08)", color: "var(--brand-blue)" } }}
+            >
+              <ListItemIcon sx={{ color: "var(--brand-blue)" }}>{link.icon}</ListItemIcon>
+              <ListItemText primary={link.label} />
+            </ListItemButton>
+          ))}
+        </List>
+      </Drawer>
     </Box>
   );
 };

@@ -152,6 +152,9 @@ export const fetchProducts = async (
     model = "",
     productCode = "",
     hasImages = "",
+    ids,
+    sortBy,
+    sortOrder,
   } = params;
 
   const queryParams: Record<string, any> = { page, limit };
@@ -161,6 +164,9 @@ export const fetchProducts = async (
   if (model) queryParams.model = model;
   if (productCode) queryParams.productCode = productCode;
   if (hasImages) queryParams.hasImages = hasImages;
+  if (ids) queryParams.ids = ids;
+  if (sortBy) queryParams.sortBy = sortBy;
+  if (sortOrder) queryParams.sortOrder = sortOrder;
 
   return apiClient.get<PaginatedResponse<Product> & { withoutImagesCount?: number }>(
     "/products",
@@ -186,8 +192,13 @@ export const updateProduct = async (
   return apiClient.put<Product>(`/products/${id}`, data);
 };
 
-export const deleteProduct = async (id: string): Promise<void> => {
-  return apiClient.delete<void>(`/products/${id}`);
+export const deleteProduct = async (
+  id: string,
+  options: { detachImages?: boolean } = {},
+): Promise<void> => {
+  return apiClient.delete<void>(`/products/${id}`, {
+    params: options.detachImages ? { detachImages: true } : undefined,
+  });
 };
 
 export default apiClient;

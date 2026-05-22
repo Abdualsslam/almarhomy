@@ -41,7 +41,7 @@ import PageTransition from "../components/PageTransition";
 import ImageThumbnails from "../components/ImageThumbnails";
 import ImageLightbox from "../components/ImageLightbox";
 import { Helmet } from "react-helmet-async";
-import { getWhatsAppUrl } from "../utils/whatsapp";
+import { getWhatsAppUrl, buildProductWhatsAppMessage } from "../utils/whatsapp";
 import {
   getProductSchema,
   getBreadcrumbSchema,
@@ -637,9 +637,13 @@ export default function ProductDetail() {
                       <WhatsApp sx={{ fontSize: { xs: 24, sm: 28 }, ml: 1 }} />
                     }
                     onClick={() => {
-                      const productUrl = `${window.location.origin}/product/${product?._id}`;
-                      const message = `مرحباً، أرغب في الاستفسار عن المنتج:\n${product?.productName || product?.description
-                        }\n\nرابط المنتج: ${productUrl}`;
+                      const message = buildProductWhatsAppMessage({
+                        productName: product?.productName,
+                        productCode: product?.productCode,
+                        category: typeof product?.category === "string" ? product.category : undefined,
+                        model: product?.model,
+                        url: `${window.location.origin}/product/${product?._id}`,
+                      });
                       window.open(
                         getWhatsAppUrl(message),
                         "_blank"

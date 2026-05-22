@@ -22,21 +22,29 @@ export function getTheme(mode: ThemeMode): Theme {
     palette: {
       mode,
       primary: {
-        main: isDark ? "#3b82f6" : "#2563eb",
+        main: "#24458f",
+        dark: "#15295f",
+        light: "#3f5fa8",
         contrastText: "#ffffff",
       },
       secondary: {
-        main: isDark ? "#06b6d4" : "#0891b2",
+        main: "#f4c400",
+        dark: "#d9a900",
+        light: "#fff4bf",
+        contrastText: "#111827",
+      },
+      error: {
+        main: "#b5152b",
       },
       background: {
-        default: isDark ? "#050507" : "#f8fafc",
-        paper: isDark ? "#0d0d12" : "#ffffff",
+        default: isDark ? "#050505" : "#f7f7f5",
+        paper: isDark ? "#111827" : "#ffffff",
       },
       text: {
-        primary: isDark ? "#ffffff" : "#0f172a",
-        secondary: isDark ? "rgba(255, 255, 255, 0.7)" : "rgba(15, 23, 42, 0.7)",
+        primary: isDark ? "#ffffff" : "#111827",
+        secondary: isDark ? "rgba(255, 255, 255, 0.7)" : "#6b7280",
       },
-      divider: isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(15, 23, 42, 0.1)",
+      divider: isDark ? "rgba(255, 255, 255, 0.1)" : "#e5e7eb",
     },
     typography: {
       fontFamily: "'Outfit', 'Noto Sans Arabic', sans-serif",
@@ -58,17 +66,22 @@ export function getTheme(mode: ThemeMode): Theme {
             borderRadius: 14,
             textTransform: "none",
             fontWeight: 600,
-            transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            transition: "all 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
           },
           containedPrimary: {
-            background: isDark
-              ? "linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%)"
-              : "linear-gradient(135deg, #2563eb 0%, #0891b2 100%)",
+            background: "#24458f",
+            color: "#ffffff",
             "&:hover": {
-              transform: "translateY(-2px)",
-              boxShadow: isDark
-                ? "0 8px 25px rgba(59, 130, 246, 0.5)"
-                : "0 8px 25px rgba(37, 99, 235, 0.4)",
+              background: "#15295f",
+              transform: "translateY(-1px)",
+              boxShadow: "0 10px 24px rgba(36, 69, 143, 0.22)",
+            },
+          },
+          containedSecondary: {
+            background: "#f4c400",
+            color: "#111827",
+            "&:hover": {
+              background: "#d9a900",
             },
           },
         },
@@ -76,12 +89,10 @@ export function getTheme(mode: ThemeMode): Theme {
       MuiCard: {
         styleOverrides: {
           root: {
-            background: isDark ? "rgba(255, 255, 255, 0.03)" : "rgba(255, 255, 255, 0.8)",
-            backdropFilter: "blur(20px)",
-            border: isDark ? "1px solid rgba(255, 255, 255, 0.1)" : "1px solid rgba(15, 23, 42, 0.1)",
-            borderRadius: 24,
             backgroundImage: "none",
-            boxShadow: isDark ? undefined : "0 4px 24px rgba(15, 23, 42, 0.08)",
+            borderRadius: 22,
+            border: isDark ? "1px solid rgba(255, 255, 255, 0.08)" : "1px solid #e5e7eb",
+            boxShadow: isDark ? "0 4px 24px rgba(0,0,0,0.3)" : "0 14px 35px rgba(17, 24, 39, 0.08)",
           },
         },
       },
@@ -89,24 +100,24 @@ export function getTheme(mode: ThemeMode): Theme {
         styleOverrides: {
           root: {
             backgroundImage: "none",
-            background: isDark ? "#0d0d12" : "#ffffff",
+            background: isDark ? "#111827" : "#ffffff",
           },
         },
       },
       MuiAppBar: {
         styleOverrides: {
           root: {
-            background: isDark ? "rgba(13, 13, 18, 0.8)" : "rgba(255, 255, 255, 0.9)",
-            backdropFilter: "blur(20px)",
-            borderBottom: isDark ? "1px solid rgba(255, 255, 255, 0.1)" : "1px solid rgba(15, 23, 42, 0.1)",
+            background: isDark ? "rgba(5, 5, 5, 0.95)" : "rgba(255, 255, 255, 0.97)",
+            backdropFilter: "blur(12px)",
+            borderBottom: isDark ? "1px solid rgba(255, 255, 255, 0.08)" : "1px solid #e5e7eb",
           },
         },
       },
       MuiDrawer: {
         styleOverrides: {
           paper: {
-            background: isDark ? "#0d0d12" : "#ffffff",
-            borderLeft: isDark ? "1px solid rgba(255, 255, 255, 0.1)" : "1px solid rgba(15, 23, 42, 0.1)",
+            background: isDark ? "#050505" : "#ffffff",
+            borderLeft: isDark ? "1px solid rgba(255, 255, 255, 0.08)" : "1px solid #e5e7eb",
             borderRight: "none",
           },
         },
@@ -114,9 +125,9 @@ export function getTheme(mode: ThemeMode): Theme {
       MuiIconButton: {
         styleOverrides: {
           root: {
-            transition: "all 0.3s ease",
+            transition: "all 0.25s ease",
             "&:hover": {
-              background: isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(15, 23, 42, 0.05)",
+              background: isDark ? "rgba(255, 255, 255, 0.08)" : "rgba(36, 69, 143, 0.06)",
             },
           },
         },
@@ -126,9 +137,24 @@ export function getTheme(mode: ThemeMode): Theme {
           root: {
             "&.Mui-focused": {
               "& .MuiOutlinedInput-notchedOutline": {
-                borderColor: isDark ? "#3b82f6" : "#2563eb",
+                borderColor: "#24458f",
               },
             },
+          },
+        },
+      },
+      MuiChip: {
+        styleOverrides: {
+          root: {
+            fontWeight: 600,
+          },
+          colorPrimary: {
+            backgroundColor: isDark ? "rgba(36, 69, 143, 0.2)" : "rgba(36, 69, 143, 0.1)",
+            color: isDark ? "#6b8fd4" : "#24458f",
+          },
+          colorSecondary: {
+            backgroundColor: isDark ? "rgba(244, 196, 0, 0.15)" : "rgba(244, 196, 0, 0.12)",
+            color: isDark ? "#f4c400" : "#8a6d00",
           },
         },
       },

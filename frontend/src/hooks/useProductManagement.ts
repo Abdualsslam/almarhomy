@@ -3,6 +3,7 @@ import {
   fetchProducts,
   createProduct,
   updateProduct,
+  deleteProduct,
   fetchCategories,
   fetchImages,
   getFolderContents,
@@ -329,8 +330,11 @@ export const useProductManagement = () => {
     }
     setSelectedSimilarProductsLoading(true);
     try {
-        // Simple implementation: fetch all to find them, or ideally use a bulk endpoint if exists
-        const res = await fetchProducts({ page: 1, limit: 1000 });
+        const res = await fetchProducts({
+          ids: ids.join(','),
+          page: 1,
+          limit: Math.min(ids.length, 100),
+        });
         const items = Array.isArray(res.items) ? res.items : [];
         const map = new Map(items.map((item: any) => [item._id, item as ProductItem]));
         setSelectedSimilarProducts(ids.map(id => map.get(id) || ({ _id: id, productName: "منتج غير موجود" } as ProductItem)));
@@ -398,6 +402,61 @@ export const useProductManagement = () => {
     }
   };
 
+  const handleOpenImageDialog = () => {
+    setImageDialogOpen(true);
+  };
+
+  const handleCloseImageDialog = () => {
+    setImageDialogOpen(false);
+  };
+
+  const handleToggleSelectedImage = (image: ImageItem) => {
+    setSelectedImages((prev) => {
+      const exists = prev.some((item) => item._id === image._id);
+      if (exists) return prev.filter((item) => item._id !== image._id);
+      return [...prev, image];
+    });
+  };
+
+  const handleRemoveSelectedImage = (id: string) => {
+    setSelectedImages((prev) => prev.filter((image) => image._id !== id));
+  };
+
+  const handleOpenSimilarProductsDialog = () => {
+    setSimilarProductsDialogOpen(true);
+  };
+
+  const handleCloseSimilarProductsDialog = () => {
+    setSimilarProductsDialogOpen(false);
+  };
+
+  const handleToggleSelectedSimilarProduct = (product: ProductItem) => {
+    if (editingProduct && product._id === editingProduct._id) return;
+    setSelectedSimilarProducts((prev) => {
+      const exists = prev.some((item) => item._id === product._id);
+      if (exists) return prev.filter((item) => item._id !== product._id);
+      return [...prev, product];
+    });
+  };
+
+  const handleRemoveSelectedSimilarProduct = (id: string) => {
+    setSelectedSimilarProducts((prev) => prev.filter((product) => product._id !== id));
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!deleteDialog.id) return;
+    setDeleteDialog((prev) => ({ ...prev, loading: true }));
+    setError("");
+    try {
+      await deleteProduct(deleteDialog.id, { detachImages: true });
+      setDeleteDialog({ open: false, id: null, name: "", loading: false });
+      await loadProducts();
+    } catch (err: any) {
+      setError(err.response?.data?.message || err.response?.data?.error || "فشل حذف المنتج");
+      setDeleteDialog((prev) => ({ ...prev, loading: false }));
+    }
+  };
+
   return {
     products, loading, page, setPage, rowsPerPage, setRowsPerPage, totalCount, withoutImagesCount,
     search, setSearch, filters, setFilters, open, setOpen, editingProduct, form, setForm,
@@ -409,6 +468,8 @@ export const useProductManagement = () => {
     similarProductsDialogOpen, setSimilarProductsDialogOpen, productsLibrary,
     productsLibraryQuery, setProductsLibraryQuery, loadProducts, handleOpen, handleSave,
     handleFormChange, selectedImageIdSet, selectedSimilarProductIdSet,
-    // Add other handlers as needed...
+    handleOpenImageDialog, handleCloseImageDialog, handleToggleSelectedImage,
+    handleRemoveSelectedImage, handleOpenSimilarProductsDialog, handleCloseSimilarProductsDialog,
+    handleToggleSelectedSimilarProduct, handleRemoveSelectedSimilarProduct, handleConfirmDelete,
   };
 };

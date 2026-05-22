@@ -44,6 +44,9 @@ const DeleteProductDialog: React.FC<Props> = ({ state, onClose, onConfirm }) => 
         <Typography>
           {t("admin.products.delete_message", { name: state.name })}
         </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+          سيتم حذف المنتج فقط، وستبقى الصور في مكتبة الوسائط كصور غير مرتبطة.
+        </Typography>
       </DialogContent>
       <DialogActions
         sx={{
