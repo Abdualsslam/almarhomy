@@ -14,6 +14,7 @@ import { JobStatusModule } from './job-status/job-status.module';
 import { HealthModule } from './health/health.module';
 import { FoldersModule } from './folders/folders.module';
 import { SitemapModule } from './sitemap/sitemap.module';
+import { PublicModule } from './public/public.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { SitemapModule } from './sitemap/sitemap.module';
     HealthModule,
     FoldersModule,
     SitemapModule,
+    PublicModule,
   ],
   providers: [
     {

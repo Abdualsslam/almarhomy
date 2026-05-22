@@ -182,6 +182,15 @@ export class AdminImagesService {
       }),
     );
 
+    if (img.product) {
+      await this.productModel
+        .updateOne(
+          { _id: img.product },
+          { $pull: { images: img._id } },
+        )
+        .exec();
+    }
+
     // Delete document from MongoDB
     await img.deleteOne();
 

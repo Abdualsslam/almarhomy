@@ -72,6 +72,14 @@ export class ProductQueryDto {
   hasImages?: string;
 
   @ApiPropertyOptional({
+    description: 'قائمة معرّفات منتجات مفصولة بفواصل',
+    example: 'id1,id2,id3',
+  })
+  @IsOptional()
+  @IsString()
+  ids?: string;
+
+  @ApiPropertyOptional({
     description: 'الترتيب حسب الحقل',
     enum: ['createdAt', 'productName', 'model'],
     default: 'createdAt',
