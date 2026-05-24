@@ -32,11 +32,14 @@ const ProductTable: React.FC<Props> = ({ products, loading, rowsPerPage, onEdit,
   const theme = useTheme();
 
   const getProductImage = (product: ProductItem): string | undefined => {
+    if ((product as Record<string, unknown>).thumbnailUrl) return (product as Record<string, unknown>).thumbnailUrl as string;
+    if ((product as Record<string, unknown>).watermarkedUrl) return (product as Record<string, unknown>).watermarkedUrl as string;
+    if ((product as Record<string, unknown>).originalUrl) return (product as Record<string, unknown>).originalUrl as string;
     const imgs = product.images as Array<{ watermarkedUrl?: string; originalUrl?: string }> | undefined;
     if (imgs && imgs.length > 0) {
       return imgs[0].watermarkedUrl || imgs[0].originalUrl;
     }
-    return (product as Record<string, unknown>).originalUrl as string | undefined || (product as Record<string, unknown>).watermarkedUrl as string | undefined || undefined;
+    return undefined;
   };
 
   return (

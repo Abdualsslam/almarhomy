@@ -151,11 +151,11 @@ const SimilarProductsSelectionDialog: React.FC<SimilarProductsSelectionDialogPro
                       position: "relative",
                     }}
                   >
-                    {(product as any).originalUrl || (product as any).imageIds?.length > 0 ? (
+                    {(product as any).thumbnailUrl || (product as any).originalUrl || (product as any).imageIds?.length > 0 ? (
                       <CardMedia
                         component="img"
                         height="100"
-                        image={(product as any).originalUrl || "/placeholder.png"}
+                        image={(product as any).thumbnailUrl || (product as any).originalUrl || "/placeholder.png"}
                         alt={product.productName}
                         sx={{ objectFit: "cover", height: 100 }}
                       />

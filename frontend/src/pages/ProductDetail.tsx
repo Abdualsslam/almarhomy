@@ -225,6 +225,7 @@ export default function ProductDetail() {
           bgcolor: "background.default",
           minHeight: "100vh",
           py: { xs: 2, sm: 3, md: 4 },
+          pb: { xs: 10, sm: 3, md: 4 },
         }}
       >
         <Container maxWidth="lg">
@@ -771,6 +772,52 @@ export default function ProductDetail() {
           {t('product.code_copied')}
         </MuiAlert>
       </Snackbar>
+
+      {product && (
+        <Box
+          sx={{
+            display: { xs: "flex", md: "none" },
+            position: "fixed",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: 1300,
+            p: 2,
+            bgcolor: "background.paper",
+            borderTop: `1px solid ${theme.palette.divider}`,
+            boxShadow: "0 -4px 20px rgba(0,0,0,0.15)",
+          }}
+        >
+          <Button
+            variant="contained"
+            fullWidth
+            startIcon={<WhatsApp />}
+            onClick={() => {
+              const message = buildProductWhatsAppMessage({
+                productName: product.productName,
+                productCode: product.productCode,
+                category: typeof product.category === "string" ? product.category : undefined,
+                model: product.model,
+                url: `${window.location.origin}/product/${product._id}`,
+              });
+              window.open(getWhatsAppUrl(message), "_blank");
+            }}
+            sx={{
+              py: 1.5,
+              borderRadius: 3,
+              fontSize: "1rem",
+              fontWeight: 700,
+              background: "linear-gradient(135deg, #25D366 0%, #128C7E 100%)",
+              boxShadow: `0 4px 12px ${alpha("#25D366", 0.3)}`,
+              "&:hover": {
+                background: "linear-gradient(135deg, #128C7E 0%, #075E54 100%)",
+              },
+            }}
+          >
+            {t('product.whatsapp_inquiry')}
+          </Button>
+        </Box>
+      )}
 
       {product?.images && (
         <ImageLightbox

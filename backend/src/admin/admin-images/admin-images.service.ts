@@ -133,6 +133,7 @@ export class AdminImagesService {
 
         return {
           _id: img._id,
+          productId: product?._id?.toString() ?? null,
           model: product?.model,
           category: categoryName,
           productName: product?.productName,

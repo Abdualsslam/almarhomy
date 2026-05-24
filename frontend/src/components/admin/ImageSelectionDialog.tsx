@@ -174,9 +174,9 @@ const ImageSelectionDialog: React.FC<ImageSelectionDialogProps> = ({
           <Grid container spacing={1.5}>
             {imageLibrary.items.map((img) => {
               const isSelected = selectedImageIdSet.has(img._id);
-              const imgProduct = img.product as string | null | undefined;
+              const imgProductId = img.productId as string | null | undefined;
               const isLinkedToOther =
-                imgProduct && imgProduct !== editingProductId && !isSelected;
+                imgProductId && imgProductId !== editingProductId && !isSelected;
 
               return (
                 <Grid size={{ xs: 6, sm: 4, md: 3 }} key={img._id}>

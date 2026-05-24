@@ -1,7 +1,7 @@
 import { useState, useEffect, FC, ReactElement } from "react";
 import { Box, Container, Grid, Typography, Stack } from "@mui/material";
 import { Inventory2, Category, Image, Verified } from "@mui/icons-material";
-import axios from "axios";
+import apiClient from "../api/client";
 
 interface SiteStats {
   totalProducts: number;
@@ -71,15 +71,15 @@ const StatsCounter: FC = (): ReactElement => {
     productsWithImages: 100,
   });
 
-  useEffect(() => {
+useEffect(() => {
     (async () => {
       try {
-        const res = await axios.get("/public/site-stats");
-        if (res.data) {
+        const data = await apiClient.get<SiteStats>('/public/site-stats');
+        if (data) {
           setStats({
-            totalProducts: res.data.totalProducts || 0,
-            totalCategories: res.data.totalCategories || 0,
-            productsWithImages: res.data.productsWithImages || 0,
+            totalProducts: data.totalProducts || 0,
+            totalCategories: data.totalCategories || 0,
+            productsWithImages: data.productsWithImages || 0,
           });
         }
       } catch {

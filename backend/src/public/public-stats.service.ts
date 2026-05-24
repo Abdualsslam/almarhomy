@@ -19,14 +19,24 @@ export class PublicStatsService {
   async getStats() {
     const totalProducts = await this.productModel.countDocuments().exec();
     const totalCategories = await this.categoryModel.countDocuments().exec();
-    const productsWithImages = await this.imageModel
+
+    const productsWithImagesByField = await this.productModel
+      .countDocuments({ 'images.0': { $exists: true } })
+      .exec();
+
+    const linkedImageProductIds = await this.imageModel
       .distinct('product', { product: { $ne: null } })
       .exec();
+
+    const productsWithImages =
+      productsWithImagesByField > 0
+        ? productsWithImagesByField
+        : linkedImageProductIds.length;
 
     return {
       totalProducts,
       totalCategories,
-      productsWithImages: productsWithImages.length,
+      productsWithImages,
     };
   }
 }

@@ -4,18 +4,21 @@ import {
   Box,
   Skeleton,
   Stack,
-
+  IconButton,
+  Tooltip,
 } from "@mui/material";
 import { JSX, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { VisibilityOutlined } from "@mui/icons-material";
+import { VisibilityOutlined, Download as DownloadIcon } from "@mui/icons-material";
 import { ImageCardProps } from "../types/component.types";
+import { saveAs } from "file-saver";
 
 export default function ImageCard({
   image,
   onViewDetails,
   className,
+  withDownload,
 }: ImageCardProps): JSX.Element {
   const [imgLoaded, setImgLoaded] = useState<boolean>(false);
   const navigate = useNavigate();
@@ -26,6 +29,14 @@ export default function ImageCard({
       onViewDetails(image);
     } else {
       navigate(`/product/${image._id}`);
+    }
+  };
+
+  const handleDownload = (e: React.MouseEvent): void => {
+    e.stopPropagation();
+    const url = image.originalUrl || image.watermarkedUrl;
+    if (url) {
+      saveAs(url, `${title.replace(/\s+/g, "-")}.png`);
     }
   };
 
@@ -89,7 +100,7 @@ export default function ImageCard({
             sx={{
               position: "absolute",
               inset: 0,
-              background: "linear-gradient(to top, rgba(59, 130, 246, 0.4), transparent)",
+              background: "linear-gradient(to top, rgba(36, 69, 143, 0.5), transparent)",
               opacity: 0,
               transition: "opacity 0.4s ease",
             }}
@@ -136,6 +147,31 @@ export default function ImageCard({
               zIndex: 3
             }}
           />
+
+          {/* Download Button */}
+          {withDownload && (
+            <Tooltip title="تحميل الصورة">
+              <IconButton
+                size="small"
+                onClick={handleDownload}
+                sx={{
+                  position: "absolute",
+                  top: 16,
+                  left: 16,
+                  background: "rgba(0,0,0,0.5)",
+                  backdropFilter: "blur(5px)",
+                  color: "white",
+                  border: "1px solid rgba(255,255,255,0.1)",
+                  zIndex: 3,
+                  "&:hover": {
+                    background: "rgba(36, 69, 143, 0.8)",
+                  },
+                }}
+              >
+                <DownloadIcon fontSize="small" />
+              </IconButton>
+            </Tooltip>
+          )}
         </Box>
 
         {/* Content */}
@@ -147,7 +183,7 @@ export default function ImageCard({
               fontSize: "1.1rem",
               lineHeight: 1.4,
               mb: 2,
-              color: "white",
+              color: "var(--text-main)",
               display: "-webkit-box",
               WebkitLineClamp: 2,
               WebkitBoxOrient: "vertical",
@@ -158,8 +194,8 @@ export default function ImageCard({
           </Typography>
 
           <Stack direction="row" spacing={1} alignItems="center">
-            <Box sx={{ width: 8, height: 8, borderRadius: "50%", background: "var(--accent-secondary)" }} />
-            <Typography variant="caption" sx={{ color: "var(--text-secondary)", fontWeight: 500, letterSpacing: 0.5 }}>
+            <Box sx={{ width: 8, height: 8, borderRadius: "50%", background: "var(--brand-yellow)" }} />
+            <Typography variant="caption" sx={{ color: "var(--text-muted)", fontWeight: 500, letterSpacing: 0.5 }}>
               عرض التفاصيل
             </Typography>
           </Stack>

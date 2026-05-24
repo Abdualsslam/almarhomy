@@ -96,11 +96,12 @@ const CategoryShowcase: FC<CategoryShowcaseProps> = ({
                           position: "absolute",
                           top: 20,
                           right: 20,
-                          background: "var(--accent-primary)",
+                          background: "var(--brand-yellow)",
                           px: 2,
                           py: 0.5,
                           borderRadius: "100px",
-                          boxShadow: "0 4px 15px rgba(59, 130, 246, 0.5)"
+                          boxShadow: "0 4px 15px rgba(244, 196, 0, 0.3)",
+                          color: "var(--brand-charcoal)",
                         }}
                       >
                         <Typography variant="caption" sx={{ fontWeight: 800 }}>
@@ -112,7 +113,7 @@ const CategoryShowcase: FC<CategoryShowcaseProps> = ({
                       <Typography variant="h5" sx={{ fontWeight: 800, mb: 1, color: "white" }}>
                         {category.name}
                       </Typography>
-                      <Typography variant="body2" sx={{ color: "var(--text-secondary)", lineHeight: 1.6 }}>
+                      <Typography variant="body2" sx={{ color: "var(--text-muted)", lineHeight: 1.6 }}>
                         {category.description || "استكشف أرقى الخيارات في هذه الفئة."}
                       </Typography>
                     </Box>
@@ -144,13 +145,13 @@ const CategoryShowcase: FC<CategoryShowcaseProps> = ({
                   background: "rgba(255,255,255,0.02)",
                   transition: "all 0.3s ease",
                   "&:hover": {
-                    borderColor: "var(--accent-secondary)",
-                    background: "rgba(6, 182, 212, 0.05)"
+borderColor: "var(--brand-blue)",
+                  background: "rgba(36, 69, 143, 0.05)"
                   }
                 }}
               >
-                <CategoryOutlined sx={{ fontSize: 48, color: "var(--accent-secondary)", mb: 2 }} />
-                <Typography variant="h6" sx={{ fontWeight: 800, color: "white", display: "flex", alignItems: "center", gap: 1 }}>
+                <CategoryOutlined sx={{ fontSize: 48, color: "var(--brand-yellow)", mb: 2 }} />
+                <Typography variant="h6" sx={{ fontWeight: 800, color: "var(--text-main)", display: "flex", alignItems: "center", gap: 1 }}>
                   عرض جميع الفئات <ArrowForwardOutlined fontSize="small" />
                 </Typography>
               </Box>

@@ -202,6 +202,37 @@ export class ProductsService {
       .limit(limit)
       .exec();
 
+    const productIds = products.map((p) => p._id);
+    const productImagesMap = new Map<
+      string,
+      { originalUrl: string; watermarkedUrl: string; isWatermarked: boolean }
+    >();
+
+    if (productIds.length > 0) {
+      const images = await this.imageModel
+        .aggregate([
+          { $match: { product: { $in: productIds } } },
+          { $sort: { createdAt: -1 } },
+          {
+            $group: {
+              _id: '$product',
+              firstImage: { $first: '$$ROOT' },
+            },
+          },
+        ])
+        .exec();
+
+      images.forEach((item) => {
+        if (item.firstImage) {
+          productImagesMap.set(item._id.toString(), {
+            originalUrl: item.firstImage.originalUrl,
+            watermarkedUrl: item.firstImage.watermarkedUrl,
+            isWatermarked: item.firstImage.isWatermarked,
+          });
+        }
+      });
+    }
+
     const items = await Promise.all(
       products.map(async (product) => {
         const categoryName = extractCategoryName(product.category);
@@ -218,6 +249,10 @@ export class ProductsService {
             ? imageIds.length
             : await this.imageModel.countDocuments({ product: product._id }).exec();
 
+        const productId =
+          product._id instanceof Types.ObjectId ? product._id.toString() : String(product._id);
+        const firstImage = productImagesMap.get(productId);
+
         return {
           _id: product._id,
           category: categoryName,
@@ -232,6 +267,10 @@ export class ProductsService {
           imageIds,
           similarProductIds,
           imageCount,
+          thumbnailUrl: firstImage?.watermarkedUrl || firstImage?.originalUrl || null,
+          originalUrl: firstImage?.originalUrl || null,
+          watermarkedUrl: firstImage?.watermarkedUrl || null,
+          isWatermarked: firstImage?.isWatermarked || false,
           createdAt: product.get('createdAt') as Date,
           updatedAt: product.get('updatedAt') as Date,
         };

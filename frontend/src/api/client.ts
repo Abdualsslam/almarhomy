@@ -154,3 +154,5 @@ class ApiClient {
 const apiClient = new ApiClient(API_BASE_URL);
 
 export default apiClient;
+
+export const fetchPublicSiteStats = () => apiClient.get<{ totalProducts: number; totalCategories: number; productsWithImages: number }>('/public/site-stats');

@@ -112,6 +112,14 @@ export default function CatalogPage() {
     setSearchParams(nextParams);
   };
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const handlePageChange = (_event: React.ChangeEvent<unknown>, newPage: number) => {
+    const nextParams = new URLSearchParams(searchParams);
+    if (newPage > 1) nextParams.set('page', String(newPage));
+    else nextParams.delete('page');
+    setSearchParams(nextParams);
+  };
+
   return (
     <PageTransition>
       <SEO title="Catalog | Alrhomi Showroom" description="Browse our professional equipment collection." />
@@ -123,7 +131,7 @@ export default function CatalogPage() {
             <Typography variant="h2" sx={{ fontWeight: 800, mb: 2 }} className="text-gradient">
               {t('catalog.title')}
             </Typography>
-            <Typography variant="body1" sx={{ color: "var(--text-secondary)", maxWidth: 600, mx: "auto" }}>
+            <Typography variant="body1" sx={{ color: "var(--text-muted)", maxWidth: 600, mx: "auto" }}>
               {t('catalog.subtitle')}
             </Typography>
           </Box>
@@ -251,10 +259,10 @@ export default function CatalogPage() {
 
                       {data.totalPages > 1 && (
                         <Box sx={{ display: "flex", justifyContent: "center", mt: 6 }}>
-                          <Pagination
+<Pagination
                             count={data.totalPages}
                             page={page}
-                            onChange={(_, p) => handleFilterChange({ page: p.toString() } as any)}
+                            onChange={handlePageChange as any}
                             color="primary"
                             size="large"
                           />

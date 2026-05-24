@@ -26,7 +26,6 @@ function App(): JSX.Element {
 
     return (
         <Suspense fallback={<FullPageLoader />}>
-            <div className="mesh-bg" />
             <RouteProgress />
             <Routes>
                 <Route path="/" element={<MainLayout />}>

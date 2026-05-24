@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useMemo, ChangeEvent } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
   fetchProducts,
   createProduct,
@@ -92,6 +93,7 @@ const getDefaultForm = (): ProductForm => ({
 });
 
 export const useProductManagement = () => {
+  const [searchParams] = useSearchParams();
   const [products, setProducts] = useState<ProductItem[]>([]);
   const [loading, setLoading] = useState(false);
   const [page, setPage] = useState(0);
@@ -102,7 +104,7 @@ export const useProductManagement = () => {
   const [filters, setFilters] = useState({
     category: "",
     model: "",
-    hasImages: "",
+    hasImages: searchParams.get("hasImages") || "",
   });
   const [open, setOpen] = useState(false);
   const [editingProduct, setEditingProduct] = useState<ProductItem | null>(null);

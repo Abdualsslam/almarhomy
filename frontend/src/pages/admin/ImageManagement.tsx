@@ -1,5 +1,6 @@
 // src/pages/admin/ImageManagement.tsx
 import { useCallback, useEffect, useMemo, useState, ChangeEvent } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
   Box,
   Breadcrumbs,
@@ -857,6 +858,15 @@ function ImagePreviewDialog({ open, image, isMobile, onClose }: ImagePreviewDial
 export default function ImageManagement() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const [urlSearchParams] = useSearchParams();
+
+  const initialAssigned = urlSearchParams.get("assigned");
+
+  const initialAssigned = urlSearchParams.get("assigned");
+  const [assignedFilter, setAssignedFilter] = useState<boolean | undefined>(
+    initialAssigned === "false" ? false : initialAssigned === "true" ? true : undefined
+  );
+  const [initialAutoSearch] = useState("");
 
   // --- State ---
   // 1. حالة التصفح (المجلد الحالي)
@@ -892,11 +902,13 @@ export default function ImageManagement() {
     setLoading(true);
     try {
       // إذا كان هناك بحث، نبحث global في الصور
-      if (search) {
+      const effectiveSearch = search || initialAutoSearch;
+      if (effectiveSearch) {
         const res = await fetchImages({
           page: page + 1,
           limit: rowsPerPage,
-          search,
+          search: effectiveSearch,
+          assigned: assignedFilter,
         });
         setImages(res.items as ImageData[]);
         setTotalCount(res.totalItems || res.total || 0);
@@ -905,6 +917,17 @@ export default function ImageManagement() {
       }
 
       // تحميل محتويات المجلد الحالي
+      if (assignedFilter !== undefined) {
+        const res = await fetchImages({
+          page: page + 1,
+          limit: rowsPerPage,
+          assigned: assignedFilter,
+        });
+        setImages(res.items as ImageData[]);
+        setTotalCount(res.totalItems || res.total || 0);
+        setFolders([]);
+        return;
+      }
       const folderId = currentFolderId || 'root';
       const res = await getFolderContents(folderId);
 
@@ -916,7 +939,7 @@ export default function ImageManagement() {
     } finally {
       setLoading(false);
     }
-  }, [currentFolderId, search, page, rowsPerPage]);
+  }, [currentFolderId, search, page, rowsPerPage, assignedFilter]);
 
   useEffect(() => {
     loadData();
