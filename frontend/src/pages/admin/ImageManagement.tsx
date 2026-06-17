@@ -862,7 +862,6 @@ export default function ImageManagement() {
 
   const initialAssigned = urlSearchParams.get("assigned");
 
-  const initialAssigned = urlSearchParams.get("assigned");
   const [assignedFilter, setAssignedFilter] = useState<boolean | undefined>(
     initialAssigned === "false" ? false : initialAssigned === "true" ? true : undefined
   );
