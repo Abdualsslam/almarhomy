@@ -3,6 +3,7 @@ import { JSX, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowBackRounded } from "@mui/icons-material";
 import { ImageCardProps } from "../types/component.types";
+import { onImageError } from "../utils/fallbackImage";
 
 export default function ImageCard({
   image,
@@ -53,6 +54,7 @@ export default function ImageCard({
             alt={title}
             loading="lazy"
             onLoad={() => setImgLoaded(true)}
+            onError={(e) => { setImgLoaded(true); onImageError(e); }}
             sx={{
               position: "absolute",
               inset: 0,

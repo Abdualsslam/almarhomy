@@ -27,6 +27,7 @@ import {
 import { fetchCategories } from "../api/admin";
 import SEO from "../components/SEO";
 import { Category } from "../types/models.types";
+import { onImageError } from "../utils/fallbackImage";
 
 interface OrganizedCategory extends Category {
   children: Category[];
@@ -304,6 +305,7 @@ export default function CategoriesPage() {
                                 component="img"
                                 image={parentCategory.image}
                                 alt={parentCategory.name}
+                                onError={onImageError}
                                 className="category-image"
                                 sx={{
                                   width: "100%",
@@ -429,6 +431,7 @@ export default function CategoriesPage() {
                                   component="img"
                                   image={childCategory.image}
                                   alt={childCategory.name}
+                                  onError={onImageError}
                                   className="category-image"
                                   sx={{
                                     width: "100%",

@@ -2,6 +2,7 @@ import { Box, Typography, Grid, Skeleton, Stack } from "@mui/material";
 import { useMemo, FC, ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowBackRounded, GridViewRounded } from "@mui/icons-material";
+import { onImageError } from "../utils/fallbackImage";
 
 interface Category {
   _id: string;
@@ -76,6 +77,7 @@ const CategoryShowcase: FC<CategoryShowcaseProps> = ({
                       src={category.image}
                       alt={category.name}
                       loading="lazy"
+                      onError={onImageError}
                       sx={{
                         width: "100%",
                         height: "100%",
