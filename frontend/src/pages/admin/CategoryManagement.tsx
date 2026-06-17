@@ -33,18 +33,16 @@ import {
   Stack,
   Grid,
 } from "@mui/material";
-import {
-  Add as AddIcon,
-  AccountTree as FolderTreeIcon,
-  Edit as EditIcon,
-  Delete as DeleteIcon,
-  Close as CloseIcon,
-  Category as CategoryIcon,
-  Description as DescriptionIcon,
-  Warning as WarningIcon,
-  Image as ImageIcon,
-  CloudUpload as CloudUploadIcon,
-} from "@mui/icons-material";
+import AddIcon from "@mui/icons-material/Add";
+import FolderTreeIcon from "@mui/icons-material/AccountTree";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import CloseIcon from "@mui/icons-material/Close";
+import CategoryIcon from "@mui/icons-material/Category";
+import DescriptionIcon from "@mui/icons-material/Description";
+import WarningIcon from "@mui/icons-material/Warning";
+import ImageIcon from "@mui/icons-material/Image";
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import API, {
   createCategory,
   updateCategory,

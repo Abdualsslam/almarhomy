@@ -23,16 +23,14 @@ import {
   Alert as MuiAlert,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import {
-  WhatsApp,
-  Category,
-  Style,
-  QrCode,
-  CalendarToday,
-  LocalOffer,
-  Info,
-  ContentCopy,
-} from "@mui/icons-material";
+import WhatsApp from "@mui/icons-material/WhatsApp";
+import Category from "@mui/icons-material/Category";
+import Style from "@mui/icons-material/Style";
+import QrCode from "@mui/icons-material/QrCode";
+import CalendarToday from "@mui/icons-material/CalendarToday";
+import LocalOffer from "@mui/icons-material/LocalOffer";
+import Info from "@mui/icons-material/Info";
+import ContentCopy from "@mui/icons-material/ContentCopy";
 import ImageGrid from "../components/ImageGrid";
 import { getProductById } from "../api/products";
 import { getRelatedImages } from "../api/images";
@@ -41,7 +39,7 @@ import PageTransition from "../components/PageTransition";
 import ImageThumbnails from "../components/ImageThumbnails";
 import ImageLightbox from "../components/ImageLightbox";
 import { Helmet } from "react-helmet-async";
-import { getWhatsAppUrl } from "../utils/whatsapp";
+import { getWhatsAppUrl, buildProductWhatsAppMessage } from "../utils/whatsapp";
 import {
   getProductSchema,
   getBreadcrumbSchema,
@@ -225,6 +223,7 @@ export default function ProductDetail() {
           bgcolor: "background.default",
           minHeight: "100vh",
           py: { xs: 2, sm: 3, md: 4 },
+          pb: { xs: 10, sm: 3, md: 4 },
         }}
       >
         <Container maxWidth="lg">
@@ -309,7 +308,7 @@ export default function ProductDetail() {
                         position: "relative",
                         transition: "all 0.3s ease",
                         "&:hover": {
-                           boxShadow: theme.shadows[10],
+                          boxShadow: theme.shadows[10],
                         }
                       }}
                     >
@@ -372,18 +371,18 @@ export default function ProductDetail() {
                       {product?.productName || product?.description}
                     </Typography>
                     <Stack direction="row" spacing={1.5} alignItems="center">
-                       <Chip 
-                         label={product?.category} 
-                         color="primary" 
-                         variant="outlined"
-                         sx={{ fontWeight: 700, borderRadius: 2 }}
-                       />
-                       <Chip 
-                         label={product?.model} 
-                         color="secondary" 
-                         variant="outlined"
-                         sx={{ fontWeight: 700, borderRadius: 2 }}
-                       />
+                      <Chip
+                        label={product?.category}
+                        color="primary"
+                        variant="outlined"
+                        sx={{ fontWeight: 700, borderRadius: 2 }}
+                      />
+                      <Chip
+                        label={product?.model}
+                        color="secondary"
+                        variant="outlined"
+                        sx={{ fontWeight: 700, borderRadius: 2 }}
+                      />
                     </Stack>
                   </Box>
 
@@ -511,76 +510,76 @@ export default function ProductDetail() {
                                     "&:last-child": { pb: { xs: 2, sm: 2.5 } },
                                   }}
                                 >
-                                    <Stack spacing={{ xs: 1.5, sm: 1.5 }}>
-                                      <Stack
-                                        direction="row"
-                                        justifyContent="space-between"
-                                        alignItems="center"
-                                      >
-                                        <Stack direction="row" spacing={1} alignItems="center">
-                                          <Box
+                                  <Stack spacing={{ xs: 1.5, sm: 1.5 }}>
+                                    <Stack
+                                      direction="row"
+                                      justifyContent="space-between"
+                                      alignItems="center"
+                                    >
+                                      <Stack direction="row" spacing={1} alignItems="center">
+                                        <Box
+                                          sx={{
+                                            display: "flex",
+                                            alignItems: "center",
+                                            justifyContent: "center",
+                                            width: { xs: 28, sm: 32 },
+                                            height: { xs: 28, sm: 32 },
+                                            borderRadius: { xs: 1.5, sm: 2 },
+                                            bgcolor: alpha(
+                                              theme.palette[item.color].main,
+                                              0.15
+                                            ),
+                                          }}
+                                        >
+                                          <item.icon
                                             sx={{
-                                              display: "flex",
-                                              alignItems: "center",
-                                              justifyContent: "center",
-                                              width: { xs: 28, sm: 32 },
-                                              height: { xs: 28, sm: 32 },
-                                              borderRadius: { xs: 1.5, sm: 2 },
-                                              bgcolor: alpha(
-                                                theme.palette[item.color].main,
-                                                0.15
-                                              ),
+                                              color: `${item.color}.main`,
+                                              fontSize: { xs: 16, sm: 18 },
                                             }}
-                                          >
-                                            <item.icon
-                                              sx={{
-                                                color: `${item.color}.main`,
-                                                fontSize: { xs: 16, sm: 18 },
-                                              }}
-                                            />
-                                          </Box>
-                                          <Typography
-                                            variant="body2"
-                                            color="text.secondary"
-                                            sx={{
-                                              fontSize: { xs: "0.8rem", sm: "0.875rem" },
-                                            }}
-                                          >
-                                            {item.label}
-                                          </Typography>
-                                        </Stack>
-
-                                        {item.copyable && (
-                                          <Tooltip title={t('product.copy_code')}>
-                                            <IconButton
-                                              size="small"
-                                              onClick={() => handleCopyCode(item.value!)}
-                                              sx={{
-                                                color: `${item.color}.main`,
-                                                "&:hover": {
-                                                  bgcolor: alpha(
-                                                    theme.palette[item.color].main,
-                                                    0.1
-                                                  ),
-                                                },
-                                              }}
-                                            >
-                                              <ContentCopy sx={{ fontSize: 16 }} />
-                                            </IconButton>
-                                          </Tooltip>
-                                        )}
+                                          />
+                                        </Box>
+                                        <Typography
+                                          variant="body2"
+                                          color="text.secondary"
+                                          sx={{
+                                            fontSize: { xs: "0.8rem", sm: "0.875rem" },
+                                          }}
+                                        >
+                                          {item.label}
+                                        </Typography>
                                       </Stack>
-                                      <Typography
-                                        sx={{
-                                          fontSize: { xs: "0.9rem", sm: "1rem" },
-                                          pr: { xs: 1, sm: 1 },
-                                          wordBreak: "break-word",
-                                          fontWeight: item.copyable ? 700 : 400,
-                                        }}
-                                      >
-                                        {item.value}
-                                      </Typography>
+
+                                      {item.copyable && (
+                                        <Tooltip title={t('product.copy_code')}>
+                                          <IconButton
+                                            size="small"
+                                            onClick={() => handleCopyCode(item.value!)}
+                                            sx={{
+                                              color: `${item.color}.main`,
+                                              "&:hover": {
+                                                bgcolor: alpha(
+                                                  theme.palette[item.color].main,
+                                                  0.1
+                                                ),
+                                              },
+                                            }}
+                                          >
+                                            <ContentCopy sx={{ fontSize: 16 }} />
+                                          </IconButton>
+                                        </Tooltip>
+                                      )}
                                     </Stack>
+                                    <Typography
+                                      sx={{
+                                        fontSize: { xs: "0.9rem", sm: "1rem" },
+                                        pr: { xs: 1, sm: 1 },
+                                        wordBreak: "break-word",
+                                        fontWeight: item.copyable ? 700 : 400,
+                                      }}
+                                    >
+                                      {item.value}
+                                    </Typography>
+                                  </Stack>
                                 </CardContent>
                               </Card>
                             </Grid>
@@ -635,9 +634,13 @@ export default function ProductDetail() {
                       <WhatsApp sx={{ fontSize: { xs: 24, sm: 28 }, ml: 1 }} />
                     }
                     onClick={() => {
-                      const productUrl = `${window.location.origin}/product/${product?._id}`;
-                      const message = `مرحباً، أرغب في الاستفسار عن المنتج:\n${product?.productName || product?.description
-                        }\n\nرابط المنتج: ${productUrl}`;
+                      const message = buildProductWhatsAppMessage({
+                        productName: product?.productName,
+                        productCode: product?.productCode,
+                        category: typeof product?.category === "string" ? product.category : undefined,
+                        model: product?.model,
+                        url: `${window.location.origin}/product/${product?._id}`,
+                      });
                       window.open(
                         getWhatsAppUrl(message),
                         "_blank"
@@ -765,6 +768,52 @@ export default function ProductDetail() {
           {t('product.code_copied')}
         </MuiAlert>
       </Snackbar>
+
+      {product && (
+        <Box
+          sx={{
+            display: { xs: "flex", md: "none" },
+            position: "fixed",
+            bottom: 0,
+            left: 0,
+            right: 0,
+            zIndex: 1300,
+            p: 2,
+            bgcolor: "background.paper",
+            borderTop: `1px solid ${theme.palette.divider}`,
+            boxShadow: "0 -4px 20px rgba(0,0,0,0.15)",
+          }}
+        >
+          <Button
+            variant="contained"
+            fullWidth
+            startIcon={<WhatsApp />}
+            onClick={() => {
+              const message = buildProductWhatsAppMessage({
+                productName: product.productName,
+                productCode: product.productCode,
+                category: typeof product.category === "string" ? product.category : undefined,
+                model: product.model,
+                url: `${window.location.origin}/product/${product._id}`,
+              });
+              window.open(getWhatsAppUrl(message), "_blank");
+            }}
+            sx={{
+              py: 1.5,
+              borderRadius: 3,
+              fontSize: "1rem",
+              fontWeight: 700,
+              background: "linear-gradient(135deg, #25D366 0%, #128C7E 100%)",
+              boxShadow: `0 4px 12px ${alpha("#25D366", 0.3)}`,
+              "&:hover": {
+                background: "linear-gradient(135deg, #128C7E 0%, #075E54 100%)",
+              },
+            }}
+          >
+            {t('product.whatsapp_inquiry')}
+          </Button>
+        </Box>
+      )}
 
       {product?.images && (
         <ImageLightbox

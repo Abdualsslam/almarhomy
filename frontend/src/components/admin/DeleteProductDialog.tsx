@@ -9,7 +9,8 @@ import {
   Button,
   CircularProgress,
 } from "@mui/material";
-import { Warning as WarningIcon, Delete as DeleteIcon } from "@mui/icons-material";
+import WarningIcon from "@mui/icons-material/Warning";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { DeleteDialogState } from "../../hooks/useProductManagement";
 
 interface Props {
@@ -43,6 +44,9 @@ const DeleteProductDialog: React.FC<Props> = ({ state, onClose, onConfirm }) => 
       <DialogContent sx={{ py: 3 }}>
         <Typography>
           {t("admin.products.delete_message", { name: state.name })}
+        </Typography>
+        <Typography variant="body2" color="text.secondary" sx={{ mt: 1 }}>
+          سيتم حذف المنتج فقط، وستبقى الصور في مكتبة الوسائط كصور غير مرتبطة.
         </Typography>
       </DialogContent>
       <DialogActions

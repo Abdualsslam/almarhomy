@@ -1,5 +1,6 @@
 // src/pages/admin/ImageManagement.tsx
 import { useCallback, useEffect, useMemo, useState, ChangeEvent } from "react";
+import { useSearchParams } from "react-router-dom";
 import {
   Box,
   Breadcrumbs,
@@ -31,20 +32,18 @@ import {
   alpha,
   Theme,
 } from "@mui/material";
-import {
-  Add as AddIcon,
-  CheckCircle as CheckIcon,
-  CloudUpload,
-  CloudUpload as UploadIcon,
-  Close as CloseIcon,
-  CreateNewFolder as CreateNewFolderIcon,
-  Delete as DeleteIcon,
-  Folder as FolderIcon,
-  Home as HomeIcon,
-  NavigateNext as NavigateNextIcon,
-  Search as SearchIcon,
-  ZoomIn as ZoomInIcon,
-} from "@mui/icons-material";
+import AddIcon from "@mui/icons-material/Add";
+import CheckIcon from "@mui/icons-material/CheckCircle";
+import CloudUpload from "@mui/icons-material/CloudUpload";
+import UploadIcon from "@mui/icons-material/CloudUpload";
+import CloseIcon from "@mui/icons-material/Close";
+import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
+import DeleteIcon from "@mui/icons-material/Delete";
+import FolderIcon from "@mui/icons-material/Folder";
+import HomeIcon from "@mui/icons-material/Home";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import SearchIcon from "@mui/icons-material/Search";
+import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import {
   deleteImage,
   fetchImages,
@@ -56,10 +55,9 @@ import {
 import { Image } from "../../types/models.types";
 import { RealFolder } from "../../types/api.types";
 
-
 // Extended Image type with additional properties used in this component
-interface ImageData extends Omit<Image, 'uploadedBy'> {
-  status?: 'queued' | 'processing' | 'completed' | 'failed';
+interface ImageData extends Omit<Image, "uploadedBy"> {
+  status?: "queued" | "processing" | "completed" | "failed";
   progress?: number;
   productName?: string;
   productCode?: string;
@@ -78,11 +76,11 @@ interface UploadForm {
 }
 
 // Status metadata type
-type StatusKey = 'queued' | 'processing' | 'completed' | 'failed';
+type StatusKey = "queued" | "processing" | "completed" | "failed";
 
 interface StatusMetadata {
   label: string;
-  color: 'warning' | 'info' | 'success' | 'error' | 'default';
+  color: "warning" | "info" | "success" | "error" | "default";
 }
 
 const STATUS_META: Record<StatusKey, StatusMetadata> = {
@@ -170,13 +168,13 @@ function FolderCard({ folder, onClick }: FolderCardProps) {
       sx={{
         border: `1px solid ${theme.palette.divider}`,
         borderRadius: 4,
-        transition: 'all 0.2s',
+        transition: "all 0.2s",
         backgroundColor: theme.palette.background.paper,
-        '&:hover': {
+        "&:hover": {
           borderColor: theme.palette.primary.main,
-          transform: 'translateY(-4px)',
-          boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
-        }
+          transform: "translateY(-4px)",
+          boxShadow: "0 4px 12px rgba(0,0,0,0.08)",
+        },
       }}
     >
       <CardActionArea onClick={onClick} sx={{ p: 2 }}>
@@ -187,7 +185,7 @@ function FolderCard({ folder, onClick }: FolderCardProps) {
               borderRadius: 3,
               backgroundColor: alpha(theme.palette.primary.main, 0.1),
               color: theme.palette.primary.main,
-              display: 'flex',
+              display: "flex",
             }}
           >
             <FolderIcon fontSize="large" />
@@ -208,8 +206,6 @@ interface BreadcrumbItem {
   id: string | null;
   name: string;
 }
-
-
 
 function PageHeader({ isMobile, onAdd }: PageHeaderProps) {
   return (
@@ -316,7 +312,14 @@ function EmptyState({ isMobile, search, onAdd }: EmptyStateProps) {
   );
 }
 
-function ImageCard({ theme, img, isMobile, onToggle, onDelete, onPreview }: ImageCardProps) {
+function ImageCard({
+  theme,
+  img,
+  isMobile,
+  onToggle,
+  onDelete,
+  onPreview,
+}: ImageCardProps) {
   const statusKey: StatusKey = (img.status as StatusKey) || "queued";
   const statusMeta = STATUS_META[statusKey] || STATUS_META.queued;
   const displayImage =
@@ -668,7 +671,13 @@ function UploadDialog({
   );
 }
 
-function DeleteDialog({ open, isMobile, deleting, onClose, onConfirm }: DeleteDialogProps) {
+function DeleteDialog({
+  open,
+  isMobile,
+  deleting,
+  onClose,
+  onConfirm,
+}: DeleteDialogProps) {
   return (
     <Dialog
       open={open}
@@ -701,7 +710,12 @@ function DeleteDialog({ open, isMobile, deleting, onClose, onConfirm }: DeleteDi
   );
 }
 
-function ImagePreviewDialog({ open, image, isMobile, onClose }: ImagePreviewDialogProps) {
+function ImagePreviewDialog({
+  open,
+  image,
+  isMobile,
+  onClose,
+}: ImagePreviewDialogProps) {
   const theme = useTheme();
 
   if (!image) return null;
@@ -787,8 +801,9 @@ function ImagePreviewDialog({ open, image, isMobile, onClose }: ImagePreviewDial
           }}
         >
           <Chip
-            label={`الحالة: ${STATUS_META[image.status || "queued"]?.label || "غير محدد"
-              }`}
+            label={`الحالة: ${
+              STATUS_META[image.status || "queued"]?.label || "غير محدد"
+            }`}
             color={STATUS_META[image.status || "queued"]?.color || "default"}
             size="small"
           />
@@ -824,7 +839,7 @@ function ImagePreviewDialog({ open, image, isMobile, onClose }: ImagePreviewDial
           {image.uploadedAt && (
             <Chip
               label={`تم الرفع: ${new Date(image.uploadedAt).toLocaleDateString(
-                "ar-EG"
+                "ar-EG",
               )}`}
               variant="outlined"
               size="small"
@@ -857,11 +872,25 @@ function ImagePreviewDialog({ open, image, isMobile, onClose }: ImagePreviewDial
 export default function ImageManagement() {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const [urlSearchParams] = useSearchParams();
+
+  const initialAssigned = urlSearchParams.get("assigned");
+
+  const [assignedFilter] = useState<boolean | undefined>(
+    initialAssigned === "false"
+      ? false
+      : initialAssigned === "true"
+        ? true
+        : undefined,
+  );
+  const [initialAutoSearch] = useState("");
 
   // --- State ---
   // 1. حالة التصفح (المجلد الحالي)
   const [currentFolderId, setCurrentFolderId] = useState<string | null>(null);
-  const [breadcrumbs, setBreadcrumbs] = useState<BreadcrumbItem[]>([{ id: null, name: 'الملفات' }]);
+  const [breadcrumbs, setBreadcrumbs] = useState<BreadcrumbItem[]>([
+    { id: null, name: "الملفات" },
+  ]);
 
   // 2. البيانات المعروضة
   const [folders, setFolders] = useState<RealFolder[]>([]);
@@ -892,11 +921,13 @@ export default function ImageManagement() {
     setLoading(true);
     try {
       // إذا كان هناك بحث، نبحث global في الصور
-      if (search) {
+      const effectiveSearch = search || initialAutoSearch;
+      if (effectiveSearch) {
         const res = await fetchImages({
           page: page + 1,
           limit: rowsPerPage,
-          search,
+          search: effectiveSearch,
+          assigned: assignedFilter,
         });
         setImages(res.items as ImageData[]);
         setTotalCount(res.totalItems || res.total || 0);
@@ -905,7 +936,18 @@ export default function ImageManagement() {
       }
 
       // تحميل محتويات المجلد الحالي
-      const folderId = currentFolderId || 'root';
+      if (assignedFilter !== undefined) {
+        const res = await fetchImages({
+          page: page + 1,
+          limit: rowsPerPage,
+          assigned: assignedFilter,
+        });
+        setImages(res.items as ImageData[]);
+        setTotalCount(res.totalItems || res.total || 0);
+        setFolders([]);
+        return;
+      }
+      const folderId = currentFolderId || "root";
       const res = await getFolderContents(folderId);
 
       setFolders(res.folders);
@@ -916,7 +958,7 @@ export default function ImageManagement() {
     } finally {
       setLoading(false);
     }
-  }, [currentFolderId, search, page, rowsPerPage]);
+  }, [currentFolderId, search, page, rowsPerPage, assignedFilter, initialAutoSearch]);
 
   useEffect(() => {
     loadData();
@@ -987,7 +1029,6 @@ export default function ImageManagement() {
     } finally {
       setUploading(false);
     }
-
   };
 
   const handleToggle = (id: string) => async () => {
@@ -995,8 +1036,8 @@ export default function ImageManagement() {
       await toggleWatermark(id);
       setImages((imgs) =>
         imgs.map((img) =>
-          img._id === id ? { ...img, isWatermarked: !img.isWatermarked } : img
-        )
+          img._id === id ? { ...img, isWatermarked: !img.isWatermarked } : img,
+        ),
       );
     } catch (err) {
       console.error("Failed to toggle watermark:", err);
@@ -1050,18 +1091,31 @@ export default function ImageManagement() {
       page,
       rowsPerPage,
     }),
-    [page, rowsPerPage, totalCount]
+    [page, rowsPerPage, totalCount],
   );
 
   // عرض شريط التنقل
   const renderBreadcrumbs = () => (
-    <Paper elevation={0} sx={{ p: 2, mb: 3, borderRadius: 4, border: `1px solid ${theme.palette.divider}` }}>
+    <Paper
+      elevation={0}
+      sx={{
+        p: 2,
+        mb: 3,
+        borderRadius: 4,
+        border: `1px solid ${theme.palette.divider}`,
+      }}
+    >
       <Stack direction="row" alignItems="center" justifyContent="space-between">
         <Breadcrumbs separator={<NavigateNextIcon fontSize="small" />}>
           {breadcrumbs.map((crumb, index) => {
             const isLast = index === breadcrumbs.length - 1;
             return isLast ? (
-              <Typography key={index} color="text.primary" fontWeight="bold" sx={{ display: 'flex', alignItems: 'center' }}>
+              <Typography
+                key={index}
+                color="text.primary"
+                fontWeight="bold"
+                sx={{ display: "flex", alignItems: "center" }}
+              >
                 {crumb.name}
               </Typography>
             ) : (
@@ -1072,7 +1126,7 @@ export default function ImageManagement() {
                 underline="hover"
                 color="inherit"
                 onClick={() => handleBreadcrumbClick(crumb)}
-                sx={{ display: 'flex', alignItems: 'center' }}
+                sx={{ display: "flex", alignItems: "center" }}
               >
                 {index === 0 && <HomeIcon sx={{ mr: 0.5, fontSize: 20 }} />}
                 {crumb.name}
@@ -1085,8 +1139,12 @@ export default function ImageManagement() {
           {breadcrumbs.length > 1 && !search && (
             <Button
               size="small"
-              startIcon={<NavigateNextIcon sx={{ transform: 'rotate(180deg)' }} />}
-              onClick={() => handleBreadcrumbClick(breadcrumbs[breadcrumbs.length - 2])}
+              startIcon={
+                <NavigateNextIcon sx={{ transform: "rotate(180deg)" }} />
+              }
+              onClick={() =>
+                handleBreadcrumbClick(breadcrumbs[breadcrumbs.length - 2])
+              }
             >
               عودة
             </Button>
@@ -1120,9 +1178,13 @@ export default function ImageManagement() {
       <Box sx={{ minHeight: 400 }}>
         {loading ? (
           <Grid container spacing={2}>
-            {[1, 2, 3, 4].map(i => (
+            {[1, 2, 3, 4].map((i) => (
               <Grid size={{ xs: 12, sm: 6, md: 3 }} key={i}>
-                <Skeleton variant="rectangular" height={100} sx={{ borderRadius: 4 }} />
+                <Skeleton
+                  variant="rectangular"
+                  height={100}
+                  sx={{ borderRadius: 4 }}
+                />
               </Grid>
             ))}
           </Grid>
@@ -1133,7 +1195,10 @@ export default function ImageManagement() {
               <Grid container spacing={3} sx={{ mb: 3 }}>
                 {folders.map((folder) => (
                   <Grid size={{ xs: 12, sm: 6, md: 4, lg: 3 }} key={folder._id}>
-                    <FolderCard folder={folder} onClick={() => handleFolderClick(folder)} />
+                    <FolderCard
+                      folder={folder}
+                      onClick={() => handleFolderClick(folder)}
+                    />
                   </Grid>
                 ))}
               </Grid>
@@ -1147,11 +1212,18 @@ export default function ImageManagement() {
                   borderRadius: 5,
                   p: { xs: 2, md: 3 },
                   border: `1px solid ${theme.palette.divider}`,
-                  background: theme.palette.mode === "dark" ? "rgba(15,15,15,0.9)" : "rgba(255,255,255,0.95)",
+                  background:
+                    theme.palette.mode === "dark"
+                      ? "rgba(15,15,15,0.9)"
+                      : "rgba(255,255,255,0.95)",
                 }}
               >
                 {!hasImages ? (
-                  <EmptyState isMobile={isMobile} search={search} onAdd={openDialog} />
+                  <EmptyState
+                    isMobile={isMobile}
+                    search={search}
+                    onAdd={openDialog}
+                  />
                 ) : (
                   <>
                     <ImagesGrid
@@ -1191,10 +1263,14 @@ export default function ImageManagement() {
                   </>
                 )}
               </Paper>
-            ) : folders.length === 0 && (
-              <Box textAlign="center" py={5}>
-                <Typography color="text.secondary">هذا المجلد فارغ</Typography>
-              </Box>
+            ) : (
+              folders.length === 0 && (
+                <Box textAlign="center" py={5}>
+                  <Typography color="text.secondary">
+                    هذا المجلد فارغ
+                  </Typography>
+                </Box>
+              )
             )}
           </>
         )}
@@ -1243,25 +1319,33 @@ export default function ImageManagement() {
             fullWidth
             value={newFolderName}
             onChange={(e) => setNewFolderName(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && handleCreateFolder()}
+            onKeyDown={(e) => e.key === "Enter" && handleCreateFolder()}
             disabled={creatingFolder}
           />
         </DialogContent>
         <DialogActions>
-          <Button onClick={() => setCreateFolderOpen(false)} disabled={creatingFolder}>
+          <Button
+            onClick={() => setCreateFolderOpen(false)}
+            disabled={creatingFolder}
+          >
             إلغاء
           </Button>
           <Button
             onClick={handleCreateFolder}
             variant="contained"
             disabled={creatingFolder || !newFolderName.trim()}
-            startIcon={creatingFolder ? <CircularProgress size={16} /> : <CreateNewFolderIcon />}
+            startIcon={
+              creatingFolder ? (
+                <CircularProgress size={16} />
+              ) : (
+                <CreateNewFolderIcon />
+              )
+            }
           >
-            {creatingFolder ? 'جاري الإنشاء...' : 'إنشاء'}
+            {creatingFolder ? "جاري الإنشاء..." : "إنشاء"}
           </Button>
         </DialogActions>
       </Dialog>
     </Container>
   );
 }
-

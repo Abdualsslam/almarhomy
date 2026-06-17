@@ -8,12 +8,10 @@ import {
   Avatar,
   alpha,
 } from "@mui/material";
-import {
-  Email as EmailIcon,
-  AccessTime as AccessTimeIcon,
-  Person as PersonIcon,
-  CheckCircle as CheckCircleIcon,
-} from "@mui/icons-material";
+import EmailIcon from "@mui/icons-material/Email";
+import AccessTimeIcon from "@mui/icons-material/AccessTime";
+import PersonIcon from "@mui/icons-material/Person";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { useTheme } from "@mui/material/styles";
 
 interface User {

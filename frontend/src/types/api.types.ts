@@ -83,6 +83,7 @@ export interface ProductQueryParams extends PaginationParams {
   tags?: string[];
   search?: string;
   hasImages?: string;
+  ids?: string;
   sortBy?: string;
   sortOrder?: "asc" | "desc";
 }

@@ -133,6 +133,7 @@ export class AdminImagesService {
 
         return {
           _id: img._id,
+          productId: product?._id?.toString() ?? null,
           model: product?.model,
           category: categoryName,
           productName: product?.productName,
@@ -181,6 +182,15 @@ export class AdminImagesService {
         }
       }),
     );
+
+    if (img.product) {
+      await this.productModel
+        .updateOne(
+          { _id: img.product },
+          { $pull: { images: img._id } },
+        )
+        .exec();
+    }
 
     // Delete document from MongoDB
     await img.deleteOne();

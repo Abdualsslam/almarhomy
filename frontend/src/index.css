@@ -2,10 +2,12 @@
   /* Warm Arabian Hospitality palette */
   --cream: #faf5ee;
   --surface: #ffffff;
+  --surface-soft: #fffaf3;
   --border-warm: #e9dfd1;
   --green: #2c4a3b;
   --green-700: #22392e;
   --gold: #c2a14d;
+  --gold-dark: #a8842f;
   --clay: #b85c38;
   --ink: #211c16;
   --muted: #7a7064;
@@ -14,18 +16,86 @@
   --shadow-soft: 0 6px 22px rgba(33, 28, 22, 0.06);
   --shadow-md: 0 10px 30px rgba(33, 28, 22, 0.1);
   --transition: all 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-smooth: var(--transition);
 
-  /* Legacy aliases — map old dark-theme variables onto the warm palette
-     so any leftover references render on-brand instead of breaking. */
+  /* Legacy aliases */
   --accent-primary: var(--green);
   --accent-secondary: var(--gold);
   --accent-glow: rgba(44, 74, 59, 0.25);
+
   --text-primary: var(--ink);
   --text-secondary: var(--muted);
+  --text-main: var(--ink);
+  --text-muted: var(--muted);
+  --text-inverse: #ffffff;
+
   --bg-dark: var(--cream);
+  --bg-page: var(--cream);
+  --bg-section: #f7efe3;
   --bg-card: var(--surface);
+
   --glass-bg: var(--surface);
   --glass-border: var(--border-warm);
+
+  --border-soft: var(--border-warm);
+  --border-strong: #d9ccb8;
+
+  /* Brand aliases mapped to warm theme */
+  --brand-blue: var(--green);
+  --brand-blue-dark: var(--green-700);
+  --brand-blue-deep: #172a22;
+  --brand-yellow: var(--gold);
+  --brand-yellow-dark: var(--gold-dark);
+  --brand-yellow-soft: #fff7e6;
+  --brand-red: var(--clay);
+  --brand-black: var(--ink);
+  --brand-charcoal: var(--ink);
+  --brand-white: #ffffff;
+  --danger: var(--clay);
+}
+
+[data-theme="dark"] {
+  --cream: #15120f;
+  --surface: #211c16;
+  --surface-soft: #2a241e;
+  --border-warm: rgba(194, 161, 77, 0.24);
+  --green: #d3bd75;
+  --green-700: #c2a14d;
+  --gold: #c2a14d;
+  --gold-dark: #a8842f;
+  --clay: #d9825f;
+  --ink: #faf5ee;
+  --muted: #c7b9a5;
+
+  --shadow-soft: 0 6px 22px rgba(0, 0, 0, 0.28);
+  --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.38);
+
+  --text-primary: var(--ink);
+  --text-secondary: var(--muted);
+  --text-main: var(--ink);
+  --text-muted: var(--muted);
+  --text-inverse: #15120f;
+
+  --bg-dark: var(--cream);
+  --bg-page: var(--cream);
+  --bg-section: #211c16;
+  --bg-card: var(--surface);
+
+  --glass-bg: var(--surface);
+  --glass-border: var(--border-warm);
+
+  --border-soft: var(--border-warm);
+  --border-strong: rgba(194, 161, 77, 0.34);
+
+  --brand-blue: var(--gold);
+  --brand-blue-dark: var(--gold-dark);
+  --brand-blue-deep: #15120f;
+  --brand-yellow: var(--gold);
+  --brand-yellow-dark: var(--gold-dark);
+  --brand-yellow-soft: rgba(194, 161, 77, 0.16);
+  --brand-black: #050505;
+  --brand-charcoal: #211c16;
+  --brand-white: #faf5ee;
 }
 
 * {
@@ -48,20 +118,26 @@ body {
   -moz-osx-font-smoothing: grayscale;
   direction: rtl;
   overflow-x: hidden;
+  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 #root {
   min-height: 100vh;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: "El Messiri", "Tajawal", sans-serif;
   font-weight: 700;
   color: var(--ink);
   letter-spacing: 0;
 }
 
-/* Faint mashrabiya (8-point star) backdrop — whisper, not shout */
+/* Faint mashrabiya backdrop */
 .app-bg {
   position: fixed;
   inset: 0;
@@ -72,12 +148,11 @@ h1, h2, h3, h4, h5, h6 {
   background-size: 80px 80px;
 }
 
-/* Legacy element from the old design — neutralized */
+/* Legacy element from old design */
 .mesh-bg {
   display: none;
 }
 
-/* Small centered ornament used between sections */
 .motif-rule {
   height: 26px;
   width: 100%;
@@ -86,39 +161,61 @@ h1, h2, h3, h4, h5, h6 {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='24' viewBox='0 0 120 24'%3E%3Cg fill='none' stroke='%23C2A14D' stroke-width='1.4' opacity='0.7'%3E%3Cline x1='0' y1='12' x2='44' y2='12'/%3E%3Cline x1='76' y1='12' x2='120' y2='12'/%3E%3Crect x='52' y='4' width='16' height='16' transform='rotate(45 60 12)'/%3E%3C/g%3E%3C/svg%3E");
 }
 
-/* Product card lift */
 .product-card {
   transition: var(--transition);
 }
+
 .product-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-md) !important;
   border-color: rgba(194, 161, 77, 0.55) !important;
 }
 
-/* ---- Warm fallbacks for any legacy utility classes still referenced ---- */
-.glass {
+.brand-section-dark {
+  background:
+    radial-gradient(circle at 20% 20%, rgba(194, 161, 77, 0.18), transparent 28%),
+    linear-gradient(135deg, #15120f 0%, #211c16 52%, #2c4a3b 100%);
+  color: #ffffff;
+}
+
+.brand-card {
+  background: var(--surface);
+  border: 1px solid var(--border-soft);
+  border-radius: 22px;
+  box-shadow: var(--shadow-soft);
+  transition: var(--transition);
+}
+
+.brand-card:hover {
+  border-color: rgba(194, 161, 77, 0.5);
+  box-shadow: var(--shadow-md);
+}
+
+.glass,
+.glass-light {
   background: var(--surface);
   border: 1px solid var(--border-warm);
   border-radius: 20px;
   box-shadow: var(--shadow-soft);
-}
-.glass-light {
-  background: var(--surface);
-  border: 1px solid var(--border-warm);
-  box-shadow: var(--shadow-soft);
-}
-.glass-card {
   transition: var(--transition);
 }
+
+.glass-card {
+  position: relative;
+  overflow: hidden;
+  transition: var(--transition);
+}
+
 .glass-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--shadow-md);
   border-color: rgba(194, 161, 77, 0.5);
 }
+
 .text-gradient {
   color: var(--green);
 }
+
 .btn-premium {
   background: var(--green);
   color: #fff;
@@ -133,10 +230,13 @@ h1, h2, h3, h4, h5, h6 {
   gap: 8px;
   transition: var(--transition);
 }
+
 .btn-premium:hover {
   background: var(--green-700);
   box-shadow: 0 8px 20px rgba(44, 74, 59, 0.22);
+  transform: translateY(-2px);
 }
+
 .btn-glass {
   background: #fff;
   color: var(--green);
@@ -151,22 +251,49 @@ h1, h2, h3, h4, h5, h6 {
   gap: 8px;
   transition: var(--transition);
 }
+
 .btn-glass:hover {
   border-color: var(--gold);
   background: #fff7e9;
+}
+
+[data-theme="dark"] .btn-glass {
+  background: var(--surface);
+  color: var(--gold);
+}
+
+[data-theme="dark"] .btn-glass:hover {
+  background: rgba(194, 161, 77, 0.12);
+  color: var(--gold);
+}
+
+.responsive-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 22px;
+}
+
+@media (max-width: 600px) {
+  .responsive-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 14px;
+  }
 }
 
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 10px;
 }
+
 ::-webkit-scrollbar-track {
   background: var(--cream);
 }
+
 ::-webkit-scrollbar-thumb {
   background: #d9ccb8;
   border-radius: 10px;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   background: var(--gold);
 }
@@ -176,19 +303,39 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--gold) !important;
   height: 3px !important;
 }
+
 #nprogress .peg {
   box-shadow: 0 0 10px var(--gold), 0 0 5px var(--gold) !important;
 }
 
-/* Generic responsive grid */
-.responsive-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-  gap: 22px;
+.hover-lift {
+  transition: var(--transition);
 }
-@media (max-width: 600px) {
-  .responsive-grid {
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 14px;
-  }
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.whatsapp-float {
+  position: fixed;
+  bottom: 24px;
+  left: 24px;
+  z-index: 9999;
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  background-color: var(--whatsapp);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+  transition: var(--transition);
+  cursor: pointer;
+}
+
+.whatsapp-float:hover {
+  transform: scale(1.1);
+  box-shadow: 0 6px 28px rgba(37, 211, 102, 0.5);
 }

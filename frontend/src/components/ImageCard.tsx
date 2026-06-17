@@ -1,7 +1,17 @@
-import { Typography, Chip, Box, Skeleton, Stack } from "@mui/material";
-import { JSX, useState } from "react";
+import {
+  Typography,
+  Chip,
+  Box,
+  Skeleton,
+  Stack,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
+import { JSX, useState, MouseEvent } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowBackRounded } from "@mui/icons-material";
+import DownloadIcon from "@mui/icons-material/Download";
+import { saveAs } from "file-saver";
 import { ImageCardProps } from "../types/component.types";
 import { onImageError } from "../utils/fallbackImage";
 
@@ -9,9 +19,11 @@ export default function ImageCard({
   image,
   onViewDetails,
   className,
+  withDownload,
 }: ImageCardProps): JSX.Element {
   const [imgLoaded, setImgLoaded] = useState<boolean>(false);
   const navigate = useNavigate();
+
   const title = image.productName || image.description || "منتج";
   const src = image.watermarkedUrl || image.originalUrl;
 
@@ -20,6 +32,16 @@ export default function ImageCard({
       onViewDetails(image);
     } else {
       navigate(`/product/${image._id}`);
+    }
+  };
+
+  const handleDownload = (e: MouseEvent<HTMLButtonElement>): void => {
+    e.stopPropagation();
+
+    const url = image.originalUrl || image.watermarkedUrl;
+
+    if (url) {
+      saveAs(url, `${title.replace(/\s+/g, "-")}.png`);
     }
   };
 
@@ -43,10 +65,26 @@ export default function ImageCard({
       }}
     >
       {/* Image */}
-      <Box sx={{ position: "relative", width: "100%", paddingTop: "100%", bgcolor: "#fbf8f2", overflow: "hidden" }}>
+      <Box
+        sx={{
+          position: "relative",
+          width: "100%",
+          paddingTop: "100%",
+          bgcolor: "#fbf8f2",
+          overflow: "hidden",
+        }}
+      >
         {!imgLoaded && (
-          <Skeleton variant="rectangular" sx={{ position: "absolute", inset: 0, bgcolor: "#f1e9dc" }} />
+          <Skeleton
+            variant="rectangular"
+            sx={{
+              position: "absolute",
+              inset: 0,
+              bgcolor: "#f1e9dc",
+            }}
+          />
         )}
+
         {src ? (
           <Box
             component="img"
@@ -54,7 +92,10 @@ export default function ImageCard({
             alt={title}
             loading="lazy"
             onLoad={() => setImgLoaded(true)}
-            onError={(e) => { setImgLoaded(true); onImageError(e); }}
+            onError={(e) => {
+              setImgLoaded(true);
+              onImageError(e);
+            }}
             sx={{
               position: "absolute",
               inset: 0,
@@ -99,10 +140,44 @@ export default function ImageCard({
             }}
           />
         )}
+
+        {withDownload && src && (
+          <Tooltip title="تحميل الصورة">
+            <IconButton
+              size="small"
+              onClick={handleDownload}
+              sx={{
+                position: "absolute",
+                top: 12,
+                insetInlineStart: 12,
+                bgcolor: "rgba(255,255,255,0.92)",
+                color: "primary.main",
+                border: "1px solid",
+                borderColor: "divider",
+                backdropFilter: "blur(4px)",
+                zIndex: 2,
+                "&:hover": {
+                  bgcolor: "background.paper",
+                },
+              }}
+            >
+              <DownloadIcon fontSize="small" />
+            </IconButton>
+          </Tooltip>
+        )}
       </Box>
 
       {/* Content */}
-      <Box sx={{ p: 2.5, flexGrow: 1, display: "flex", flexDirection: "column", justifyContent: "space-between", gap: 1.5 }}>
+      <Box
+        sx={{
+          p: 2.5,
+          flexGrow: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+          gap: 1.5,
+        }}
+      >
         <Typography
           sx={{
             fontWeight: 700,

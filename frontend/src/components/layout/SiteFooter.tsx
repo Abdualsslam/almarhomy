@@ -35,20 +35,36 @@ const SiteFooter: FC = (): ReactElement => {
           <Grid size={{ xs: 12, md: 5 }}>
             <Typography
               variant="h5"
-              sx={{ fontWeight: 700, mb: 2, color: "#fff", fontFamily: "'El Messiri', sans-serif" }}
+              sx={{
+                fontWeight: 700,
+                mb: 2,
+                color: "#fff",
+                fontFamily: "'El Messiri', sans-serif",
+              }}
             >
               المرحومي
             </Typography>
-            <Typography sx={{ lineHeight: 1.9, maxWidth: 420, color: "rgba(255,255,255,0.8)" }}>
+
+            <Typography
+              sx={{
+                lineHeight: 1.9,
+                maxWidth: 420,
+                color: "rgba(255,255,255,0.8)",
+              }}
+            >
               أناقة الضيافة العربية في كل تفصيل — أواني وأدوات المطبخ، أطقم القهوة والشاي، صواني
               التقديم، المباخر، ومستلزمات البيت بجودة عالية وأسعار في المتناول.
             </Typography>
           </Grid>
 
           <Grid size={{ xs: 6, md: 3 }}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 2.5, color: "#fff" }}>
+            <Typography
+              variant="subtitle1"
+              sx={{ fontWeight: 700, mb: 2.5, color: "#fff" }}
+            >
               روابط سريعة
             </Typography>
+
             <Stack spacing={1.5}>
               {quickLinks.map((link) => (
                 <MuiLink
@@ -70,9 +86,13 @@ const SiteFooter: FC = (): ReactElement => {
           </Grid>
 
           <Grid size={{ xs: 6, md: 4 }}>
-            <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 2.5, color: "#fff" }}>
+            <Typography
+              variant="subtitle1"
+              sx={{ fontWeight: 700, mb: 2.5, color: "#fff" }}
+            >
               تواصل معنا
             </Typography>
+
             <Stack spacing={1.5}>
               <Stack direction="row" spacing={1} alignItems="center">
                 <PlaceOutlined sx={{ fontSize: 20, color: "secondary.main" }} />
@@ -80,6 +100,7 @@ const SiteFooter: FC = (): ReactElement => {
                   المملكة العربية السعودية
                 </Typography>
               </Stack>
+
               <MuiLink
                 href={getWhatsAppUrl()}
                 target="_blank"
@@ -103,7 +124,10 @@ const SiteFooter: FC = (): ReactElement => {
 
         <Divider sx={{ my: 5, borderColor: "rgba(255,255,255,0.15)" }} />
 
-        <Typography variant="body2" sx={{ textAlign: "center", color: "rgba(255,255,255,0.6)" }}>
+        <Typography
+          variant="body2"
+          sx={{ textAlign: "center", color: "rgba(255,255,255,0.6)" }}
+        >
           © {new Date().getFullYear()} المرحومي · جميع الحقوق محفوظة
         </Typography>
       </Container>

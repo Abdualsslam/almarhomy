@@ -1,6 +1,6 @@
 import { Box, Typography, Chip, Button, Stack, Divider } from "@mui/material";
 import { useMemo, FC, ReactElement } from "react";
-import { ClearAll } from "@mui/icons-material";
+import ClearAll from "@mui/icons-material/ClearAll";
 import { Category } from "../types/models.types";
 
 interface FilterValues {
@@ -44,7 +44,10 @@ const Filters: FC<FiltersProps> = ({
     border: "1px solid",
     borderColor: active ? "rgba(44,74,59,0.35)" : "transparent",
     color: active ? "primary.main" : "text.secondary",
-    "&:hover": { bgcolor: active ? "rgba(44,74,59,0.12)" : "rgba(44,74,59,0.05)", color: "primary.main" },
+    "&:hover": {
+      bgcolor: active ? "rgba(44,74,59,0.12)" : "rgba(44,74,59,0.05)",
+      color: "primary.main",
+    },
   });
 
   return (
@@ -61,20 +64,32 @@ const Filters: FC<FiltersProps> = ({
       <Box>
         <Typography
           variant="subtitle2"
-          sx={{ mb: 1.5, fontWeight: 700, color: "secondary.main", letterSpacing: 0.5 }}
+          sx={{
+            mb: 1.5,
+            fontWeight: 700,
+            color: "secondary.main",
+            letterSpacing: 0.5,
+          }}
         >
           الفئات
         </Typography>
+
         <Stack spacing={0.75}>
           <Box onClick={() => onChange?.({ category: "" })} sx={itemSx(!values?.category)}>
             <Typography variant="body2" sx={{ fontWeight: !values?.category ? 700 : 500 }}>
               جميع المنتجات
             </Typography>
           </Box>
+
           {categories.map((category) => {
             const active = values?.category === category._id;
+
             return (
-              <Box key={category._id} onClick={() => onChange?.({ category: category._id })} sx={itemSx(active)}>
+              <Box
+                key={category._id}
+                onClick={() => onChange?.({ category: category._id })}
+                sx={itemSx(active)}
+              >
                 <Typography variant="body2" sx={{ fontWeight: active ? 700 : 500 }}>
                   {category.name}
                 </Typography>
@@ -87,10 +102,12 @@ const Filters: FC<FiltersProps> = ({
       {!!activeFilters.length && (
         <>
           <Divider />
+
           <Stack spacing={1.5}>
             <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
               الفلاتر النشطة
             </Typography>
+
             <Stack direction="row" gap={1} flexWrap="wrap">
               {activeFilters.map(([field, value]) => (
                 <Chip
@@ -103,7 +120,14 @@ const Filters: FC<FiltersProps> = ({
                 />
               ))}
             </Stack>
-            <Button variant="text" color="warning" fullWidth startIcon={<ClearAll />} onClick={onReset}>
+
+            <Button
+              variant="text"
+              color="warning"
+              fullWidth
+              startIcon={<ClearAll />}
+              onClick={onReset}
+            >
               مسح الكل
             </Button>
           </Stack>

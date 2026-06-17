@@ -36,7 +36,7 @@ const CategoryShowcase: FC<CategoryShowcaseProps> = ({
   }, [categories, loading, limit]);
 
   const displayCategories = loading
-    ? (Array.from({ length: limit }, (_, idx) => ({ _id: `skeleton-${idx}` } as Category)))
+    ? Array.from({ length: limit }, (_, idx) => ({ _id: `skeleton-${idx}` } as Category))
     : organizedCategories;
 
   return (
@@ -70,7 +70,14 @@ const CategoryShowcase: FC<CategoryShowcaseProps> = ({
               </>
             ) : (
               <>
-                <Box sx={{ position: "relative", height: { xs: 130, md: 180 }, overflow: "hidden", bgcolor: "#fbf8f2" }}>
+                <Box
+                  sx={{
+                    position: "relative",
+                    height: { xs: 130, md: 180 },
+                    overflow: "hidden",
+                    bgcolor: "#fbf8f2",
+                  }}
+                >
                   {category.image ? (
                     <Box
                       component="img"
@@ -86,10 +93,18 @@ const CategoryShowcase: FC<CategoryShowcaseProps> = ({
                       }}
                     />
                   ) : (
-                    <Box sx={{ height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <Box
+                      sx={{
+                        height: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                      }}
+                    >
                       <GridViewRounded sx={{ fontSize: 40, color: "secondary.main", opacity: 0.7 }} />
                     </Box>
                   )}
+
                   {typeof category.itemsCount === "number" && (
                     <Box
                       sx={{
@@ -109,10 +124,19 @@ const CategoryShowcase: FC<CategoryShowcaseProps> = ({
                     </Box>
                   )}
                 </Box>
+
                 <Box sx={{ p: { xs: 2, md: 2.5 }, flexGrow: 1 }}>
-                  <Typography variant="h6" sx={{ fontWeight: 700, mb: 0.5, fontSize: { xs: "1rem", md: "1.2rem" } }}>
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      fontWeight: 700,
+                      mb: 0.5,
+                      fontSize: { xs: "1rem", md: "1.2rem" },
+                    }}
+                  >
                     {category.name}
                   </Typography>
+
                   <Stack direction="row" spacing={0.5} alignItems="center" sx={{ color: "primary.main", mt: 1 }}>
                     <Typography variant="caption" sx={{ fontWeight: 700 }}>
                       تصفّح الفئة
@@ -148,7 +172,16 @@ const CategoryShowcase: FC<CategoryShowcaseProps> = ({
             }}
           >
             <GridViewRounded sx={{ fontSize: 40, color: "secondary.main" }} />
-            <Typography variant="subtitle1" sx={{ fontWeight: 700, color: "primary.main", display: "flex", alignItems: "center", gap: 0.5 }}>
+            <Typography
+              variant="subtitle1"
+              sx={{
+                fontWeight: 700,
+                color: "primary.main",
+                display: "flex",
+                alignItems: "center",
+                gap: 0.5,
+              }}
+            >
               عرض جميع الفئات <ArrowBackRounded fontSize="small" />
             </Typography>
           </Box>

@@ -1,4 +1,4 @@
-import { Box, Container, Typography, Stack, Button, Chip } from "@mui/material";
+import { Box, Container, Typography, Stack, Button, Chip, Grid } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState, FC, ReactElement } from "react";
 import {
@@ -8,10 +8,11 @@ import {
   AutoAwesomeRounded,
 } from "@mui/icons-material";
 import { motion } from "framer-motion";
+
 import { fetchCategories } from "../api/admin";
 import { searchProducts } from "../api/products";
 import CategoryShowcase from "../components/CategoryShowcase";
-import ImageGrid from "../components/ImageGrid";
+import ProductCard from "../components/ProductCard";
 import AboutContactSection from "../components/AboutContactSection";
 import SEO from "../components/SEO";
 import PageTransition from "../components/PageTransition";
@@ -20,40 +21,70 @@ import { getWhatsAppUrl } from "../utils/whatsapp";
 interface Category {
   _id: string;
   name: string;
-  [key: string]: any;
+  description?: string;
+  image?: string;
+  parent?: string | { name: string };
+  itemsCount?: number;
+  [key: string]: unknown;
 }
 
-interface Product {
+interface ProductItem {
   _id: string;
-  [key: string]: any;
+  productName?: string;
+  productCode?: string;
+  category?: string | { name?: string };
+  model?: string;
+  description?: string;
+  originalUrl?: string | null;
+  watermarkedUrl?: string | null;
+  tags?: string[];
 }
 
-const SectionHeading: FC<{ overline: string; title: string; subtitle?: string }> = ({
-  overline,
-  title,
-  subtitle,
-}) => (
+const SectionHeading: FC<{
+  overline: string;
+  title: string;
+  subtitle?: string;
+}> = ({ overline, title, subtitle }) => (
   <Stack spacing={1.5} sx={{ textAlign: "center", mb: 5 }}>
-    <Typography variant="overline" sx={{ color: "secondary.main", fontWeight: 800, letterSpacing: 2 }}>
+    <Typography
+      variant="overline"
+      sx={{
+        color: "secondary.main",
+        fontWeight: 800,
+        letterSpacing: 2,
+      }}
+    >
       {overline}
     </Typography>
+
     <Typography variant="h3" sx={{ fontWeight: 700 }}>
       {title}
     </Typography>
+
     {subtitle && (
-      <Typography variant="body1" sx={{ color: "text.secondary", maxWidth: 620, mx: "auto" }}>
+      <Typography
+        variant="body1"
+        sx={{
+          color: "text.secondary",
+          maxWidth: 620,
+          mx: "auto",
+        }}
+      >
         {subtitle}
       </Typography>
     )}
+
     <Box className="motif-rule" sx={{ mt: 1 }} />
   </Stack>
 );
 
 const HomePage: FC = (): ReactElement => {
   const navigate = useNavigate();
+
   const [categories, setCategories] = useState<Category[]>([]);
   const [loadingCategories, setLoadingCategories] = useState<boolean>(true);
-  const [products, setProducts] = useState<Product[]>([]);
+
+  const [products, setProducts] = useState<ProductItem[]>([]);
   const [loadingProducts, setLoadingProducts] = useState<boolean>(true);
 
   useEffect(() => {
@@ -63,8 +94,9 @@ const HomePage: FC = (): ReactElement => {
           fetchCategories({ page: 1, limit: 6 }),
           searchProducts({ page: 1, limit: 8 }),
         ]);
-        setCategories(catRes.items);
-        setProducts(prodRes.data.items);
+
+        setCategories(catRes.items || []);
+        setProducts(prodRes.data?.items || []);
       } catch (err) {
         console.error("Failed to fetch home data", err);
       } finally {
@@ -102,10 +134,24 @@ const HomePage: FC = (): ReactElement => {
               alignItems: "center",
             }}
           >
-            <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-              <Stack spacing={3} sx={{ textAlign: { xs: "center", md: "right" }, alignItems: { xs: "center", md: "flex-start" } }}>
+            <motion.div
+              initial={{ opacity: 0, y: 24 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6 }}
+            >
+              <Stack
+                spacing={3}
+                sx={{
+                  textAlign: { xs: "center", md: "right" },
+                  alignItems: { xs: "center", md: "flex-start" },
+                }}
+              >
                 <Chip
-                  icon={<AutoAwesomeRounded sx={{ color: "secondary.main !important" }} />}
+                  icon={
+                    <AutoAwesomeRounded
+                      sx={{ color: "secondary.main !important" }}
+                    />
+                  }
                   label="تشكيلة المرحومي للمنزل والضيافة"
                   sx={{
                     bgcolor: "rgba(194,161,77,0.12)",
@@ -117,17 +163,42 @@ const HomePage: FC = (): ReactElement => {
                     borderColor: "rgba(194,161,77,0.4)",
                   }}
                 />
-                <Typography variant="h1" sx={{ fontWeight: 700, fontSize: { xs: "2.4rem", md: "3.6rem" }, lineHeight: 1.2 }}>
+
+                <Typography
+                  variant="h1"
+                  sx={{
+                    fontWeight: 700,
+                    fontSize: { xs: "2.4rem", md: "3.6rem" },
+                    lineHeight: 1.2,
+                  }}
+                >
                   أناقة الضيافة العربية
-                  <Box component="span" sx={{ color: "primary.main", display: "block" }}>
+                  <Box
+                    component="span"
+                    sx={{ color: "primary.main", display: "block" }}
+                  >
                     لمطبخك وبيتك
                   </Box>
                 </Typography>
-                <Typography variant="h6" sx={{ color: "text.secondary", fontWeight: 400, maxWidth: 560, lineHeight: 1.9 }}>
+
+                <Typography
+                  variant="h6"
+                  sx={{
+                    color: "text.secondary",
+                    fontWeight: 400,
+                    maxWidth: 560,
+                    lineHeight: 1.9,
+                  }}
+                >
                   أواني وأدوات مطبخ، أطقم قهوة وشاي، صواني تقديم، مباخر ومستلزمات منزل مختارة بعناية —
                   بجودة عالية وأسعار في المتناول. اطلب بسهولة عبر واتساب.
                 </Typography>
-                <Stack direction={{ xs: "column", sm: "row" }} spacing={2} sx={{ pt: 1, width: { xs: "100%", sm: "auto" } }}>
+
+                <Stack
+                  direction={{ xs: "column", sm: "row" }}
+                  spacing={2}
+                  sx={{ pt: 1, width: { xs: "100%", sm: "auto" } }}
+                >
                   <Button
                     variant="contained"
                     size="large"
@@ -137,13 +208,24 @@ const HomePage: FC = (): ReactElement => {
                   >
                     تصفّح المنتجات
                   </Button>
+
                   <Button
                     variant="outlined"
                     color="success"
                     size="large"
                     startIcon={<WhatsApp />}
                     onClick={() => window.open(getWhatsAppUrl(), "_blank")}
-                    sx={{ px: 4, py: 1.4, fontSize: "1.05rem", borderColor: "success.main", color: "success.main", "&:hover": { borderColor: "success.main", bgcolor: "rgba(37,211,102,0.08)" } }}
+                    sx={{
+                      px: 4,
+                      py: 1.4,
+                      fontSize: "1.05rem",
+                      borderColor: "success.main",
+                      color: "success.main",
+                      "&:hover": {
+                        borderColor: "success.main",
+                        bgcolor: "rgba(37,211,102,0.08)",
+                      },
+                    }}
                   >
                     تواصل معنا
                   </Button>
@@ -167,7 +249,8 @@ const HomePage: FC = (): ReactElement => {
                   alignItems: "center",
                   justifyContent: "center",
                   position: "relative",
-                  background: "linear-gradient(160deg, #34543f 0%, #2c4a3b 60%, #22392e 100%)",
+                  background:
+                    "linear-gradient(160deg, #34543f 0%, #2c4a3b 60%, #22392e 100%)",
                   border: "2px solid rgba(194,161,77,0.5)",
                   boxShadow: "var(--shadow-md)",
                   overflow: "hidden",
@@ -181,7 +264,13 @@ const HomePage: FC = (): ReactElement => {
                   },
                 }}
               >
-                <LocalCafeRounded sx={{ fontSize: 120, color: "rgba(194,161,77,0.9)", position: "relative" }} />
+                <LocalCafeRounded
+                  sx={{
+                    fontSize: 120,
+                    color: "rgba(194,161,77,0.9)",
+                    position: "relative",
+                  }}
+                />
               </Box>
             </motion.div>
           </Box>
@@ -195,6 +284,7 @@ const HomePage: FC = (): ReactElement => {
           title="فئاتنا المختارة"
           subtitle="من أطقم القهوة والشاي إلى صواني التقديم والمباخر ومستلزمات المنزل."
         />
+
         <CategoryShowcase
           categories={categories}
           loading={loadingCategories}
@@ -205,20 +295,55 @@ const HomePage: FC = (): ReactElement => {
       </Container>
 
       {/* Featured products */}
-      <Box sx={{ bgcolor: "#fbf7f0", borderTop: "1px solid", borderBottom: "1px solid", borderColor: "divider" }}>
+      <Box
+        sx={{
+          bgcolor: "#fbf7f0",
+          borderTop: "1px solid",
+          borderBottom: "1px solid",
+          borderColor: "divider",
+        }}
+      >
         <Container maxWidth="lg" sx={{ py: { xs: 7, md: 10 } }}>
           <SectionHeading
             overline="وصل حديثاً"
             title="أحدث المنتجات"
             subtitle="اكتشف أحدث ما أضفناه إلى الكتالوج."
           />
+
           {loadingProducts ? (
             <CategoryShowcase loading limit={8} />
           ) : (
-            <ImageGrid images={products} onSelect={(img) => navigate(`/product/${img._id}`)} />
+            <Grid container spacing={3}>
+              {products.map((product) => (
+                <Grid size={{ xs: 6, sm: 6, lg: 3 }} key={product._id}>
+                  <ProductCard
+                    _id={product._id}
+                    productName={product.productName}
+                    productCode={product.productCode}
+                    category={
+                      typeof product.category === "string"
+                        ? product.category
+                        : product.category?.name
+                    }
+                    model={product.model}
+                    description={product.description}
+                    originalUrl={product.originalUrl || null}
+                    watermarkedUrl={product.watermarkedUrl || null}
+                    tags={product.tags}
+                  />
+                </Grid>
+              ))}
+            </Grid>
           )}
+
           <Box sx={{ textAlign: "center", mt: 6 }}>
-            <Button variant="contained" size="large" endIcon={<ArrowBackRounded />} onClick={() => navigate("/catalog")} sx={{ px: 5, py: 1.4 }}>
+            <Button
+              variant="contained"
+              size="large"
+              endIcon={<ArrowBackRounded />}
+              onClick={() => navigate("/catalog")}
+              sx={{ px: 5, py: 1.4 }}
+            >
               عرض كل المنتجات
             </Button>
           </Box>

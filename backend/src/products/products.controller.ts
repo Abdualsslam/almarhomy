@@ -97,7 +97,10 @@ export class ProductsController {
   })
   @ApiBadRequestResponse({ description: 'لا يمكن حذف منتج يحتوي على صور مرتبطة' })
   @ApiNotFoundResponse({ description: 'المنتج غير موجود' })
-  async remove(@Param('id') id: string) {
-    return this.productsService.remove(id);
+  async remove(
+    @Param('id') id: string,
+    @Query('detachImages') detachImages?: string,
+  ) {
+    return this.productsService.remove(id, detachImages === 'true');
   }
 }

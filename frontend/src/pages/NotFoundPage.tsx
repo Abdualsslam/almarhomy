@@ -1,5 +1,6 @@
 import { Box, Container, Typography, Button, alpha } from "@mui/material";
-import { SearchOff, HomeOutlined } from "@mui/icons-material";
+import SearchOff from "@mui/icons-material/SearchOff";
+import HomeOutlined from "@mui/icons-material/HomeOutlined";
 import { useNavigate } from "react-router-dom";
 import { FC, ReactElement } from "react";
 import SEO from "../components/SEO";

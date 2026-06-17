@@ -10,13 +10,15 @@ import {
   alpha,
   Stack,
 } from "@mui/material";
-import { Add as AddIcon } from "@mui/icons-material";
+import AddIcon from "@mui/icons-material/Add";
 import { useTranslation } from "react-i18next";
 import { useProductManagement, ProductItem } from "../../hooks/useProductManagement";
 import ProductTable from "../../components/admin/ProductTable";
 import ProductFilters from "../../components/admin/ProductFilters";
 import ProductFormDialog from "../../components/admin/ProductFormDialog";
 import DeleteProductDialog from "../../components/admin/DeleteProductDialog";
+import ImageSelectionDialog from "../../components/admin/ImageSelectionDialog";
+import SimilarProductsSelectionDialog from "../../components/admin/SimilarProductsSelectionDialog";
 
 import PageTransition from "../../components/PageTransition";
 
@@ -27,10 +29,16 @@ export default function ProductManagement() {
     products, loading, page, setPage, rowsPerPage, setRowsPerPage, totalCount,
     search, setSearch, filters, setFilters, open, setOpen, editingProduct, form, setForm,
     tagInput, setTagInput, selectedImages, selectedImagesLoading,
+    imageDialogOpen, imageLibrary, imageLibraryQuery, setImageLibraryQuery,
+    currentFolderId, setCurrentFolderId, folders, breadcrumbs,
     saving, error, setError,
     categories, parentCategories, subcategoryOptions, deleteDialog, setDeleteDialog,
     selectedSimilarProducts, selectedSimilarProductsLoading,
-    handleOpen, handleSave, handleFormChange
+    similarProductsDialogOpen, productsLibrary, productsLibraryQuery, setProductsLibraryQuery,
+    handleOpen, handleSave, handleFormChange, selectedImageIdSet, selectedSimilarProductIdSet,
+    handleOpenImageDialog, handleCloseImageDialog, handleToggleSelectedImage,
+    handleRemoveSelectedImage, handleOpenSimilarProductsDialog, handleCloseSimilarProductsDialog,
+    handleToggleSelectedSimilarProduct, handleRemoveSelectedSimilarProduct, handleConfirmDelete,
   } = useProductManagement();
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -47,7 +55,6 @@ export default function ProductManagement() {
     setDeleteDialog({ open: true, id: product._id, name: product.productName || "", loading: false });
   };
 
-  // Helper functions for variants (needed because they are complex state)
   const handleAddVariant = () => {
     setForm(prev => ({ ...prev, variants: [...prev.variants, { name: "", values: [""] }] }));
   };
@@ -83,7 +90,6 @@ export default function ProductManagement() {
     });
   };
 
-  // Tags
   const handleAddTag = () => {
     if (tagInput.trim() && !form.tags.includes(tagInput.trim())) {
         setForm(prev => ({ ...prev, tags: [...prev.tags, tagInput.trim()] }));
@@ -201,23 +207,47 @@ export default function ProductManagement() {
         onDeleteTag={(tag) => setForm(prev => ({ ...prev, tags: prev.tags.filter(t => t !== tag) }))}
         selectedImages={selectedImages}
         selectedImagesLoading={selectedImagesLoading}
-        onOpenImageDialog={() => { /* Need to implement ImageSelectionDialog */ }}
-        onRemoveSelectedImage={() => { /* Implement */ }}
+        onOpenImageDialog={handleOpenImageDialog}
+        onRemoveSelectedImage={handleRemoveSelectedImage}
         selectedSimilarProducts={selectedSimilarProducts}
         selectedSimilarProductsLoading={selectedSimilarProductsLoading}
-        onOpenSimilarProductsDialog={() => { /* Implement */ }}
-        onRemoveSelectedSimilarProduct={() => { /* Implement */ }}
+        onOpenSimilarProductsDialog={handleOpenSimilarProductsDialog}
+        onRemoveSelectedSimilarProduct={handleRemoveSelectedSimilarProduct}
         saving={saving}
         error={error}
         onSave={handleSave}
       />
 
+      <ImageSelectionDialog
+        open={imageDialogOpen}
+        onClose={handleCloseImageDialog}
+        imageLibrary={imageLibrary}
+        imageLibraryQuery={imageLibraryQuery}
+        setImageLibraryQuery={setImageLibraryQuery}
+        folders={folders}
+        breadcrumbs={breadcrumbs}
+        currentFolderId={currentFolderId}
+        setCurrentFolderId={setCurrentFolderId}
+        selectedImageIdSet={selectedImageIdSet}
+        onToggleImage={handleToggleSelectedImage}
+        editingProductId={editingProduct?._id}
+      />
+
+      <SimilarProductsSelectionDialog
+        open={similarProductsDialogOpen}
+        onClose={handleCloseSimilarProductsDialog}
+        productsLibrary={productsLibrary}
+        productsLibraryQuery={productsLibraryQuery}
+        setProductsLibraryQuery={setProductsLibraryQuery}
+        selectedSimilarProductIdSet={selectedSimilarProductIdSet}
+        onToggleProduct={handleToggleSelectedSimilarProduct}
+        currentProductId={editingProduct?._id}
+      />
+
       <DeleteProductDialog 
         state={deleteDialog} 
         onClose={() => setDeleteDialog(prev => ({ ...prev, open: false }))}
-        onConfirm={async () => {
-            // Delete logic...
-        }}
+        onConfirm={handleConfirmDelete}
       />
     </PageTransition>
   );

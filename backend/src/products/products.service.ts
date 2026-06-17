@@ -118,6 +118,7 @@ export class ProductsService {
       productCode,
       sortBy = 'createdAt',
       sortOrder = 'desc',
+      ids,
     } = queryDto;
 
     const rawHasImages = queryDto.hasImages;
@@ -128,6 +129,19 @@ export class ProductsService {
     if (category) baseFilter.category = category;
     if (model) baseFilter.model = model;
     if (productCode) baseFilter.productCode = productCode;
+
+    if (ids) {
+      const idList = ids
+        .split(',')
+        .map((id) => id.trim())
+        .filter(Boolean);
+      const objectIds = idList
+        .filter((id) => Types.ObjectId.isValid(id))
+        .map((id) => new Types.ObjectId(id));
+      if (objectIds.length > 0) {
+        baseFilter._id = { $in: objectIds };
+      }
+    }
 
     if (q) {
       const regex = new RegExp(q.trim(), 'i');
@@ -188,6 +202,37 @@ export class ProductsService {
       .limit(limit)
       .exec();
 
+    const productIds = products.map((p) => p._id);
+    const productImagesMap = new Map<
+      string,
+      { originalUrl: string; watermarkedUrl: string; isWatermarked: boolean }
+    >();
+
+    if (productIds.length > 0) {
+      const images = await this.imageModel
+        .aggregate([
+          { $match: { product: { $in: productIds } } },
+          { $sort: { createdAt: -1 } },
+          {
+            $group: {
+              _id: '$product',
+              firstImage: { $first: '$$ROOT' },
+            },
+          },
+        ])
+        .exec();
+
+      images.forEach((item) => {
+        if (item.firstImage) {
+          productImagesMap.set(item._id.toString(), {
+            originalUrl: item.firstImage.originalUrl,
+            watermarkedUrl: item.firstImage.watermarkedUrl,
+            isWatermarked: item.firstImage.isWatermarked,
+          });
+        }
+      });
+    }
+
     const items = await Promise.all(
       products.map(async (product) => {
         const categoryName = extractCategoryName(product.category);
@@ -204,6 +249,10 @@ export class ProductsService {
             ? imageIds.length
             : await this.imageModel.countDocuments({ product: product._id }).exec();
 
+        const productId =
+          product._id instanceof Types.ObjectId ? product._id.toString() : String(product._id);
+        const firstImage = productImagesMap.get(productId);
+
         return {
           _id: product._id,
           category: categoryName,
@@ -218,6 +267,10 @@ export class ProductsService {
           imageIds,
           similarProductIds,
           imageCount,
+          thumbnailUrl: firstImage?.watermarkedUrl || firstImage?.originalUrl || null,
+          originalUrl: firstImage?.originalUrl || null,
+          watermarkedUrl: firstImage?.watermarkedUrl || null,
+          isWatermarked: firstImage?.isWatermarked || false,
           createdAt: product.get('createdAt') as Date,
           updatedAt: product.get('updatedAt') as Date,
         };
@@ -660,27 +713,48 @@ export class ProductsService {
     }
   }
 
-  async remove(id: string) {
+  async remove(id: string, detachImages = false) {
     if (!Types.ObjectId.isValid(id)) {
       throw new BadRequestException('معرّف غير صالح');
     }
 
-    // Check if product has associated images
-    const imageCount = await this.imageModel.countDocuments({ product: id }).exec();
-
-    if (imageCount > 0) {
-      throw new BadRequestException({
-        error: 'لا يمكن حذف المنتج لأنه يحتوي على صور مرتبطة',
-        imageCount,
-      });
-    }
-
-    const product = await this.productModel.findByIdAndDelete(id).exec();
-
+    const product = await this.productModel.findById(id).exec();
     if (!product) {
       throw new NotFoundException('المنتج غير موجود');
     }
 
-    return { message: 'تم حذف المنتج' };
+    const productObjectId = new Types.ObjectId(id);
+    const imageCount = await this.imageModel
+      .countDocuments({ product: productObjectId })
+      .exec();
+
+    if (imageCount > 0 && !detachImages) {
+      throw new BadRequestException({
+        error: 'لا يمكن حذف المنتج لأنه يحتوي على صور مرتبطة',
+        imageCount,
+        actionRequired: 'أرسل detachImages=true لفصل الصور قبل حذف المنتج',
+      });
+    }
+
+    if (detachImages) {
+      await this.imageModel
+        .updateMany({ product: productObjectId }, { $set: { product: null } })
+        .exec();
+    }
+
+    await this.productModel
+      .updateMany(
+        { similarProducts: productObjectId },
+        { $pull: { similarProducts: productObjectId } },
+      )
+      .exec();
+
+    await this.productModel.findByIdAndDelete(productObjectId).exec();
+
+    return {
+      message: detachImages
+        ? 'تم حذف المنتج وفصل صوره من مكتبة الوسائط'
+        : 'تم حذف المنتج',
+    };
   }
 }

@@ -26,9 +26,14 @@ const AboutContactSection: FC = (): ReactElement => {
               <Typography variant="overline" sx={{ color: "secondary.main", fontWeight: 800, letterSpacing: 2 }}>
                 عن المرحومي
               </Typography>
+
               <Typography variant="h3" sx={{ fontWeight: 700 }}>
-                أناقة الضيافة العربية <Box component="span" sx={{ color: "primary.main" }}>في بيتك</Box>
+                أناقة الضيافة العربية{" "}
+                <Box component="span" sx={{ color: "primary.main" }}>
+                  في بيتك
+                </Box>
               </Typography>
+
               <Typography variant="body1" sx={{ color: "text.secondary", fontSize: "1.08rem" }}>
                 في المرحومي نختار لك أجمل أواني وأدوات المطبخ، أطقم القهوة والشاي، صواني التقديم،
                 المباخر، ومستلزمات الضيافة والمنزل — بجودة عالية وذوق عربي أصيل وأسعار في المتناول، لتكون
@@ -75,6 +80,7 @@ const AboutContactSection: FC = (): ReactElement => {
               <Typography variant="h4" sx={{ fontWeight: 700, mb: 1.5, color: "#fff" }}>
                 اطلب واستفسر مباشرة
               </Typography>
+
               <Typography sx={{ color: "rgba(255,255,255,0.82)", mb: 4, lineHeight: 1.9 }}>
                 اختر ما يعجبك من الكتالوج وراسلنا على واتساب، وسنساعدك في إتمام طلبك بسهولة وسرعة.
               </Typography>

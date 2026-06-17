@@ -9,9 +9,10 @@ import {
   SxProps,
   Theme,
 } from "@mui/material";
-import { WhatsApp, ContentCopy } from "@mui/icons-material";
+import WhatsApp from "@mui/icons-material/WhatsApp";
+import ContentCopy from "@mui/icons-material/ContentCopy";
 import { useMemo, useState, FC, ReactElement } from "react";
-import { getWhatsAppUrl } from "../utils/whatsapp";
+import { getWhatsAppUrl, buildProductWhatsAppMessage } from "../utils/whatsapp";
 
 interface Product {
   _id: string;
@@ -44,8 +45,13 @@ const WhatsAppCTA: FC<WhatsAppCTAProps> = ({
     if (!product) {
       return `مرحباً فريق المرحومي، أود الحصول على استشارة سريعة حول منتجاتكم. (${context || "landing"})`;
     }
-    return `مرحباً، أرغب في معرفة مزيد من التفاصيل عن المنتج ${product.productName || product.description || product._id
-      } (الرمز: ${product._id}).`;
+    return buildProductWhatsAppMessage({
+      productName: product.productName,
+      productCode: product.productCode || product._id,
+      category: product.category,
+      model: product.model,
+      url: product.url || `${window.location.origin}/product/${product._id}`,
+    });
   }, [product, context]);
 
   const whatsappUrl = getWhatsAppUrl(message);
