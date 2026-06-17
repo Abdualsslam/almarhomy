@@ -15,13 +15,11 @@ import {
   Alert,
   Chip,
 } from "@mui/material";
-import {
-  Close as CloseIcon,
-  Add as AddIcon,
-  Delete as DeleteIcon,
-  PhotoLibrary as PhotoLibraryIcon,
-  Link as LinkIcon,
-} from "@mui/icons-material";
+import CloseIcon from "@mui/icons-material/Close";
+import AddIcon from "@mui/icons-material/Add";
+import DeleteIcon from "@mui/icons-material/Delete";
+import PhotoLibraryIcon from "@mui/icons-material/PhotoLibrary";
+import LinkIcon from "@mui/icons-material/Link";
 import { ProductItem, ProductForm, CategoryItem, ImageItem } from "../../hooks/useProductManagement";
 
 interface Props {

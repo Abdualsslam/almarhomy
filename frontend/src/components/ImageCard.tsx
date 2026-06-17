@@ -10,7 +10,8 @@ import {
 import { JSX, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { VisibilityOutlined, Download as DownloadIcon } from "@mui/icons-material";
+import VisibilityOutlined from "@mui/icons-material/VisibilityOutlined";
+import DownloadIcon from "@mui/icons-material/Download";
 import { ImageCardProps } from "../types/component.types";
 import { saveAs } from "file-saver";
 

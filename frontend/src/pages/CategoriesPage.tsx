@@ -18,12 +18,10 @@ import {
 import { useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState, useMemo, useCallback } from "react";
-import {
-  Home,
-  FolderOutlined,
-  CategoryOutlined,
-  Refresh,
-} from "@mui/icons-material";
+import Home from "@mui/icons-material/Home";
+import FolderOutlined from "@mui/icons-material/FolderOutlined";
+import CategoryOutlined from "@mui/icons-material/CategoryOutlined";
+import Refresh from "@mui/icons-material/Refresh";
 import { fetchCategories } from "../api/admin";
 import SEO from "../components/SEO";
 import { Category } from "../types/models.types";

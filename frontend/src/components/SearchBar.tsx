@@ -1,5 +1,6 @@
 import { TextField, Box, InputAdornment, IconButton, SxProps, Theme, TextFieldProps, useTheme } from "@mui/material";
-import { Search, Close } from "@mui/icons-material";
+import Search from "@mui/icons-material/Search";
+import Close from "@mui/icons-material/Close";
 import { useState, useEffect, useRef, FC, ReactElement } from "react";
 import debounce from "lodash.debounce";
 

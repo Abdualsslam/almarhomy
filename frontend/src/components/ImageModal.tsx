@@ -14,13 +14,11 @@ import {
   Chip,
   AlertColor,
 } from "@mui/material";
-import {
-  Close,
-  Download,
-  Fullscreen,
-  Share,
-  FullscreenExit,
-} from "@mui/icons-material";
+import Close from "@mui/icons-material/Close";
+import Download from "@mui/icons-material/Download";
+import Fullscreen from "@mui/icons-material/Fullscreen";
+import Share from "@mui/icons-material/Share";
+import FullscreenExit from "@mui/icons-material/FullscreenExit";
 import { useState, useRef, useEffect, FC, ReactElement } from "react";
 import { saveAs } from "file-saver";
 import API from "../api/images"; // استخدم instance مع interceptors مهيّئة للـ accessToken

@@ -6,7 +6,8 @@ import {
 } from "@mui/material";
 import { useMemo, FC, ReactElement } from "react";
 import { useNavigate } from "react-router-dom";
-import { ArrowForwardOutlined, CategoryOutlined } from "@mui/icons-material";
+import ArrowForwardOutlined from "@mui/icons-material/ArrowForwardOutlined";
+import CategoryOutlined from "@mui/icons-material/CategoryOutlined";
 import { motion } from "framer-motion";
 
 interface Category {

@@ -18,13 +18,11 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import {
-  Close as CloseIcon,
-  Search as SearchIcon,
-  Folder as FolderIcon,
-  CheckCircle as CheckCircleIcon,
-  Link as LinkIcon,
-} from "@mui/icons-material";
+import CloseIcon from "@mui/icons-material/Close";
+import SearchIcon from "@mui/icons-material/Search";
+import FolderIcon from "@mui/icons-material/Folder";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import LinkIcon from "@mui/icons-material/Link";
 import { ImageItem, LibraryState, QueryState } from "../../hooks/useProductManagement";
 import { RealFolder } from "../../types/api.types";
 

@@ -9,7 +9,8 @@ import {
   SxProps,
   Theme,
 } from "@mui/material";
-import { WhatsApp, ContentCopy } from "@mui/icons-material";
+import WhatsApp from "@mui/icons-material/WhatsApp";
+import ContentCopy from "@mui/icons-material/ContentCopy";
 import { useMemo, useState, FC, ReactElement } from "react";
 import { getWhatsAppUrl, buildProductWhatsAppMessage } from "../utils/whatsapp";
 

@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import { Grid, Box, Card, CardContent, Typography, Button, Alert, alpha, useTheme } from "@mui/material";
 import { useNavigate } from "react-router-dom";
-import {
-  Add as AddIcon,
-  CloudUpload,
-  ImageNotSupported,
-  LinkOff,
-} from "@mui/icons-material";
+import AddIcon from "@mui/icons-material/Add";
+import CloudUpload from "@mui/icons-material/CloudUpload";
+import ImageNotSupported from "@mui/icons-material/ImageNotSupported";
+import LinkOff from "@mui/icons-material/LinkOff";
 import { fetchStats, fetchUsers } from "../../api/admin";
 import { User } from "../../types/models.types";
 import DashboardSkeleton from "./components/DashboardSkeleton";

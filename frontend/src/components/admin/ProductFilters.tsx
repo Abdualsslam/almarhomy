@@ -1,6 +1,6 @@
 import React from "react";
 import { Grid, TextField, MenuItem, InputAdornment } from "@mui/material";
-import { Search as SearchIcon } from "@mui/icons-material";
+import SearchIcon from "@mui/icons-material/Search";
 import { useTranslation } from "react-i18next";
 import { CategoryItem } from "../../hooks/useProductManagement";
 

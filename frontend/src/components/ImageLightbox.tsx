@@ -6,12 +6,10 @@ import {
   alpha,
   IconButtonProps,
 } from "@mui/material";
-import {
-  Close,
-  ArrowBackIosNew,
-  ArrowForwardIos,
-  Download,
-} from "@mui/icons-material";
+import Close from "@mui/icons-material/Close";
+import ArrowBackIosNew from "@mui/icons-material/ArrowBackIosNew";
+import ArrowForwardIos from "@mui/icons-material/ArrowForwardIos";
+import Download from "@mui/icons-material/Download";
 import { ProductImage } from "../types/models.types";
 
 interface Props {

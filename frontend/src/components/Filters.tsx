@@ -8,7 +8,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { useMemo, FC, ReactElement } from "react";
-import { ClearAll } from "@mui/icons-material";
+import ClearAll from "@mui/icons-material/ClearAll";
 import { Category } from "../types/models.types";
 
 interface FilterValues {

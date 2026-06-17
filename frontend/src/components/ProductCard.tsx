@@ -7,7 +7,8 @@ import {
   Stack,
   useTheme,
 } from "@mui/material";
-import { WhatsApp, Visibility } from "@mui/icons-material";
+import WhatsApp from "@mui/icons-material/WhatsApp";
+import Visibility from "@mui/icons-material/Visibility";
 import { useNavigate } from "react-router-dom";
 import { buildProductWhatsAppMessage, getWhatsAppUrl } from "../utils/whatsapp";
 

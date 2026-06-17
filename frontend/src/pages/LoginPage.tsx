@@ -17,15 +17,13 @@ import {
   alpha,
   Card,
 } from "@mui/material";
-import {
-  Visibility,
-  VisibilityOff,
-  Lock,
-  Person,
-  ArrowBack,
-  LightMode,
-  DarkMode,
-} from "@mui/icons-material";
+import Visibility from "@mui/icons-material/Visibility";
+import VisibilityOff from "@mui/icons-material/VisibilityOff";
+import Lock from "@mui/icons-material/Lock";
+import Person from "@mui/icons-material/Person";
+import ArrowBack from "@mui/icons-material/ArrowBack";
+import LightMode from "@mui/icons-material/LightMode";
+import DarkMode from "@mui/icons-material/DarkMode";
 import { useNavigate } from "react-router-dom";
 import API from "../api/client";
 import { UserRole } from "../types/models.types";

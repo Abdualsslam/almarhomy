@@ -6,16 +6,14 @@ import {
   TablePagination, Chip, Avatar, LinearProgress, useTheme,
   Tooltip
 } from '@mui/material';
-import {
-  Add as AddIcon,
-  Search as SearchIcon,
-  Person as PersonIcon,
-  Edit as EditIcon,
-  Delete as DeleteIcon,
-  Close as CloseIcon,
-  CheckCircle as CheckIcon,
-  ContentCopy
-} from '@mui/icons-material';
+import AddIcon from "@mui/icons-material/Add";
+import SearchIcon from "@mui/icons-material/Search";
+import PersonIcon from "@mui/icons-material/Person";
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import CloseIcon from "@mui/icons-material/Close";
+import CheckIcon from "@mui/icons-material/CheckCircle";
+import ContentCopy from "@mui/icons-material/ContentCopy";
 // تأكد من أن ملف API يدعم الأنواع أو ستحتاج لتعريفها هنا إذا لم تكن موجودة
 import { createUser, fetchUsers, deleteUser } from '../../api/admin';
 

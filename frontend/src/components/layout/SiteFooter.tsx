@@ -10,7 +10,7 @@ import {
   useTheme,
 } from "@mui/material";
 import { NavLink } from "react-router-dom";
-import { WhatsApp } from "@mui/icons-material";
+import WhatsApp from "@mui/icons-material/WhatsApp";
 import { FC, ReactElement } from "react";
 import { getWhatsAppUrl } from "../../utils/whatsapp";
 

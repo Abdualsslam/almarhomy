@@ -19,11 +19,9 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import {
-  Close as CloseIcon,
-  Search as SearchIcon,
-  CheckCircle as CheckCircleIcon,
-} from "@mui/icons-material";
+import CloseIcon from "@mui/icons-material/Close";
+import SearchIcon from "@mui/icons-material/Search";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import { ProductItem, LibraryState } from "../../hooks/useProductManagement";
 
 interface SimilarProductsSelectionDialogProps {

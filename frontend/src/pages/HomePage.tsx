@@ -9,7 +9,11 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import { ArrowForward, WhatsApp, Search, LocalShipping, Verified } from "@mui/icons-material";
+import ArrowForward from "@mui/icons-material/ArrowForward";
+import WhatsApp from "@mui/icons-material/WhatsApp";
+import Search from "@mui/icons-material/Search";
+import LocalShipping from "@mui/icons-material/LocalShipping";
+import Verified from "@mui/icons-material/Verified";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState, FC, ReactElement } from "react";
 import { motion } from "framer-motion";

@@ -9,7 +9,8 @@ import {
   Button,
   CircularProgress,
 } from "@mui/material";
-import { Warning as WarningIcon, Delete as DeleteIcon } from "@mui/icons-material";
+import WarningIcon from "@mui/icons-material/Warning";
+import DeleteIcon from "@mui/icons-material/Delete";
 import { DeleteDialogState } from "../../hooks/useProductManagement";
 
 interface Props {

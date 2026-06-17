@@ -23,16 +23,14 @@ import {
   Alert as MuiAlert,
 } from "@mui/material";
 import { useTheme } from "@mui/material/styles";
-import {
-  WhatsApp,
-  Category,
-  Style,
-  QrCode,
-  CalendarToday,
-  LocalOffer,
-  Info,
-  ContentCopy,
-} from "@mui/icons-material";
+import WhatsApp from "@mui/icons-material/WhatsApp";
+import Category from "@mui/icons-material/Category";
+import Style from "@mui/icons-material/Style";
+import QrCode from "@mui/icons-material/QrCode";
+import CalendarToday from "@mui/icons-material/CalendarToday";
+import LocalOffer from "@mui/icons-material/LocalOffer";
+import Info from "@mui/icons-material/Info";
+import ContentCopy from "@mui/icons-material/ContentCopy";
 import ImageGrid from "../components/ImageGrid";
 import { getProductById } from "../api/products";
 import { getRelatedImages } from "../api/images";

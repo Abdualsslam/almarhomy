@@ -7,15 +7,13 @@ import {
   alpha,
   Stack,
 } from "@mui/material";
-import {
-  Inventory as ProductIcon,
-  PhotoLibrary as ProductsWithImagesIcon,
-  ImageNotSupported,
-  Image as ImageIcon,
-  WaterDrop as WatermarkIcon,
-  HourglassTop as HourglassIcon,
-  Person as PersonIcon,
-} from "@mui/icons-material";
+import ProductIcon from "@mui/icons-material/Inventory";
+import ProductsWithImagesIcon from "@mui/icons-material/PhotoLibrary";
+import ImageNotSupported from "@mui/icons-material/ImageNotSupported";
+import ImageIcon from "@mui/icons-material/Image";
+import WatermarkIcon from "@mui/icons-material/WaterDrop";
+import HourglassIcon from "@mui/icons-material/HourglassTop";
+import PersonIcon from "@mui/icons-material/Person";
 
 const STAT_VARIANTS = [
   {

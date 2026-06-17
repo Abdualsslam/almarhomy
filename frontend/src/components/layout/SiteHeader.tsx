@@ -16,7 +16,13 @@ import {
   useMediaQuery,
 } from "@mui/material";
 import { NavLink, useNavigate } from "react-router-dom";
-import { WhatsApp, LightMode, DarkMode, Menu as MenuIcon, Home, Category, Storefront } from "@mui/icons-material";
+import WhatsApp from "@mui/icons-material/WhatsApp";
+import LightMode from "@mui/icons-material/LightMode";
+import DarkMode from "@mui/icons-material/DarkMode";
+import MenuIcon from "@mui/icons-material/Menu";
+import Home from "@mui/icons-material/Home";
+import Category from "@mui/icons-material/Category";
+import Storefront from "@mui/icons-material/Storefront";
 import { useState, FC, ReactElement } from "react";
 import { getWhatsAppUrl } from "../../utils/whatsapp";
 import { useThemeMode } from "../../contexts/ThemeContext";

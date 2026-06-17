@@ -1,6 +1,7 @@
 import { Component, ErrorInfo, ReactNode } from "react";
 import { Box, Typography, Button, Container, alpha } from "@mui/material";
-import { ErrorOutline, Refresh } from "@mui/icons-material";
+import ErrorOutline from "@mui/icons-material/ErrorOutline";
+import Refresh from "@mui/icons-material/Refresh";
 
 interface Props {
   children?: ReactNode;

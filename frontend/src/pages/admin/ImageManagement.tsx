@@ -32,20 +32,18 @@ import {
   alpha,
   Theme,
 } from "@mui/material";
-import {
-  Add as AddIcon,
-  CheckCircle as CheckIcon,
-  CloudUpload,
-  CloudUpload as UploadIcon,
-  Close as CloseIcon,
-  CreateNewFolder as CreateNewFolderIcon,
-  Delete as DeleteIcon,
-  Folder as FolderIcon,
-  Home as HomeIcon,
-  NavigateNext as NavigateNextIcon,
-  Search as SearchIcon,
-  ZoomIn as ZoomInIcon,
-} from "@mui/icons-material";
+import AddIcon from "@mui/icons-material/Add";
+import CheckIcon from "@mui/icons-material/CheckCircle";
+import CloudUpload from "@mui/icons-material/CloudUpload";
+import UploadIcon from "@mui/icons-material/CloudUpload";
+import CloseIcon from "@mui/icons-material/Close";
+import CreateNewFolderIcon from "@mui/icons-material/CreateNewFolder";
+import DeleteIcon from "@mui/icons-material/Delete";
+import FolderIcon from "@mui/icons-material/Folder";
+import HomeIcon from "@mui/icons-material/Home";
+import NavigateNextIcon from "@mui/icons-material/NavigateNext";
+import SearchIcon from "@mui/icons-material/Search";
+import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import {
   deleteImage,
   fetchImages,
@@ -878,7 +876,7 @@ export default function ImageManagement() {
 
   const initialAssigned = urlSearchParams.get("assigned");
 
-  const [assignedFilter, setAssignedFilter] = useState<boolean | undefined>(
+  const [assignedFilter] = useState<boolean | undefined>(
     initialAssigned === "false"
       ? false
       : initialAssigned === "true"
@@ -960,7 +958,7 @@ export default function ImageManagement() {
     } finally {
       setLoading(false);
     }
-  }, [currentFolderId, search, page, rowsPerPage, assignedFilter]);
+  }, [currentFolderId, search, page, rowsPerPage, assignedFilter, initialAutoSearch]);
 
   useEffect(() => {
     loadData();

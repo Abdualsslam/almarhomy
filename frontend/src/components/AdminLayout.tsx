@@ -23,19 +23,17 @@ import {
   Badge,
   alpha,
 } from "@mui/material";
-import {
-  Dashboard as DashboardIcon,
-  PhotoLibrary as PhotoLibraryIcon,
-  People as PeopleIcon,
-  Menu as MenuIcon,
-  Settings as SettingsIcon,
-  Logout as LogoutIcon,
-  ChevronLeft as ChevronLeftIcon,
-  ChevronRight as ChevronRightIcon,
-  LightMode as LightModeIcon,
-  DarkMode as DarkModeIcon,
-  Inventory2 as InventoryIcon,
-} from "@mui/icons-material";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import PhotoLibraryIcon from "@mui/icons-material/PhotoLibrary";
+import PeopleIcon from "@mui/icons-material/People";
+import MenuIcon from "@mui/icons-material/Menu";
+import SettingsIcon from "@mui/icons-material/Settings";
+import LogoutIcon from "@mui/icons-material/Logout";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import LightModeIcon from "@mui/icons-material/LightMode";
+import DarkModeIcon from "@mui/icons-material/DarkMode";
+import InventoryIcon from "@mui/icons-material/Inventory2";
 import { useThemeMode } from "../contexts/ThemeContext";
 
 const drawerWidth = 260;

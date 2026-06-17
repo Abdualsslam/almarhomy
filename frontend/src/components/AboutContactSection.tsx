@@ -8,13 +8,11 @@ import {
   Button,
   Divider,
 } from "@mui/material";
-import {
-  PhoneOutlined as PhoneIcon,
-  EmailOutlined as EmailIcon,
-  LocationOnOutlined as LocationOnIcon,
-  WhatsApp,
-  BusinessOutlined as BusinessIcon,
-} from "@mui/icons-material";
+import PhoneIcon from "@mui/icons-material/PhoneOutlined";
+import EmailIcon from "@mui/icons-material/EmailOutlined";
+import LocationOnIcon from "@mui/icons-material/LocationOnOutlined";
+import WhatsApp from "@mui/icons-material/WhatsApp";
+import BusinessIcon from "@mui/icons-material/BusinessOutlined";
 import { getWhatsAppUrl } from "../utils/whatsapp";
 
 const AboutContactSection: FC = (): ReactElement => {

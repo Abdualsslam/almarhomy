@@ -17,7 +17,8 @@ import {
   useTheme,
 } from "@mui/material";
 import { useSearchParams } from "react-router-dom";
-import { Tune, WhatsApp } from "@mui/icons-material";
+import Tune from "@mui/icons-material/Tune";
+import WhatsApp from "@mui/icons-material/WhatsApp";
 import { motion, AnimatePresence } from "framer-motion";
 
 

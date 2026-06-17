@@ -1,6 +1,9 @@
 import { useState, useEffect, FC, ReactElement } from "react";
 import { Box, Container, Grid, Typography, Stack } from "@mui/material";
-import { Inventory2, Category, Image, Verified } from "@mui/icons-material";
+import Inventory2 from "@mui/icons-material/Inventory2";
+import Category from "@mui/icons-material/Category";
+import Image from "@mui/icons-material/Image";
+import Verified from "@mui/icons-material/Verified";
 import apiClient from "../api/client";
 
 interface SiteStats {
