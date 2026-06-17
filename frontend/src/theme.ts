@@ -5,96 +5,131 @@ declare module "@mui/material/styles" {
   interface Theme {
     custom: {
       borderRadius: { small: number; medium: number; large: number };
+      colors: {
+        cream: string;
+        surface: string;
+        borderWarm: string;
+        green: string;
+        green700: string;
+        gold: string;
+        clay: string;
+        ink: string;
+        muted: string;
+        whatsapp: string;
+      };
+      shadow: { soft: string; md: string };
     };
   }
   interface ThemeOptions {
     custom?: {
       borderRadius?: { small?: number; medium?: number; large?: number };
+      colors?: Record<string, string>;
+      shadow?: { soft?: string; md?: string };
     };
   }
 }
 
-export function getTheme(mode: ThemeMode): Theme {
-  const isDark = mode === "dark";
-  
+// "Warm Arabian Hospitality" palette — light, RTL-first.
+const COLORS = {
+  cream: "#FAF5EE",
+  surface: "#FFFFFF",
+  borderWarm: "#E9DFD1",
+  green: "#2C4A3B",
+  green700: "#22392E",
+  gold: "#C2A14D",
+  clay: "#B85C38",
+  ink: "#211C16",
+  muted: "#7A7064",
+  whatsapp: "#25D366",
+};
+
+const SHADOW = {
+  soft: "0 6px 22px rgba(33,28,22,.06)",
+  md: "0 10px 30px rgba(33,28,22,.10)",
+};
+
+// The design is intentionally light-only; mode is ignored.
+export function getTheme(_mode: ThemeMode): Theme {
   const themeOptions: ThemeOptions = {
     direction: "rtl",
     palette: {
-      mode: "dark", // We force dark mode feel for the "insane" UI
-      primary: {
-        main: "#3b82f6",
-        contrastText: "#ffffff",
-      },
-      secondary: {
-        main: "#06b6d4",
-      },
-      background: {
-        default: "#050507",
-        paper: "#0d0d12",
-      },
-      text: {
-        primary: "#ffffff",
-        secondary: "rgba(255, 255, 255, 0.7)",
-      },
-      divider: "rgba(255, 255, 255, 0.1)",
+      mode: "light",
+      primary: { main: COLORS.green, dark: COLORS.green700, contrastText: "#FFFFFF" },
+      secondary: { main: COLORS.gold, contrastText: COLORS.ink },
+      background: { default: COLORS.cream, paper: COLORS.surface },
+      text: { primary: COLORS.ink, secondary: COLORS.muted },
+      divider: COLORS.borderWarm,
+      success: { main: COLORS.whatsapp, contrastText: "#FFFFFF" },
+      warning: { main: COLORS.clay },
     },
     typography: {
-      fontFamily: "'Outfit', 'Noto Sans Arabic', sans-serif",
-      h1: { fontWeight: 800, letterSpacing: "-0.02em" },
-      h2: { fontWeight: 800, letterSpacing: "-0.02em" },
-      h3: { fontWeight: 700, letterSpacing: "-0.01em" },
-      h4: { fontWeight: 700, letterSpacing: "-0.01em" },
-      h5: { fontWeight: 600 },
-      h6: { fontWeight: 600 },
-      body1: { lineHeight: 1.8 },
+      fontFamily: "'Tajawal', 'Segoe UI', sans-serif",
+      h1: { fontFamily: "'El Messiri', 'Tajawal', sans-serif", fontWeight: 700, letterSpacing: 0 },
+      h2: { fontFamily: "'El Messiri', 'Tajawal', sans-serif", fontWeight: 700, letterSpacing: 0 },
+      h3: { fontFamily: "'El Messiri', 'Tajawal', sans-serif", fontWeight: 700 },
+      h4: { fontFamily: "'El Messiri', 'Tajawal', sans-serif", fontWeight: 700 },
+      h5: { fontFamily: "'El Messiri', 'Tajawal', sans-serif", fontWeight: 600 },
+      h6: { fontFamily: "'El Messiri', 'Tajawal', sans-serif", fontWeight: 600 },
+      button: { fontWeight: 700 },
+      body1: { lineHeight: 1.85 },
+      body2: { lineHeight: 1.8 },
     },
-    shape: {
-      borderRadius: 16,
-    },
+    shape: { borderRadius: 14 },
     components: {
       MuiButton: {
+        defaultProps: { disableElevation: true },
         styleOverrides: {
           root: {
-            borderRadius: 14,
+            borderRadius: 12,
             textTransform: "none",
-            fontWeight: 600,
-            transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+            fontWeight: 700,
+            paddingInline: 22,
+            paddingBlock: 10,
+            boxShadow: "none",
+            transition: "all .28s cubic-bezier(.4,0,.2,1)",
           },
           containedPrimary: {
-            background: "linear-gradient(135deg, #3b82f6 0%, #06b6d4 100%)",
+            backgroundColor: COLORS.green,
             "&:hover": {
-              transform: "translateY(-2px)",
-              boxShadow: "0 8px 25px rgba(59, 130, 246, 0.5)",
+              backgroundColor: COLORS.green700,
+              boxShadow: "0 8px 20px rgba(44,74,59,.22)",
             },
+          },
+          outlinedPrimary: {
+            borderColor: COLORS.green,
+            color: COLORS.green,
+            "&:hover": { backgroundColor: "rgba(44,74,59,.06)", borderColor: COLORS.green },
           },
         },
       },
       MuiCard: {
         styleOverrides: {
           root: {
-            background: "rgba(255, 255, 255, 0.03)",
-            backdropFilter: "blur(20px)",
-            border: "1px solid rgba(255, 255, 255, 0.1)",
-            borderRadius: 24,
+            backgroundColor: COLORS.surface,
+            border: `1px solid ${COLORS.borderWarm}`,
+            borderRadius: 16,
+            boxShadow: SHADOW.soft,
             backgroundImage: "none",
           },
         },
       },
-      MuiPaper: {
+      MuiPaper: { styleOverrides: { root: { backgroundImage: "none" } } },
+      MuiAppBar: { styleOverrides: { root: { backgroundImage: "none" } } },
+      MuiChip: {
         styleOverrides: {
-          root: {
-            backgroundImage: "none",
-            background: "#0d0d12",
-          },
+          root: { fontWeight: 600, borderRadius: 999 },
+        },
+      },
+      MuiOutlinedInput: {
+        styleOverrides: {
+          root: { backgroundColor: COLORS.surface, borderRadius: 12 },
         },
       },
     },
     custom: {
-      borderRadius: {
-        small: 8,
-        medium: 16,
-        large: 32,
-      },
+      borderRadius: { small: 8, medium: 14, large: 28 },
+      colors: COLORS,
+      shadow: SHADOW,
     },
   };
 
