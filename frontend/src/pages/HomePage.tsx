@@ -1,20 +1,11 @@
-import {
-  Box,
-  Container,
-  Typography,
-  Grid,
-  Stack,
-  Button,
-  alpha,
-  useTheme,
-  useMediaQuery,
-} from "@mui/material";
+import { Box, Container, Typography, Stack, Button, Chip } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState, FC, ReactElement } from "react";
 import {
-  ArrowForwardOutlined,
+  ArrowBackRounded,
   WhatsApp,
-  AutoAwesomeOutlined,
+  LocalCafeRounded,
+  AutoAwesomeRounded,
 } from "@mui/icons-material";
 import { motion } from "framer-motion";
 import { fetchCategories } from "../api/admin";
@@ -23,7 +14,6 @@ import CategoryShowcase from "../components/CategoryShowcase";
 import ImageGrid from "../components/ImageGrid";
 import AboutContactSection from "../components/AboutContactSection";
 import SEO from "../components/SEO";
-import { useTranslation } from "react-i18next";
 import PageTransition from "../components/PageTransition";
 import { getWhatsAppUrl } from "../utils/whatsapp";
 
@@ -38,22 +28,40 @@ interface Product {
   [key: string]: any;
 }
 
+const SectionHeading: FC<{ overline: string; title: string; subtitle?: string }> = ({
+  overline,
+  title,
+  subtitle,
+}) => (
+  <Stack spacing={1.5} sx={{ textAlign: "center", mb: 5 }}>
+    <Typography variant="overline" sx={{ color: "secondary.main", fontWeight: 800, letterSpacing: 2 }}>
+      {overline}
+    </Typography>
+    <Typography variant="h3" sx={{ fontWeight: 700 }}>
+      {title}
+    </Typography>
+    {subtitle && (
+      <Typography variant="body1" sx={{ color: "text.secondary", maxWidth: 620, mx: "auto" }}>
+        {subtitle}
+      </Typography>
+    )}
+    <Box className="motif-rule" sx={{ mt: 1 }} />
+  </Stack>
+);
+
 const HomePage: FC = (): ReactElement => {
-  const theme = useTheme();
   const navigate = useNavigate();
-  const isMdUp = useMediaQuery(theme.breakpoints.up("md"));
   const [categories, setCategories] = useState<Category[]>([]);
   const [loadingCategories, setLoadingCategories] = useState<boolean>(true);
   const [products, setProducts] = useState<Product[]>([]);
   const [loadingProducts, setLoadingProducts] = useState<boolean>(true);
-  const { t } = useTranslation();
 
   useEffect(() => {
     (async () => {
       try {
         const [catRes, prodRes] = await Promise.all([
           fetchCategories({ page: 1, limit: 6 }),
-          searchProducts({ page: 1, limit: 6 })
+          searchProducts({ page: 1, limit: 8 }),
         ]);
         setCategories(catRes.items);
         setProducts(prodRes.data.items);
@@ -69,177 +77,155 @@ const HomePage: FC = (): ReactElement => {
   return (
     <PageTransition>
       <SEO
-        title="Alrhomi Catalog | Premium Digital Showroom"
-        description="Experience the finest selection of professional equipment in a stunning digital showroom."
-        keywords="premium catalog, professional equipment, high-end tools, Alrhomi"
+        title="المرحومي · أناقة الضيافة العربية لمطبخك وبيتك"
+        description="تشكيلة المرحومي من أواني المطبخ، أطقم القهوة والشاي، صواني التقديم، المباخر ومستلزمات الضيافة والمنزل."
         type="website"
       />
-      
-      <Box sx={{ position: "relative", overflow: "hidden" }}>
-        {/* Cinematic Hero Section */}
-        <Box
-          sx={{
-            height: "90vh",
-            display: "flex",
-            alignItems: "center",
-            position: "relative",
-            overflow: "hidden",
-            "&::before": {
-              content: '""',
-              position: "absolute",
-              inset: 0,
-              backgroundImage: 'url("/premium_hero_banner_1779240298835.png")',
-              backgroundSize: "cover",
-              backgroundPosition: "center",
-              filter: "brightness(0.4) saturate(1.2)",
-              zIndex: -1,
-            },
-            "&::after": {
-              content: '""',
-              position: "absolute",
-              inset: 0,
-              background: "linear-gradient(to bottom, transparent 0%, var(--bg-dark) 100%)",
-              zIndex: -1,
-            }
-          }}
-        >
-          <Container maxWidth="lg">
-            <motion.div
-              initial={{ opacity: 0, y: 50 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, ease: "easeOut" }}
-            >
-              <Stack spacing={4} sx={{ maxWidth: 800, textAlign: "right" }}>
-                <Box
+
+      {/* Hero */}
+      <Box
+        sx={{
+          position: "relative",
+          overflow: "hidden",
+          background:
+            "radial-gradient(1200px 500px at 85% -10%, rgba(194,161,77,0.18), transparent 60%), linear-gradient(180deg, #fbf7f0 0%, var(--cream) 100%)",
+          borderBottom: "1px solid",
+          borderColor: "divider",
+        }}
+      >
+        <Container maxWidth="lg" sx={{ py: { xs: 7, md: 12 } }}>
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: { xs: "1fr", md: "1.15fr 0.85fr" },
+              gap: { xs: 5, md: 6 },
+              alignItems: "center",
+            }}
+          >
+            <motion.div initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
+              <Stack spacing={3} sx={{ textAlign: { xs: "center", md: "right" }, alignItems: { xs: "center", md: "flex-start" } }}>
+                <Chip
+                  icon={<AutoAwesomeRounded sx={{ color: "secondary.main !important" }} />}
+                  label="تشكيلة المرحومي للمنزل والضيافة"
                   sx={{
-                    display: "inline-flex",
-                    alignItems: "center",
-                    gap: 1,
-                    px: 3,
-                    py: 1,
-                    width: "fit-content",
-                    borderRadius: "100px",
-                    background: "rgba(255, 255, 255, 0.05)",
-                    backdropFilter: "blur(10px)",
-                    border: "1px solid rgba(255, 255, 255, 0.1)",
+                    bgcolor: "rgba(194,161,77,0.12)",
+                    color: "primary.main",
+                    fontWeight: 700,
+                    py: 2,
+                    px: 1,
+                    border: "1px solid",
+                    borderColor: "rgba(194,161,77,0.4)",
                   }}
-                >
-                  <AutoAwesomeOutlined sx={{ color: "var(--accent-secondary)", fontSize: 20 }} />
-                  <Typography variant="body2" sx={{ fontWeight: 600, color: "var(--accent-secondary)" }}>
-                    {t("home.hero_badge")}
-                  </Typography>
-                </Box>
-
-                <Typography
-                  variant={isMdUp ? "h1" : "h2"}
-                  className="text-gradient"
-                  sx={{ 
-                    fontWeight: 800, 
-                    lineHeight: 1.1,
-                    fontSize: { xs: "3rem", md: "5rem" }
-                  }}
-                >
-                  {t("home.hero_title")}
+                />
+                <Typography variant="h1" sx={{ fontWeight: 700, fontSize: { xs: "2.4rem", md: "3.6rem" }, lineHeight: 1.2 }}>
+                  أناقة الضيافة العربية
+                  <Box component="span" sx={{ color: "primary.main", display: "block" }}>
+                    لمطبخك وبيتك
+                  </Box>
                 </Typography>
-
-                <Typography
-                  variant="h5"
-                  sx={{ 
-                    color: "var(--text-secondary)", 
-                    lineHeight: 1.6,
-                    maxWidth: 700,
-                    fontWeight: 400
-                  }}
-                >
-                  {t("home.hero_subtitle")}
+                <Typography variant="h6" sx={{ color: "text.secondary", fontWeight: 400, maxWidth: 560, lineHeight: 1.9 }}>
+                  أواني وأدوات مطبخ، أطقم قهوة وشاي، صواني تقديم، مباخر ومستلزمات منزل مختارة بعناية —
+                  بجودة عالية وأسعار في المتناول. اطلب بسهولة عبر واتساب.
                 </Typography>
-
-                <Stack direction={{ xs: "column", sm: "row" }} spacing={3} sx={{ pt: 4 }}>
+                <Stack direction={{ xs: "column", sm: "row" }} spacing={2} sx={{ pt: 1, width: { xs: "100%", sm: "auto" } }}>
                   <Button
-                    className="btn-premium"
+                    variant="contained"
                     size="large"
-                    endIcon={<ArrowForwardOutlined />}
+                    endIcon={<ArrowBackRounded />}
                     onClick={() => navigate("/catalog")}
-                    sx={{ fontSize: "1.1rem", px: 6, py: 2 }}
+                    sx={{ px: 4, py: 1.4, fontSize: "1.05rem" }}
                   >
-                    تصفح الكتالوج
+                    تصفّح المنتجات
                   </Button>
                   <Button
-                    className="btn-glass"
+                    variant="outlined"
+                    color="success"
                     size="large"
                     startIcon={<WhatsApp />}
                     onClick={() => window.open(getWhatsAppUrl(), "_blank")}
-                    sx={{ fontSize: "1.1rem", px: 6, py: 2 }}
+                    sx={{ px: 4, py: 1.4, fontSize: "1.05rem", borderColor: "success.main", color: "success.main", "&:hover": { borderColor: "success.main", bgcolor: "rgba(37,211,102,0.08)" } }}
                   >
-                    تواصل مباشرة
+                    تواصل معنا
                   </Button>
                 </Stack>
               </Stack>
             </motion.div>
-          </Container>
-        </Box>
 
-        {/* Categories Grid - Floating Glass Effect */}
-        <Container maxWidth="lg" sx={{ mt: -15, pb: 12, position: "relative", zIndex: 2 }}>
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-          >
-            <Box className="glass" sx={{ p: { xs: 4, md: 8 }, mb: 12 }}>
-              <Stack spacing={6}>
-                <Box sx={{ textAlign: "center" }}>
-                  <Typography variant="h3" sx={{ fontWeight: 800, mb: 2 }}>
-                    تصفح حسب <span style={{ color: "var(--accent-primary)" }}>الفئات</span>
-                  </Typography>
-                  <Typography variant="body1" sx={{ color: "var(--text-secondary)", maxWidth: 600, mx: "auto" }}>
-                    مجموعة مختارة من أرقى المعدات والأدوات الاحترافية المصنفة بدقة لتسهيل وصولك لما تحتاجه.
-                  </Typography>
-                </Box>
-                
-                <CategoryShowcase
-                  categories={categories}
-                  loading={loadingCategories}
-                  limit={6}
-                  showMore={true}
-                  onMoreClick={() => navigate("/categories")}
-                />
-              </Stack>
-            </Box>
-          </motion.div>
-
-          {/* Latest Products - Modern Grid */}
-          <Stack spacing={6}>
-            <Box sx={{ textAlign: "center" }}>
-              <Typography variant="h3" sx={{ fontWeight: 800, mb: 2 }}>
-                أحدث <span style={{ color: "var(--accent-secondary)" }}>الإضافات</span>
-              </Typography>
-              <Typography variant="body1" sx={{ color: "var(--text-secondary)", maxWidth: 600, mx: "auto" }}>
-                كن أول من يكتشف أحدث قطعنا الحصرية المضافة حديثاً للكتالوج.
-              </Typography>
-            </Box>
-
-            <ImageGrid
-              images={products}
-              withDownload
-              onSelect={(img) => navigate(`/product/${img._id}`)}
-            />
-
-            <Box sx={{ textAlign: "center", pt: 4 }}>
-              <Button
-                className="btn-premium"
-                size="large"
-                onClick={() => navigate("/catalog")}
+            {/* Decorative arch panel */}
+            <motion.div
+              initial={{ opacity: 0, scale: 0.94 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.7, delay: 0.1 }}
+              style={{ display: "flex", justifyContent: "center" }}
+            >
+              <Box
+                sx={{
+                  display: { xs: "none", md: "flex" },
+                  width: 320,
+                  height: 380,
+                  borderRadius: "180px 180px 24px 24px",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  position: "relative",
+                  background: "linear-gradient(160deg, #34543f 0%, #2c4a3b 60%, #22392e 100%)",
+                  border: "2px solid rgba(194,161,77,0.5)",
+                  boxShadow: "var(--shadow-md)",
+                  overflow: "hidden",
+                  "&::before": {
+                    content: '""',
+                    position: "absolute",
+                    inset: 0,
+                    backgroundImage:
+                      "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='70' height='70' viewBox='0 0 70 70'%3E%3Cg fill='none' stroke='%23C2A14D' stroke-width='1' opacity='0.35'%3E%3Crect x='19' y='19' width='32' height='32'/%3E%3Crect x='19' y='19' width='32' height='32' transform='rotate(45 35 35)'/%3E%3C/g%3E%3C/svg%3E\")",
+                    backgroundSize: "70px 70px",
+                  },
+                }}
               >
-                اكتشف كل المنتجات
-              </Button>
-            </Box>
-          </Stack>
+                <LocalCafeRounded sx={{ fontSize: 120, color: "rgba(194,161,77,0.9)", position: "relative" }} />
+              </Box>
+            </motion.div>
+          </Box>
         </Container>
-
-        <AboutContactSection />
       </Box>
+
+      {/* Categories */}
+      <Container maxWidth="lg" sx={{ py: { xs: 7, md: 10 } }}>
+        <SectionHeading
+          overline="تسوّق حسب الفئة"
+          title="فئاتنا المختارة"
+          subtitle="من أطقم القهوة والشاي إلى صواني التقديم والمباخر ومستلزمات المنزل."
+        />
+        <CategoryShowcase
+          categories={categories}
+          loading={loadingCategories}
+          limit={5}
+          showMore
+          onMoreClick={() => navigate("/categories")}
+        />
+      </Container>
+
+      {/* Featured products */}
+      <Box sx={{ bgcolor: "#fbf7f0", borderTop: "1px solid", borderBottom: "1px solid", borderColor: "divider" }}>
+        <Container maxWidth="lg" sx={{ py: { xs: 7, md: 10 } }}>
+          <SectionHeading
+            overline="وصل حديثاً"
+            title="أحدث المنتجات"
+            subtitle="اكتشف أحدث ما أضفناه إلى الكتالوج."
+          />
+          {loadingProducts ? (
+            <CategoryShowcase loading limit={8} />
+          ) : (
+            <ImageGrid images={products} onSelect={(img) => navigate(`/product/${img._id}`)} />
+          )}
+          <Box sx={{ textAlign: "center", mt: 6 }}>
+            <Button variant="contained" size="large" endIcon={<ArrowBackRounded />} onClick={() => navigate("/catalog")} sx={{ px: 5, py: 1.4 }}>
+              عرض كل المنتجات
+            </Button>
+          </Box>
+        </Container>
+      </Box>
+
+      <AboutContactSection />
     </PageTransition>
   );
 };
